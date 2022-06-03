@@ -1,22 +1,20 @@
 import { StyledEngineProvider } from '@mui/material';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { BrowserRouter } from 'react-router-dom';
+import App from './App';
 import LoadingIndicatorProvider from './components/Loading/LoadingContextProvider';
 import LoadingOverlay from './components/Loading/LoadingOverlay';
 import LoadingSkeleton from './components/Loading/LoadingSkeleton';
 import LoadingSlider from './components/Loading/LoadingSlider';
 import './index.css';
-import Home from './pages';
-import PlaceHolderSite from './pages/placeholder';
-import Soporte from './pages/soporte';
-import Tickets from './pages/soporte/tickets';
 import reportWebVitals from './reportWebVitals';
 import { AuthContextProvider } from './store/AuthContext';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
+
 
 
 root.render(
@@ -27,13 +25,7 @@ root.render(
       replacing={LoadingSkeleton}>
       <AuthContextProvider>
         <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="soporte" element={<Soporte />} />
-            <Route path='soporte/tickets' element={<Tickets />} />
-            <Route path="placeholder" element={<PlaceHolderSite />} />
-            <Route path="contacts" element={<PlaceHolderSite />} />
-          </Routes>
+          <App />
         </BrowserRouter>
       </AuthContextProvider>
     </LoadingIndicatorProvider>

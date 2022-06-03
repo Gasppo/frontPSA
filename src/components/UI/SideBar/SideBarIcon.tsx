@@ -18,7 +18,7 @@ const SideBarIcon = (props: Props) => {
     const { pathname } = useLocation()
 
     useEffect(() => {
-        setSelected(pathname === href && href !== '/placeholder')
+        setSelected(href === '/' ? pathname === href : pathname.includes(href) && href !== '/placeholder')
     }, [pathname, href])
 
     return (

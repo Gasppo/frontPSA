@@ -1,10 +1,10 @@
 import { ThemeProvider } from '@emotion/react';
-import { createTheme, Link, Typography } from '@mui/material';
+import { createTheme, Typography } from '@mui/material';
 import { useContext, useEffect, useState } from 'react';
-import Login from '../components/Authentication/Login';
-import Register from '../components/Authentication/Register';
-import LoadingIndicator from '../components/Loading/LoadingIndicator';
-import { AuthContext } from '../store/AuthContext';
+import Login from '../../components/Authentication/Login';
+import Register from '../../components/Authentication/Register';
+import LoadingIndicator from '../../components/Loading/LoadingIndicator';
+import { AuthContext } from '../../store/AuthContext';
 
 
 const theme = createTheme({
