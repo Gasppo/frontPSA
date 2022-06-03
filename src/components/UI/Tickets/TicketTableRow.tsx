@@ -22,7 +22,7 @@ const TicketTableRow = (props: TicketTableRowProps) => {
     }
 
     return (
-        <TableRow hover key={row.id} className="cursor-pointer">
+        <TableRow hover key={row.id}>
             <TableCell align="left">{row.id}</TableCell>
             <TableCell align="left">{row.title}</TableCell>
             <TableCell align="left">{row.author?.firstName || 'N/A'} {row.author?.lastName || 'N/A'}</TableCell>
@@ -31,7 +31,7 @@ const TicketTableRow = (props: TicketTableRowProps) => {
             <TableCell align="left">{new Date(row.updatedAt).toLocaleDateString('es-AR')}</TableCell>
             <TableCell align="left">{row.status}</TableCell>
             <TableCell align="right">
-                <div className='hover:text-teal-600 text-slate-600' onClick={deleteItems}>
+                <div className='hover:text-teal-600 text-slate-600 cursor-pointer' onClick={deleteItems}>
                     <DeleteIcon />
                 </div>
             </TableCell>
