@@ -1,16 +1,22 @@
-import { useState } from 'react'
-import MainContent from './components/MainContent'
-import HeaderBar from './components/UI/Header/HeaderBar'
-import SideBar from './components/UI/SideBar/SideBar'
+import { useContext, useEffect, useState } from 'react'
+import MainContent from '../components/MainContent'
+import HeaderBar from '../components/UI/Header/HeaderBar'
+import SideBar from '../components/UI/SideBar/SideBar'
+import { AuthContext } from '../store/AuthContext'
 
 
-const App = () => {
+const Home = () => {
   const [sideBarExpanded, setSideBarExpanded] = useState<boolean>(false)
+  const { isLoggedIn } = useContext(AuthContext)
 
 
   const handleSideBarExpand = () => {
     setSideBarExpanded(prev => !prev)
   }
+
+  useEffect(() => {
+    if (isLoggedIn) return
+  }, [isLoggedIn]);
 
   return (
     <>
@@ -26,4 +32,4 @@ const App = () => {
   )
 }
 
-export default App
+export default Home
