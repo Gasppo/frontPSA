@@ -52,34 +52,42 @@ const Tickets = (props: TicketsProps) => {
         <>
             <div className={`flex flex-col items-start transition-all duration-200 mb-20`} >
                 <Typography variant='h3'>Soporte</Typography>
-                <Link to={'/'}>
-                    <Button>Volver al inicio</Button>
-                </Link>
+                <div className="flex flex-row" >
+                    <Link to={'/'}>
+                        <Button>Inicio</Button>
+                    </Link>
+                    <Button disabled>{'>'}</Button>
+                    <Link to={'/soporte'}>
+                        <Button>Soporte</Button>
+                    </Link>
+                </div>
             </div>
             <LoadingIndicator show={isLoading} className={`flex flex-col items-start  transition-all duration-200`} >
                 <Typography variant='h5' className={'mb-10'}>Mis Tickets</Typography>
-                <div className="self-end mr-10 border-2 text-center  rounded-xl shadow-lg text-slate-800 hover:bg-gray-200 hover:text-teal-600 transition-all duration-300 cursor-pointer" onClick={handleModalOpen}>
+                {!isLoading && (<><div className="self-end mr-10 border-2 text-center  rounded-xl shadow-lg text-slate-800 hover:bg-gray-200 hover:text-teal-600 transition-all duration-300 cursor-pointer" onClick={handleModalOpen}>
                     <div className="m-4" > Agregar Ticket</div>
                 </div>
-                <AddTicketModal onSubmit={handleSubmit} onClose={handleModalClose} show={showModal} />
-                <TableContainer component={Paper} className="mt-10"  >
-                    <Table  >
-                        <TableHead>
-                            <TableRow>
-                                <TableCell align="left">Codigo de identificacion</TableCell>
-                                <TableCell align="left">Titulo</TableCell>
-                                <TableCell align="left">Creado por</TableCell>
-                                <TableCell align="left">Recurso asignado</TableCell>
-                                <TableCell align="left">Fecha de creacion</TableCell>
-                                <TableCell align="left">Ultima Modificacion</TableCell>
-                                <TableCell align="left">Estado</TableCell>
-                            </TableRow>
-                        </TableHead>
-                        <TableBody>
-                            {loadedTickets && loadedTickets.map(row => <TicketTableRow row={row} key={row.id} />)}
-                        </TableBody>
-                    </Table>
-                </TableContainer>
+                    <AddTicketModal onSubmit={handleSubmit} onClose={handleModalClose} show={showModal} />
+                    <TableContainer component={Paper} className="mt-10"  >
+                        <Table>
+                            <TableHead>
+                                <TableRow>
+                                    <TableCell align="left">Codigo de identificacion</TableCell>
+                                    <TableCell align="left">Titulo</TableCell>
+                                    <TableCell align="left">Creado por</TableCell>
+                                    <TableCell align="left">Recurso asignado</TableCell>
+                                    <TableCell align="left">Fecha de creacion</TableCell>
+                                    <TableCell align="left">Ultima Modificacion</TableCell>
+                                    <TableCell align="left">Estado</TableCell>
+                                </TableRow>
+                            </TableHead>
+                            <TableBody>
+                                {loadedTickets && loadedTickets.map(row => <TicketTableRow row={row} key={row.id} />)}
+                            </TableBody>
+                        </Table>
+                    </TableContainer>
+                </>
+                )}
             </LoadingIndicator>
         </>
     )
