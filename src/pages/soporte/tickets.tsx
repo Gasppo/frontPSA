@@ -81,10 +81,11 @@ const Tickets = (props: TicketsProps) => {
                                     <TableCell align="left">Fecha de creacion</TableCell>
                                     <TableCell align="left">Ultima Modificacion</TableCell>
                                     <TableCell align="left">Estado</TableCell>
+                                    <TableCell align="right">Accciones</TableCell>
                                 </TableRow>
                             </TableHead>
                             <TableBody>
-                                {loadedTickets && loadedTickets.map(row => <TicketTableRow row={row} key={row.id} />)}
+                                {loadedTickets && loadedTickets.map(row => <TicketTableRow refresh={gatherTickets} row={row} key={row.id} />)}
                             </TableBody>
                         </Table>
                     </TableContainer>

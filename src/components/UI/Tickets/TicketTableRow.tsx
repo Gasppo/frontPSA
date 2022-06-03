@@ -1,14 +1,26 @@
 import { TableCell, TableRow } from '@mui/material'
 import React from 'react'
 import { Ticket } from '../../types/ticketTypes'
-
+import DeleteIcon from '@mui/icons-material/Delete';
 interface TicketTableRowProps {
-    row: Ticket
+    row: Ticket,
+    refresh: () => void
 }
 
 const TicketTableRow = (props: TicketTableRowProps) => {
-    const {row} = props
-    
+    const { row, refresh } = props
+
+    const deleteItems = () => {
+        fetch(`http://localhost:4000/tickets/${row.id}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        .then( res => refresh() )
+        .catch(err => console.log(err))
+    }
+
     return (
         <TableRow hover key={row.id} className="cursor-pointer">
             <TableCell align="left">{row.id}</TableCell>
@@ -18,6 +30,11 @@ const TicketTableRow = (props: TicketTableRowProps) => {
             <TableCell align="left">{new Date(row.createdAt).toLocaleDateString('es-AR')}</TableCell>
             <TableCell align="left">{new Date(row.updatedAt).toLocaleDateString('es-AR')}</TableCell>
             <TableCell align="left">{row.status}</TableCell>
+            <TableCell align="right">
+                <div className='hover:text-teal-600 text-slate-600' onClick={deleteItems}>
+                    <DeleteIcon />
+                </div>
+            </TableCell>
         </TableRow>
     )
 }
