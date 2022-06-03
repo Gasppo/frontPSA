@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import LoadingIndicator from '../../components/Loading/LoadingIndicator'
 import { Ticket } from '../../components/types/ticketTypes'
+import PageTitle from '../../components/UI/Dashboard/PageTitle'
 import AddTicketModal from '../../components/UI/Tickets/AddTicketModal'
 import TicketTableRow from '../../components/UI/Tickets/TicketTableRow'
 
@@ -50,8 +51,7 @@ const Tickets = (props: TicketsProps) => {
 
     return (
         <>
-            <div className={`flex flex-col items-start transition-all duration-200 mb-20`} >
-                <Typography variant='h3'>Soporte</Typography>
+            <PageTitle label='Soporte'>
                 <div className="flex flex-row" >
                     <Link to={'/'}>
                         <Button>Inicio</Button>
@@ -61,12 +61,14 @@ const Tickets = (props: TicketsProps) => {
                         <Button>Soporte</Button>
                     </Link>
                 </div>
-            </div>
+            </PageTitle>
             <LoadingIndicator show={isLoading} className={`flex flex-col items-start  transition-all duration-200`} >
                 <Typography variant='h5' className={'mb-10'}>Mis Tickets</Typography>
-                {!isLoading && (<><div className="self-end mr-10 border-2 text-center  rounded-xl shadow-lg text-slate-800 hover:bg-gray-200 hover:text-teal-600 transition-all duration-300 cursor-pointer" onClick={handleModalOpen}>
-                    <div className="m-4" > Agregar Ticket</div>
-                </div>
+                {!isLoading && (<>
+                    <div className="self-end mr-10 border-2 text-center  rounded-xl shadow-lg text-slate-800 hover:bg-gray-200 hover:text-teal-600 transition-all duration-300 cursor-pointer" onClick={handleModalOpen}>
+                        <div className="m-4" > Agregar Ticket</div>
+                    </div>
+
                     <AddTicketModal onSubmit={handleSubmit} onClose={handleModalClose} show={showModal} />
                     <TableContainer component={Paper} className="mt-10"  >
                         <Table>
