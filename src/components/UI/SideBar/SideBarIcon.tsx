@@ -22,7 +22,7 @@ const SideBarIcon = (props: Props) => {
     }, [pathname, href])
 
     return (
-        <Link to={href}>
+        <Link to={selected ? '#' : href}>
             <div className={`
                         relative flex items-center justify-start h-12 mt-2 mb-2 mx-2 px-2 shadow-lg rounded-3xl
                         hover:bg-teal-600 hover:text-slate-900 transition-all duration-200  group 

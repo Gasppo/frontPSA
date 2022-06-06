@@ -21,6 +21,7 @@ const Tickets = (props: TicketsProps) => {
 
 
     const handleModalOpen = () => {
+        console.log(process.env.REACT_APP_SUPPORT_API)
         setShowModal(true)
     }
 
@@ -35,14 +36,14 @@ const Tickets = (props: TicketsProps) => {
 
     const gatherTickets = () => {
         setLoading(true)
-        fetch('http://localhost:4000/tickets/full')
+        fetch(`${process.env.REACT_APP_SUPPORT_API || 'http://localhost:4000'}/tickets/full`)
             .then(res => res.json())
             .then(res => {
                 setLoadedTickets(res.tickets)
 
             })
             .catch(err => console.log(err))
-        sleep(3000).then(res => setLoading(false))
+        sleep(1000).then(res => setLoading(false))
     }
 
     useEffect(() => {
@@ -62,35 +63,33 @@ const Tickets = (props: TicketsProps) => {
                     </Link>
                 </div>
             </PageTitle>
+            <Typography variant='h5' className={'mb-10'}>Mis Tickets</Typography>
             <LoadingIndicator show={isLoading} className={`flex flex-col items-start  transition-all duration-200`} >
-                <Typography variant='h5' className={'mb-10'}>Mis Tickets</Typography>
-                {!isLoading && (<>
-                    <div className="self-end mr-10 border-2 text-center  rounded-xl shadow-lg text-slate-800 hover:bg-gray-200 hover:text-teal-600 transition-all duration-300 cursor-pointer" onClick={handleModalOpen}>
-                        <div className="m-4" > Agregar Ticket</div>
-                    </div>
 
-                    <AddTicketModal onSubmit={handleSubmit} onClose={handleModalClose} show={showModal} />
-                    <TableContainer component={Paper} className="mt-10"  >
-                        <Table>
-                            <TableHead>
-                                <TableRow>
-                                    <TableCell align="left">Codigo de identificacion</TableCell>
-                                    <TableCell align="left">Titulo</TableCell>
-                                    <TableCell align="left">Creado por</TableCell>
-                                    <TableCell align="left">Recurso asignado</TableCell>
-                                    <TableCell align="left">Fecha de creacion</TableCell>
-                                    <TableCell align="left">Ultima Modificacion</TableCell>
-                                    <TableCell align="left">Estado</TableCell>
-                                    <TableCell align="right">Accciones</TableCell>
-                                </TableRow>
-                            </TableHead>
-                            <TableBody>
-                                {loadedTickets && loadedTickets.map(row => <TicketTableRow refresh={gatherTickets} row={row} key={row.id} />)}
-                            </TableBody>
-                        </Table>
-                    </TableContainer>
-                </>
-                )}
+                <div className="self-end mr-10 border-2 text-center  rounded-xl shadow-lg text-slate-800 hover:bg-gray-200 hover:text-teal-600 transition-all duration-300 cursor-pointer" onClick={handleModalOpen}>
+                    <div className="m-4" > Agregar Ticket</div>
+                </div>
+
+                <AddTicketModal onSubmit={handleSubmit} onClose={handleModalClose} show={showModal} />
+                <TableContainer component={Paper} className="mt-10"  >
+                    <Table>
+                        <TableHead>
+                            <TableRow>
+                                <TableCell align="left">Codigo de identificacion</TableCell>
+                                <TableCell align="left">Titulo</TableCell>
+                                <TableCell align="left">Creado por</TableCell>
+                                <TableCell align="left">Recurso asignado</TableCell>
+                                <TableCell align="left">Fecha de creacion</TableCell>
+                                <TableCell align="left">Ultima Modificacion</TableCell>
+                                <TableCell align="left">Estado</TableCell>
+                                <TableCell align="right">Accciones</TableCell>
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
+                            {loadedTickets && loadedTickets.map(row => <TicketTableRow refresh={gatherTickets} row={row} key={row.id} />)}
+                        </TableBody>
+                    </Table>
+                </TableContainer>
             </LoadingIndicator>
         </>
     )
