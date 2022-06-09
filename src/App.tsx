@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import HeaderBar from './components/UI/Header/HeaderBar'
 import SideBar from './components/UI/SideBar/SideBar'
