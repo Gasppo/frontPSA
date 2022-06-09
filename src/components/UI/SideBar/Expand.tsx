@@ -15,8 +15,8 @@ const Expand = (props: Props) => {
 
     return (
         <>
-            {expanded && <ArrowRightIcon onClick={onClick} className={arrowStyle} />}
-            {!expanded && <ArrowLeftIcon onClick={onClick} className={arrowStyle} />}
+            {!expanded && <ArrowRightIcon onClick={onClick} className={arrowStyle} />}
+            {expanded && <ArrowLeftIcon onClick={onClick} className={arrowStyle} />}
         </>
     )
 }

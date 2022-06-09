@@ -2,13 +2,13 @@ import { TextField } from '@mui/material'
 import { useState } from 'react'
 import CenteredModal from '../Modal/CenteredModal'
 
-interface AddTicketModalProps {
+interface AssingResourceModalProps {
     onClose: () => void
     onSubmit: () => void
     show: boolean
 }
 
-const AddTicketModal = (props: AddTicketModalProps) => {
+const AssingResourceModal = (props: AssingResourceModalProps) => {
     const { onSubmit, onClose, show } = props
 
     const [isLoading, setIsLoading] = useState(false)
@@ -51,18 +51,13 @@ const AddTicketModal = (props: AddTicketModalProps) => {
     }
 
     return (
-        <CenteredModal isLoading={isLoading} onClose={onClose} show={show} onSubmit={handleSubmit} label="Agregar Ticket" addbuttonLabel="Agregar">
+        <CenteredModal label='Asignar Recurso' isLoading={isLoading} onClose={onClose} show={show} onSubmit={handleSubmit} addbuttonLabel="Asignar">
             <div className='flex mb-6 flex-row'>
                 <TextField id="outlined-basic" name="title" className='mr-8 w-80' label="Titulo" InputLabelProps={{ shrink: true }} variant="outlined" onChange={handleChangeText} />
                 <TextField id="outlined-basic" name="priority" className='mr-8 w-80' label="Prioridad" type="number" InputLabelProps={{ shrink: true }} variant="outlined" onChange={handleChangeInt} />
             </div>
-            <div className='flex mb-6 flex-row'>
-                <TextField id="outlined-basic" name="productId" className='mr-8 w-80' label="Producto" InputLabelProps={{ shrink: true }} variant="outlined" />
-                <TextField id="outlined-basic" name="productVersion" className='mr-8 w-80' label="Version" InputLabelProps={{ shrink: true }} variant="outlined" />
-            </div>
-            <TextField id="outlined-basic" className='mb-6 w-[42rem] mr-8' name='description' label="Descripcion" multiline rows={2} InputLabelProps={{ shrink: true }} variant="outlined" onChange={handleChangeText} />
         </CenteredModal>
     )
 }
 
-export default AddTicketModal
+export default AssingResourceModal

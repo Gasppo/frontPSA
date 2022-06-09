@@ -1,7 +1,6 @@
 import HomeIcon from '@mui/icons-material/Home';
 import SettingsIcon from "@mui/icons-material/Settings";
 import { Divider } from "@mui/material";
-import React from "react";
 import { sections } from '../../dev/pageSections';
 import Expand from './Expand';
 import SideBarIcon from "./SideBarIcon";

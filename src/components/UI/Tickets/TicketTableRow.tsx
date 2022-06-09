@@ -7,10 +7,11 @@ import EditIcon from '@mui/icons-material/Edit';
 interface TicketTableRowProps {
     row: Ticket,
     refresh: () => void
+    onEdit: (id: number) => void
 }
 
 const TicketTableRow = (props: TicketTableRowProps) => {
-    const { row, refresh } = props
+    const { row, refresh, onEdit } = props
 
     const deleteItems = () => {
         fetch(`${process.env.REACT_APP_SUPPORT_API || 'http://localhost:4000'}/tickets/${row.id}`, {
@@ -34,7 +35,7 @@ const TicketTableRow = (props: TicketTableRowProps) => {
             <TableCell align="left">{row.status}</TableCell>
             <TableCell align="right">
                 <div  className="flex flex-row justify-end" >
-                    <div className='hover:text-teal-600 text-slate-600 cursor-pointer' onClick={() => { console.log('Hi') }}>
+                    <div className='hover:text-teal-600 text-slate-600 cursor-pointer' onClick={() => onEdit(row.id)}>
                         <EditIcon />
                     </div>
                     <div className='hover:text-teal-600 text-slate-600 cursor-pointer' onClick={() => { console.log('Hi') }}>
