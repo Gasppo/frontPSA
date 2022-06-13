@@ -77,7 +77,7 @@ const Tickets = (props: TicketsProps) => {
             <LoadingIndicator show={isLoading} className={`flex flex-col items-start  transition-all duration-200`} >
 
                 <div className="self-end mr-10 border-2 text-center  rounded-xl shadow-lg text-slate-800 hover:bg-gray-200 hover:text-teal-600 transition-all duration-300 cursor-pointer" onClick={handleAddOpen}>
-                    <div className="m-4" > Agregar Ticket</div>
+                    <div className="m-4" > Crear Ticket</div>
                 </div>
 
                 <AddTicketModal onSubmit={handleSubmit} onClose={handleClose} show={showAddModal} />
@@ -88,8 +88,7 @@ const Tickets = (props: TicketsProps) => {
                             <TableRow>
                                 <TableCell align="left">Codigo de identificacion</TableCell>
                                 <TableCell align="left">Titulo</TableCell>
-                                <TableCell align="left">Creado por</TableCell>
-                                <TableCell align="left">Recurso asignado</TableCell>
+                                <TableCell align="left">Cliente</TableCell>
                                 <TableCell align="left">Fecha de creacion</TableCell>
                                 <TableCell align="left">Ultima Modificacion</TableCell>
                                 <TableCell align="left">Estado</TableCell>

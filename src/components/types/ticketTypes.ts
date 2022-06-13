@@ -1,8 +1,6 @@
 export type TicketAuthor = {
-    id: number;
-    firstName: string;
-    lastName: string;
-    email: string;
+    razonSocial: string;
+    CUIT: string;
 }
 
 export type Ticket = {
