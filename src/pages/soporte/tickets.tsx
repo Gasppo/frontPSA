@@ -1,5 +1,5 @@
 import { Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import LoadingIndicator from '../../components/Loading/LoadingIndicator'
 import { Ticket } from '../../components/types/ticketTypes'
@@ -15,6 +15,9 @@ interface TicketsProps {
 }
 
 const Tickets = (props: TicketsProps) => {
+    const currentURI = process.env.REACT_APP_SUPPORT_API || 'http://localhost:4000'
+
+
     const [loadedTickets, setLoadedTickets] = useState<Ticket[]>([])
     const [isLoading, setLoading] = useState<boolean>(false)
     const [showAddModal, setShowAddModal] = useState(false)
@@ -42,9 +45,9 @@ const Tickets = (props: TicketsProps) => {
     }
 
 
-    const gatherTickets = () => {
+    const gatherTickets = useCallback(() => {
         setLoading(true)
-        fetch(`${process.env.REACT_APP_SUPPORT_API || 'http://localhost:4000'}/tickets/full`)
+        fetch(`${currentURI}/tickets/full`)
             .then(res => res.json())
             .then(res => {
                 setLoadedTickets(res.tickets)
@@ -54,11 +57,11 @@ const Tickets = (props: TicketsProps) => {
                 setLoading(false)
                 console.log(err)
             })
-    }
+    }, [currentURI])
 
     useEffect(() => {
         gatherTickets()
-    }, []);
+    }, [gatherTickets]);
 
     return (
         <>
