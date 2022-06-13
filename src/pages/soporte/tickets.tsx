@@ -9,7 +9,6 @@ import EditTicketModal from '../../components/UI/Tickets/EditTicketModal'
 import TicketTableRow from '../../components/UI/Tickets/TicketTableRow'
 
 
-const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
 interface TicketsProps {
 
@@ -49,10 +48,12 @@ const Tickets = (props: TicketsProps) => {
             .then(res => res.json())
             .then(res => {
                 setLoadedTickets(res.tickets)
-
+                setLoading(false)
             })
-            .catch(err => console.log(err))
-        sleep(1000).then(res => setLoading(false))
+            .catch(err => {
+                setLoading(false)
+                console.log(err)
+            })
     }
 
     useEffect(() => {
@@ -76,19 +77,18 @@ const Tickets = (props: TicketsProps) => {
             <LoadingIndicator show={isLoading} className={`flex flex-col items-start  transition-all duration-200`} >
 
                 <div className="self-end mr-10 border-2 text-center  rounded-xl shadow-lg text-slate-800 hover:bg-gray-200 hover:text-teal-600 transition-all duration-300 cursor-pointer" onClick={handleAddOpen}>
-                    <div className="m-4" > Agregar Ticket</div>
+                    <div className="m-4" > Crear Ticket</div>
                 </div>
 
                 <AddTicketModal onSubmit={handleSubmit} onClose={handleClose} show={showAddModal} />
-                <EditTicketModal onSubmit={handleSubmit} onClose={handleClose} show={showEditModal} currentId={currentId}/>
+                <EditTicketModal onSubmit={handleSubmit} onClose={handleClose} show={showEditModal} currentId={currentId} />
                 <TableContainer component={Paper} className="mt-10"  >
                     <Table>
                         <TableHead>
                             <TableRow>
                                 <TableCell align="left">Codigo de identificacion</TableCell>
                                 <TableCell align="left">Titulo</TableCell>
-                                <TableCell align="left">Creado por</TableCell>
-                                <TableCell align="left">Recurso asignado</TableCell>
+                                <TableCell align="left">Cliente</TableCell>
                                 <TableCell align="left">Fecha de creacion</TableCell>
                                 <TableCell align="left">Ultima Modificacion</TableCell>
                                 <TableCell align="left">Estado</TableCell>
@@ -96,7 +96,7 @@ const Tickets = (props: TicketsProps) => {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {loadedTickets && loadedTickets.map(row => <TicketTableRow refresh={gatherTickets} row={row} key={row.id} onEdit={handleEditOpen}/>)}
+                            {loadedTickets && loadedTickets.map(row => <TicketTableRow refresh={gatherTickets} row={row} key={row.id} onEdit={handleEditOpen} />)}
                         </TableBody>
                     </Table>
                 </TableContainer>
