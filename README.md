@@ -6,7 +6,7 @@ Primero de todo instalen VSCODE -- https://code.visualstudio.com/download
 
 Tienen que tener instalado node https://nodejs.org/en/
 
-Despues recomiendamos utilizar yarn usando npm: `npm install -g yarn`
+Despues recomendamos utilizar yarn usando npm: `npm install -g yarn`
 
 ## Arrancar el proyecto
 
