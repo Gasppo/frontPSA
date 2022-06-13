@@ -49,10 +49,12 @@ const Tickets = (props: TicketsProps) => {
             .then(res => res.json())
             .then(res => {
                 setLoadedTickets(res.tickets)
-
+                setLoading(false)
             })
-            .catch(err => console.log(err))
-        sleep(1000).then(res => setLoading(false))
+            .catch(err => {
+                setLoading(false)
+                console.log(err)
+            })
     }
 
     useEffect(() => {
@@ -80,7 +82,7 @@ const Tickets = (props: TicketsProps) => {
                 </div>
 
                 <AddTicketModal onSubmit={handleSubmit} onClose={handleClose} show={showAddModal} />
-                <EditTicketModal onSubmit={handleSubmit} onClose={handleClose} show={showEditModal} currentId={currentId}/>
+                <EditTicketModal onSubmit={handleSubmit} onClose={handleClose} show={showEditModal} currentId={currentId} />
                 <TableContainer component={Paper} className="mt-10"  >
                     <Table>
                         <TableHead>
@@ -96,7 +98,7 @@ const Tickets = (props: TicketsProps) => {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {loadedTickets && loadedTickets.map(row => <TicketTableRow refresh={gatherTickets} row={row} key={row.id} onEdit={handleEditOpen}/>)}
+                            {loadedTickets && loadedTickets.map(row => <TicketTableRow refresh={gatherTickets} row={row} key={row.id} onEdit={handleEditOpen} />)}
                         </TableBody>
                     </Table>
                 </TableContainer>
