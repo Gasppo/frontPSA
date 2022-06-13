@@ -16,7 +16,10 @@ interface EditTicketModalProps {
 
 const EditTicketModal = (props: EditTicketModalProps) => {
     const { onSubmit, onClose, show, currentId } = props
+
     const emptyAuthor = useMemo(() => ({ id: 0, CUIT: "", "razon social": "" }), [])
+    const currentURI = process.env.REACT_APP_SUPPORT_API || 'http://localhost:4000'
+    const ticketURL = useMemo(() => `${currentURI}/tickets/${currentId || 0}`, [currentId, currentURI])
 
     const [isLoading, setIsLoading] = useState(false)
     const [author, setAuthor] = useState(emptyAuthor)
@@ -29,7 +32,6 @@ const EditTicketModal = (props: EditTicketModalProps) => {
         internal: true
     })
 
-    const ticketURL = useMemo(() => `${process.env.REACT_APP_SUPPORT_API || 'http://localhost:4000'}/tickets/${currentId || 0}`, [currentId])
 
     const handleChangeText = (e: any) => {
         setInput(({ ...input, [e.target.name]: e.target.value }))
@@ -71,13 +73,12 @@ const EditTicketModal = (props: EditTicketModalProps) => {
 
     const getAuthorInfo = useCallback(
         async (authorId: number) => {
-            const response = await fetch(`${process.env.REACT_APP_SUPPORT_API || 'http://localhost:4000'}/ticketAuthors/${authorId}`)
+            const response = await fetch(`${currentURI}/ticketAuthors/${authorId}`)
             const authorInfo = await response.json()
             setAuthor(externalResource.find(el => el.CUIT === authorInfo.ticketAuthor.CUIT) || emptyAuthor)
         },
-        [emptyAuthor],
+        [emptyAuthor, currentURI],
     )
-
 
     useEffect(() => {
         setIsLoading(true)
@@ -91,14 +92,15 @@ const EditTicketModal = (props: EditTicketModalProps) => {
 
 
     useEffect(() => {
-        if (input?.authorId === 1) return
+        if (input?.authorId === 1 || !input?.authorId) return
         getAuthorInfo(input?.authorId)
     }, [getAuthorInfo, input?.authorId]);
 
+    const disabled = !input?.title || !input?.description || !author?.id || !input?.description
 
 
     return (
-        <CenteredModal isLoading={isLoading} onClose={onClose} show={show} onSubmit={handleSubmit} label="Actualizar Ticket" addbuttonLabel="Actualizar">
+        <CenteredModal isLoading={isLoading} onClose={onClose} show={show} onSubmit={handleSubmit} label="Actualizar Ticket" addbuttonLabel="Actualizar" disableSubmit={disabled}>
             <div className='flex mb-6  flex-row'>
                 <SelectBox name="authorId" className='mr-8 w-[42rem]' label="Nombre de Cliente" onChange={handleAuthorChange} valueKey="id" value={author.id} options={externalResource} text="razon social" />
             </div>
