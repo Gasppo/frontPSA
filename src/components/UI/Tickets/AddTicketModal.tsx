@@ -49,9 +49,7 @@ const AddTicketModal = (props: AddTicketModalProps) => {
         setIsLoading(true)
         const response = await generateTicketUsingAPI()
         setIsLoading(false)
-        if (response.status === 200) {
-            onSubmit()
-        }
+        if (response.status === 200) onSubmit()
     }
 
     useEffect(() => {
@@ -79,9 +77,10 @@ const AddTicketModal = (props: AddTicketModalProps) => {
         return createTicket({ ...input, authorId: inSystem })
     }
 
+    const disabled = !input.title || !input.description || !author.id || !input.description
 
     return (
-        <CenteredModal isLoading={isLoading} onClose={onClose} show={show} onSubmit={handleSubmit} label="Crear Ticket" addbuttonLabel="Crear">
+        <CenteredModal isLoading={isLoading} onClose={onClose} show={show} onSubmit={handleSubmit} label="Crear Ticket" addbuttonLabel="Crear" disableSubmit={disabled}>
             <div className='flex mb-6  flex-row'>
                 <SelectBox name="authorId" className='mr-8 w-[42rem]' label="Nombre de Cliente" onChange={handleAuthorChange} valueKey="id" value={author.id} options={externalResource} text="razon social" />
             </div>

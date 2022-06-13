@@ -1,6 +1,7 @@
 import { Modal, Typography } from '@mui/material'
 import React from 'react'
 import LoadingIndicator from '../../Loading/LoadingIndicator'
+import ModalButton from './ModalButton'
 
 interface CenteredModalProps {
     children: React.ReactNode,
@@ -10,12 +11,13 @@ interface CenteredModalProps {
     isLoading: boolean,
     addbuttonLabel?: string
     label: string
+    disableSubmit?: boolean
 }
 
 
 
 const CenteredModal = (props: CenteredModalProps) => {
-    const { children, onClose, onSubmit, show, isLoading, addbuttonLabel, label } = props
+    const { children, onClose, onSubmit, show, isLoading, addbuttonLabel, label, disableSubmit } = props
 
     return (
         <Modal onClose={onClose} open={show} >
@@ -25,13 +27,9 @@ const CenteredModal = (props: CenteredModalProps) => {
                     <div className='ml-10 flex flex-col items-center'>
                         {children}
                         <div className="flex flex-row" >
-                            <div className="text-center mr-8 mb-6 w-52 border-2 border-slate-400  rounded-xl shadow-lg font-bold text-slate-800 hover:border-teal-600 hover:border-1 hover:bg-gray-200 hover:text-teal-600 transition-all duration-300 cursor-pointer" onClick={onClose} >
-                                <div className="m-4" > Cancelar</div>
-                            </div>
+                            <ModalButton onSubmit={onClose} label={'Cancelar'} />
                             <div className="w-56" ></div>
-                            <div className="text-center mr-8 mb-6 w-52  border-2 border-slate-400  rounded-xl shadow-lg font-bold text-slate-800 hover:border-teal-600 hover:border-1 hover:bg-gray-200 hover:text-teal-600 transition-all duration-300 cursor-pointer" onClick={onSubmit}>
-                                <div className="m-4" >{ addbuttonLabel || 'Aceptar'}</div>
-                            </div>
+                            <ModalButton onSubmit={onSubmit} label={addbuttonLabel || 'Aceptar'} disabled={disableSubmit} />
                         </div>
                     </div>
                 </LoadingIndicator>
