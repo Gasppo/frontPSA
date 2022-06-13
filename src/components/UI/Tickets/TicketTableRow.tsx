@@ -20,7 +20,7 @@ const TicketTableRow = (props: TicketTableRowProps) => {
                 'Content-Type': 'application/json'
             }
         })
-            .then(res => refresh())
+            .then(refresh)
             .catch(err => console.log(err))
     }
 

@@ -9,7 +9,6 @@ import EditTicketModal from '../../components/UI/Tickets/EditTicketModal'
 import TicketTableRow from '../../components/UI/Tickets/TicketTableRow'
 
 
-const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
 interface TicketsProps {
 
