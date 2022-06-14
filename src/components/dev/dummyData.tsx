@@ -143,3 +143,7 @@ export const resources = [
 
 export const externalResource = [{ "id": 1, "razon social": "FIUBA", "CUIT": "20-12345678-2" }, { "id": 2, "razon social": "FSOC", "CUIT": "20-12345678-5" }, { "id": 3, "razon social": "Macro", "CUIT": "20-12345678-3" }]
 export const prioridades = [{ id: 1, valor: "Baja" }, { id: 2, valor: "Media" }, { id: 3, valor: "Alta" }, { id: 4, valor: "Critica" }]
+
+export const product = [{ id: 1, name: "Nombre" }]
+export const productVersion = [{ id: 1, name: "Version", productId: 1, state: "Active" }]
+export const productLicense = [{ id: 1, productId: 1, versionId: 1, clientId: 1, state: "Active" }]
