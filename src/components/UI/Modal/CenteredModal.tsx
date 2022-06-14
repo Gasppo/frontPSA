@@ -21,7 +21,7 @@ const CenteredModal = (props: CenteredModalProps) => {
 
     return (
         <Modal onClose={onClose} open={show} >
-            <div className='absolute bg-gray-200  text-slate-800 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[80vh] rounded-xl shadow-lg'>
+            <div className='absolute md:w-[95vh] bg-gray-200  text-slate-800 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[80vh] rounded-xl shadow-lg'>
                 <LoadingIndicator show={isLoading}>
                     <Typography variant='h5' className={'m-10'}>{label}</Typography>
                     <div className='ml-10 flex flex-col items-center'>
