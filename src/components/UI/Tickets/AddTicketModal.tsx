@@ -1,7 +1,7 @@
 import { TextField } from '@mui/material'
 import { useEffect, useMemo, useState } from 'react'
 import { addClientToSystem, createTicket, getClientInSystem } from '../../api/ticketSupport'
-import { externalResource, prioridades } from '../../dev/dummyData'
+import { externalResource, prioridades, product, productLicense, productVersion } from '../../dev/dummyData'
 import SelectBox from '../Inputs/SelectBox'
 import CenteredModal from '../Modal/CenteredModal'
 
@@ -14,6 +14,14 @@ interface AddTicketModalProps {
 const AddTicketModal = (props: AddTicketModalProps) => {
     const { onSubmit, onClose, show } = props
     const emptyAuthor = useMemo(() => ({ id: 0, CUIT: "", "razon social": "" }), [])
+    const userProducts = productLicense.map(lic => ({
+        ...lic,
+        products: productVersion
+            .filter(ver => ver.id === lic.versionId)
+            .map(el => ({ ...el, productName: product.find(prod => prod.id === el.productId)?.name || 'N/A' }))
+    }))
+
+
     const [author, setAuthor] = useState(emptyAuthor)
 
     const [isLoading, setIsLoading] = useState(false)
