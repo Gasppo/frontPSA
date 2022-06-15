@@ -171,5 +171,6 @@ export const defaultTicketData = {
   priority: 1,
   productId: 0,
   productLicenseId: 0,
-  authorId: 0
+  authorId: 0,
+  internal: true
 }
