@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { addClientToSystem, getClientInSystem, updateTicket } from '../../api/ticketSupport'
-import { externalResource, prioridades, product, productLicense, productVersion } from '../../dev/dummyData'
+import { defaultTicketData, externalResource, prioridades, product, productLicense, productVersion } from '../../dev/dummyData'
+import { ticketSupportURI } from '../../dev/URIs'
 import SelectBox from '../Inputs/SelectBox'
 import ValidatingInput from '../Inputs/ValidatingInput'
 import CenteredModal from '../Modal/CenteredModal'
@@ -18,8 +19,7 @@ const EditTicketModal = (props: EditTicketModalProps) => {
     const { onSubmit, onClose, show, currentId } = props
 
     const emptyAuthor = useMemo(() => ({ id: 0, CUIT: "", "razon social": "" }), [])
-    const currentURI = process.env.REACT_APP_SUPPORT_API || 'http://localhost:4000'
-    const ticketURL = useMemo(() => `${currentURI}/tickets/${currentId || 0}`, [currentId, currentURI])
+    const ticketURL = useMemo(() => `${ticketSupportURI}/tickets/${currentId || 0}`, [currentId])
     const productos = product
     const userProducts = productLicense.map(lic => ({
         ...lic,
@@ -32,16 +32,7 @@ const EditTicketModal = (props: EditTicketModalProps) => {
     const [runValidations, setRunValidations] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
     const [author, setAuthor] = useState(emptyAuthor)
-    const [input, setInput] = useState({
-        title: "",
-        description: "",
-        status: "OPEN",
-        priority: 2,
-        authorId: 0,
-        internal: true,
-        productId: 0,
-        productLicenseId: 0
-    })
+    const [input, setInput] = useState(defaultTicketData)
 
     const invalidFields = (!input?.title || !author?.id || !input.productLicenseId || !dirty)
     const disabled =  runValidations && invalidFields
@@ -101,11 +92,11 @@ const EditTicketModal = (props: EditTicketModalProps) => {
 
     const getAuthorInfo = useCallback(
         async (authorId: number) => {
-            const response = await fetch(`${currentURI}/ticketAuthors/${authorId}`)
+            const response = await fetch(`${ticketSupportURI}/ticketAuthors/${authorId}`)
             const authorInfo = await response.json()
             setAuthor(externalResource.find(el => el.CUIT === authorInfo.ticketAuthor.CUIT) || emptyAuthor)
         },
-        [emptyAuthor, currentURI],
+        [emptyAuthor],
     )
 
     const checkVersionForProduct = () => {

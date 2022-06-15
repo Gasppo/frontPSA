@@ -1,7 +1,8 @@
-const currentURI = process.env.REACT_APP_SUPPORT_API || 'http://localhost:4000'
+import { ticketSupportURI } from "../dev/URIs"
+
 
 export const addClientToSystem = async (razonSocial: string, nro_CUIT: string) => {
-    const response = await fetch(`${currentURI}/ticketAuthors`, {
+    const response = await fetch(`${ticketSupportURI}/ticketAuthors`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -16,14 +17,14 @@ export const addClientToSystem = async (razonSocial: string, nro_CUIT: string) =
 
 export const getClientInSystem = async (nro_CUIT: string | undefined) => {
     if (!nro_CUIT) return false
-    const response = await fetch(`${currentURI}/ticketAuthors/CUIT/${nro_CUIT}`)
+    const response = await fetch(`${ticketSupportURI}/ticketAuthors/CUIT/${nro_CUIT}`)
     const responseBody = await response.json()
     return responseBody?.ticketAuthor?.id || false
 }
 
 
 export const createTicket = async (body: any) => {
-    return await fetch(`${currentURI}/tickets`, {
+    return await fetch(`${ticketSupportURI}/tickets`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'

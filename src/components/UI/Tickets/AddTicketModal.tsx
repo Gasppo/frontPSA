@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { addClientToSystem, createTicket, getClientInSystem } from '../../api/ticketSupport'
-import { externalResource, prioridades, product, productLicense, productVersion } from '../../dev/dummyData'
+import { defaultTicketData, externalResource, prioridades, product, productLicense, productVersion } from '../../dev/dummyData'
 import SelectBox from '../Inputs/SelectBox'
 import ValidatingInput from '../Inputs/ValidatingInput'
 import CenteredModal from '../Modal/CenteredModal'
@@ -15,27 +15,20 @@ const AddTicketModal = (props: AddTicketModalProps) => {
     const { onSubmit, onClose, show } = props
     const emptyAuthor = useMemo(() => ({ id: 0, CUIT: "", "razon social": "" }), [])
 
+    
+    //TODO - Delete when product license API avaialble
     const productos = product
-
     const userProducts = productLicense.map(lic => ({
         ...lic,
         productName: product.find(prod => prod.id === lic.productId)?.name || 'N/A',
-        productId: product.find(prod => prod.id === lic.productId)?.id || 0,
         productVersion: productVersion.find(ver => ver.id === lic.versionId)?.name || 'N/A'
     }))
+    
 
     const [runValidations, setRunValidations] = useState(false)
     const [author, setAuthor] = useState(emptyAuthor)
     const [isLoading, setIsLoading] = useState(false)
-    const [input, setInput] = useState({
-        title: "",
-        description: "",
-        status: "OPEN",
-        priority: 1,
-        internal: true,
-        productId: 0,
-        productLicenseId: 0
-    })
+    const [input, setInput] = useState(defaultTicketData)
 
     const invalidFields = (!input?.title || !author?.id || !input.productLicenseId)
     const disabled = runValidations && invalidFields
@@ -52,15 +45,11 @@ const AddTicketModal = (props: AddTicketModalProps) => {
 
     const handleAuthorChange = (e: any) => {
         const cliente = externalResource.find(el => el.id === e.target.value)
-        setAuthor({
-            id: cliente?.id || 0,
-            CUIT: cliente?.CUIT || "",
-            "razon social": cliente?.['razon social'] || ""
-        })
+        setAuthor({ id: cliente?.id || 0, CUIT: cliente?.CUIT || "", "razon social": cliente?.['razon social'] || "" })
     }
 
     const handleSubmit = async () => {
-        if (invalidFields){
+        if (invalidFields) {
             setRunValidations(true)
             return
         }
@@ -74,15 +63,7 @@ const AddTicketModal = (props: AddTicketModalProps) => {
     useEffect(() => {
         if (show) return
         setRunValidations(false)
-        setInput({
-            title: "",
-            description: "",
-            status: "OPEN",
-            priority: 1,
-            internal: true,
-            productId: 0,
-            productLicenseId: 0
-        })
+        setInput(defaultTicketData)
         setAuthor(emptyAuthor)
     }, [emptyAuthor, show]);
 
