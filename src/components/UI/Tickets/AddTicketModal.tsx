@@ -11,14 +11,6 @@ interface AddTicketModalProps {
     show: boolean
 }
 
-function uniqBy(a: any[], key: any) {
-    var seen: any = {};
-    return a.filter(function (item) {
-        var k = key(item);
-        return seen.hasOwnProperty(k) ? false : (seen[k] = true);
-    })
-}
-
 const AddTicketModal = (props: AddTicketModalProps) => {
     const { onSubmit, onClose, show } = props
     const emptyAuthor = useMemo(() => ({ id: 0, CUIT: "", "razon social": "" }), [])
