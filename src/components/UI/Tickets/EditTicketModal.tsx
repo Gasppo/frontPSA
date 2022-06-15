@@ -119,6 +119,7 @@ const EditTicketModal = (props: EditTicketModalProps) => {
 
     useEffect(() => {
         if (show) {
+            setRunValidations(false)
             setIsLoading(true)
             fetch(ticketURL)
                 .then(res => res.json())

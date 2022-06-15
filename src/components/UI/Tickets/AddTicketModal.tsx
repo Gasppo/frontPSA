@@ -73,6 +73,7 @@ const AddTicketModal = (props: AddTicketModalProps) => {
 
     useEffect(() => {
         if (show) return
+        setRunValidations(false)
         setInput({
             title: "",
             description: "",
