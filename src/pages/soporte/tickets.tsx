@@ -76,7 +76,7 @@ const Tickets = (props: TicketsProps) => {
                     </Link>
                 </div>
             </PageTitle>
-            <Typography variant='h5' className={'mb-10'}>Mis Tickets</Typography>
+            <Typography variant='h5' className={'mb-10'}>Tickets</Typography>
             <LoadingIndicator show={isLoading} className={`flex flex-col items-start  transition-all duration-200`} >
 
                 <div className="self-end mr-10 border-2 text-center  rounded-xl shadow-lg text-slate-800 hover:bg-gray-200 hover:text-teal-600 transition-all duration-300 cursor-pointer" onClick={handleAddOpen}>
@@ -92,6 +92,7 @@ const Tickets = (props: TicketsProps) => {
                                 <TableCell align="left">Codigo de identificacion</TableCell>
                                 <TableCell align="left">Titulo</TableCell>
                                 <TableCell align="left">Cliente</TableCell>
+                                <TableCell align="left">Producto</TableCell>
                                 <TableCell align="left">Fecha de creacion</TableCell>
                                 <TableCell align="left">Ultima Modificacion</TableCell>
                                 <TableCell align="left">Estado</TableCell>

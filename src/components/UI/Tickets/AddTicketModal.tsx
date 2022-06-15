@@ -24,9 +24,7 @@ const AddTicketModal = (props: AddTicketModalProps) => {
         productVersion: productVersion.find(ver => ver.id === lic.versionId)?.name || 'N/A'
     }))
 
-    console.log(userProducts)
     const [author, setAuthor] = useState(emptyAuthor)
-    const [currProduct, setCurrProduct] = useState(0)
     const [isLoading, setIsLoading] = useState(false)
     const [input, setInput] = useState({
         title: "",
@@ -34,6 +32,7 @@ const AddTicketModal = (props: AddTicketModalProps) => {
         status: "OPEN",
         priority: 1,
         internal: true,
+        productId: 0,
         productLicenseId: 0
     })
 
@@ -46,10 +45,6 @@ const AddTicketModal = (props: AddTicketModalProps) => {
     const handleChangeInt = (e: any) => {
         setInput(({ ...input, [e.target.name]: Number(e.target.value) }))
     };
-
-    const handleChangeProd = (e: any) => {
-        setCurrProduct(e.target.value)
-    }
 
 
     const handleAuthorChange = (e: any) => {
@@ -70,13 +65,13 @@ const AddTicketModal = (props: AddTicketModalProps) => {
 
     useEffect(() => {
         if (show) return
-
         setInput({
             title: "",
             description: "",
             status: "OPEN",
             priority: 1,
             internal: true,
+            productId: 0,
             productLicenseId: 0
         })
         setAuthor(emptyAuthor)
@@ -84,17 +79,17 @@ const AddTicketModal = (props: AddTicketModalProps) => {
 
 
     const generateTicketUsingAPI = async () => {
-        const inSystem = await getClientInSystem(author?.CUIT)
-        if (!inSystem) {
+        const inSystemId = await getClientInSystem(author?.CUIT)
+        if (!inSystemId) {
             const createResponse = await addClientToSystem(author?.['razon social'], author?.CUIT)
             const createJSON = await createResponse.json()
             if (createResponse.status > 300) return createJSON
             return createTicket({ ...input, authorId: createJSON.ticketAuthor.id })
         }
-        return createTicket({ ...input, authorId: inSystem })
+        return createTicket({ ...input, authorId: inSystemId })
     }
 
-    const disabled = !input.title || !input.description || !author.id || !input.description
+    const disabled = !input.title || !input.description || !author.id || !input.description || !input.productLicenseId
 
     return (
         <CenteredModal isLoading={isLoading} onClose={onClose} show={show} onSubmit={handleSubmit} label="Crear Ticket" addbuttonLabel="Crear" disableSubmit={disabled}>
@@ -106,8 +101,8 @@ const AddTicketModal = (props: AddTicketModalProps) => {
                 <SelectBox name="priority" className='mr-8 w-80' disabled={author.id === 0} label="Prioridad" onChange={handleChangeInt} valueKey="id" value={input?.priority} options={prioridades} text="valor" />
             </div>
             <div className='flex mb-6 flex-row' >
-                <SelectBox name="productId" className='mr-8 w-80' disabled={author.id === 0} label="Product" onChange={handleChangeProd} valueKey="id" value={currProduct} options={productos} text="name" />
-                <SelectBox name="productLicenseId" className='mr-8 w-80' disabled={author.id === 0 || currProduct <= 0} label="Version" onChange={handleChangeInt} valueKey="id" value={input?.productLicenseId} options={userProducts.filter(el => el.productId === currProduct) || []} text="productVersion" />
+                <SelectBox name="productId" className='mr-8 w-80' disabled={author.id === 0} label="Producto" onChange={handleChangeInt} valueKey="id" value={input?.productId} options={productos} text="name" />
+                <SelectBox name="productLicenseId" className='mr-8 w-80' disabled={author.id === 0 || input?.productId <= 0} label="Version" onChange={handleChangeInt} valueKey="id" value={input?.productLicenseId} options={userProducts.filter(el => el.productId === input?.productId) || []} text="productVersion" />
             </div>
             <TextField className='mb-6 w-[42rem] mr-8' name='description' label="Descripcion" multiline rows={2} InputLabelProps={{ shrink: true }} variant="outlined" onChange={handleChangeText} />
         </CenteredModal>
