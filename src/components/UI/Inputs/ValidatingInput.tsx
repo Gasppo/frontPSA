@@ -8,10 +8,14 @@ interface ValidatingInputProps {
     name: string,
     className?: string
     validations?: ((value: any) => string)[]
+    required?: boolean
+    disabled?: boolean
+    multiline?: boolean
+    rows?: number
 }
 
 const ValidatingInput = (props: ValidatingInputProps) => {
-    const { value, onChange, label, name, className, validations = [] } = props
+    const { required, value, onChange, label, name, className, validations = [], disabled, multiline, rows } = props
 
     const errorMessage = validations.reduce((prev, validation) => {
         const newError = validation(value)
@@ -33,6 +37,10 @@ const ValidatingInput = (props: ValidatingInputProps) => {
             value={value}
             helperText={errorMessage}
             error={!!errorMessage}
+            required={required}
+            disabled={disabled}
+            multiline={multiline}
+            rows={rows}
         />
     )
 }

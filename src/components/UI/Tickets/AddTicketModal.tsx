@@ -1,8 +1,8 @@
-import { TextField } from '@mui/material'
 import { useEffect, useMemo, useState } from 'react'
 import { addClientToSystem, createTicket, getClientInSystem } from '../../api/ticketSupport'
 import { externalResource, prioridades, product, productLicense, productVersion } from '../../dev/dummyData'
 import SelectBox from '../Inputs/SelectBox'
+import ValidatingInput from '../Inputs/ValidatingInput'
 import CenteredModal from '../Modal/CenteredModal'
 
 interface AddTicketModalProps {
@@ -89,22 +89,22 @@ const AddTicketModal = (props: AddTicketModalProps) => {
         return createTicket({ ...input, authorId: inSystemId })
     }
 
-    const disabled = !input.title || !input.description || !author.id || !input.description || !input.productLicenseId
+    const disabled = !input.title || !input.description || !author.id  || !input.productLicenseId
 
     return (
         <CenteredModal isLoading={isLoading} onClose={onClose} show={show} onSubmit={handleSubmit} label="Crear Ticket" addbuttonLabel="Crear" disableSubmit={disabled}>
             <div className='flex mb-6  flex-row'>
-                <SelectBox name="authorId" className='mr-8 w-[42rem]' label="Nombre de Cliente" onChange={handleAuthorChange} valueKey="id" value={author.id} options={externalResource} text="razon social" />
+                <SelectBox required  name="authorId" className='mr-8 w-[42rem]' label="Nombre de Cliente" onChange={handleAuthorChange} valueKey="id" value={author.id} options={externalResource} text="razon social" />
             </div>
             <div className='flex mb-6 flex-row'>
-                <TextField name="title" className='mr-8 w-80' disabled={author.id === 0} label="Titulo" InputLabelProps={{ shrink: true }} variant="outlined" onChange={handleChangeText} />
-                <SelectBox name="priority" className='mr-8 w-80' disabled={author.id === 0} label="Prioridad" onChange={handleChangeInt} valueKey="id" value={input?.priority} options={prioridades} text="valor" />
+                <ValidatingInput required name="title" className='mr-8 w-80' disabled={author.id === 0} label="Titulo"  value={input?.title} onChange={handleChangeText} />
+                <SelectBox required name="priority" className='mr-8 w-80' disabled={author.id === 0} label="Prioridad" onChange={handleChangeInt} valueKey="id" value={input?.priority} options={prioridades} text="valor" />
             </div>
             <div className='flex mb-6 flex-row' >
-                <SelectBox name="productId" className='mr-8 w-80' disabled={author.id === 0} label="Producto" onChange={handleChangeInt} valueKey="id" value={input?.productId} options={productos} text="name" />
-                <SelectBox name="productLicenseId" className='mr-8 w-80' disabled={author.id === 0 || input?.productId <= 0} label="Version" onChange={handleChangeInt} valueKey="id" value={input?.productLicenseId} options={userProducts.filter(el => el.productId === input?.productId) || []} text="productVersion" />
+                <SelectBox required name="productId" className='mr-8 w-80' disabled={author.id === 0} label="Producto" onChange={handleChangeInt} valueKey="id" value={input?.productId} options={productos} text="name" />
+                <SelectBox required name="productLicenseId" className='mr-8 w-80' disabled={author.id === 0 || input?.productId <= 0} label="Version" onChange={handleChangeInt} valueKey="id" value={input?.productLicenseId} options={userProducts.filter(el => el.productId === input?.productId) || []} text="productVersion" />
             </div>
-            <TextField className='mb-6 w-[42rem] mr-8' name='description' label="Descripcion" multiline rows={2} InputLabelProps={{ shrink: true }} variant="outlined" onChange={handleChangeText} />
+            <ValidatingInput className='mb-6 w-[42rem] mr-8' name='description' label="Descripcion" multiline rows={2} value={input?.description} onChange={handleChangeText} />
         </CenteredModal>
     )
 }
