@@ -163,3 +163,13 @@ export const productLicense = [
   { id: 3, productId: 2, versionId: 3, clientId: 1, state: "Active" },
   { id: 4, productId: 3, versionId: 4, clientId: 1, state: "Active" },
 ]
+
+export const defaultTicketData = {
+  title: "",
+  description: "",
+  status: "OPEN",
+  priority: 1,
+  productId: 0,
+  productLicenseId: 0,
+  authorId: 0
+}
