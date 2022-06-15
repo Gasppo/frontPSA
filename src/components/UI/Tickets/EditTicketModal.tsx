@@ -24,12 +24,12 @@ const EditTicketModal = (props: EditTicketModalProps) => {
     const userProducts = productLicense.map(lic => ({
         ...lic,
         productName: product.find(prod => prod.id === lic.productId)?.name || 'N/A',
-        productId: product.find(prod => prod.id === lic.productId)?.id || 0,
         productVersion: productVersion.find(ver => ver.id === lic.versionId)?.name || 'N/A'
     }))
 
     const [dirty, setDirty] = useState(false)
     const [originalData, setOriginalData] = useState({})
+    const [runValidations, setRunValidations] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
     const [author, setAuthor] = useState(emptyAuthor)
     const [input, setInput] = useState({
@@ -43,16 +43,24 @@ const EditTicketModal = (props: EditTicketModalProps) => {
         productLicenseId: 0
     })
 
+    const invalidFields = (!input?.title || !author?.id || !input.productLicenseId || !dirty)
+    const disabled =  runValidations && invalidFields
 
     const handleChangeText = (e: any) => {
-        setInput(({ ...input, [e.target.name]: e.target.value }))
+        setInput( prev => ({ ...prev, [e.target.name]: e.target.value }))
         setDirty(true)
     };
 
     const handleChangeInt = (e: any) => {
-        setInput(({ ...input, [e.target.name]: Number(e.target.value) }))
+        setInput( prev => ({ ...prev, [e.target.name]: Number(e.target.value) }))
         setDirty(true)
     };
+
+    const handleProductChange = (e: any) => {
+        setInput( prev => ({ ...prev, [e.target.name]: Number(e.target.value) }))
+        checkVersionForProduct()
+        setDirty(true)
+    }
 
     const handleAuthorChange = (e: any) => {
         const cliente = externalResource.find(el => el.id === e.target.value)
@@ -78,6 +86,11 @@ const EditTicketModal = (props: EditTicketModalProps) => {
     }
 
     const handleSubmit = async () => {
+        if (invalidFields){
+            setRunValidations(true)
+            return
+        }
+
         setIsLoading(true)
         const response = await updateTicketUsingAPI()
         setIsLoading(false)
@@ -95,6 +108,15 @@ const EditTicketModal = (props: EditTicketModalProps) => {
         [emptyAuthor, currentURI],
     )
 
+    const checkVersionForProduct = () => {
+        const currProductId = input.productId
+        const currentLicense = input.productLicenseId
+
+        if (userProducts.find(el => el.id === currentLicense)?.productId === currProductId) {
+            setInput(prev => ({ ...prev, productLicenseId: 0 }))
+        }
+    }
+
     useEffect(() => {
         if (show) {
             setIsLoading(true)
@@ -110,9 +132,9 @@ const EditTicketModal = (props: EditTicketModalProps) => {
     }, [ticketURL, show])
 
 
-    useEffect( () => {
-        setDirty( JSON.stringify(input) !== JSON.stringify(originalData))
-    } , [input, originalData])
+    useEffect(() => {
+        setDirty(JSON.stringify(input) !== JSON.stringify(originalData))
+    }, [input, originalData])
 
 
     useEffect(() => {
@@ -120,7 +142,7 @@ const EditTicketModal = (props: EditTicketModalProps) => {
         getAuthorInfo(input?.authorId)
     }, [getAuthorInfo, input?.authorId]);
 
-    const disabled = !input?.title || !input?.description || !author?.id || !input.productLicenseId || !dirty
+   
 
     const statuses = [
         { id: "OPEN" },
@@ -131,22 +153,22 @@ const EditTicketModal = (props: EditTicketModalProps) => {
 
 
     const isEmpty = (value: any) => !value ? "Este campo no puede estar vacio" : ""
-    const validations = [isEmpty]
+    const validations = runValidations ? [isEmpty] : []
 
 
     return (
         <CenteredModal isLoading={isLoading} onClose={onClose} show={show} onSubmit={handleSubmit} label="Actualizar Ticket" addbuttonLabel="Actualizar" disableSubmit={disabled}>
             <div className='flex mb-6  flex-row'>
-                <SelectBox required name="authorId" className='mr-8 w-80' label="Nombre de Cliente" onChange={handleAuthorChange} disabled={false} valueKey="id" value={author.id} options={externalResource} text="razon social" />
-                <SelectBox required name="status" validations={validations} className='mr-8 w-80' label="Estado del Ticket" onChange={handleChangeText} valueKey="id" value={input?.status} options={statuses} text="id" />
+                <SelectBox required validations={validations} name="authorId" className='mr-8 w-80' label="Nombre de Cliente" onChange={handleAuthorChange} disabled={false} valueKey="id" value={author.id} options={externalResource} text="razon social" />
+                <SelectBox required validations={validations} name="status" className='mr-8 w-80' label="Estado del Ticket" onChange={handleChangeText} valueKey="id" value={input?.status} options={statuses} text="id" />
             </div>
             <div className='flex mb-6 flex-row'>
                 <ValidatingInput required validations={validations} name="title" className='mr-8 w-80' label="Titulo" value={input?.title} onChange={handleChangeText} />
-                <SelectBox required name="priority" className='mr-8 w-80' disabled={input?.authorId === 0} label="Prioridad" onChange={handleChangeInt} valueKey="id" value={input?.priority} options={prioridades} text="valor" />
+                <SelectBox required validations={validations} name="priority" className='mr-8 w-80' disabled={input?.authorId === 0} label="Prioridad" onChange={handleChangeInt} valueKey="id" value={input?.priority} options={prioridades} text="valor" />
             </div>
             <div className='flex mb-6 flex-row'>
-                <SelectBox required name="productId" className='mr-8 w-80' disabled={author.id === 0} label="Producto" onChange={handleChangeInt} valueKey="id" value={input?.productId} options={productos} text="name" />
-                <SelectBox required name="productLicenseId" className='mr-8 w-80' disabled={author.id === 0 || input?.productId <= 0} label="Version" onChange={handleChangeInt} valueKey="id" value={input?.productLicenseId} options={userProducts.filter(el => el.productId === input?.productId) || []} text="productVersion" />
+                <SelectBox required validations={validations} name="productId" className='mr-8 w-80' disabled={author.id === 0} label="Producto" onChange={handleProductChange} valueKey="id" value={input?.productId} options={productos} text="name" />
+                <SelectBox required validations={validations} name="productLicenseId" className='mr-8 w-80' disabled={author.id === 0 || input?.productId <= 0} label="Version" onChange={handleChangeInt} valueKey="id" value={input?.productLicenseId} options={userProducts.filter(el => el.productId === input?.productId) || []} text="productVersion" />
             </div>
             <ValidatingInput className='mb-6 w-[42rem] mr-8' name='description' label="Descripcion" value={input?.description} multiline rows={2} onChange={handleChangeText} />
         </CenteredModal>
