@@ -38,7 +38,6 @@ const tableHeaders = [
     { id: "createdAt", label: "Fecha de creacion", numeric: false },
     { id: "updatedAt", label: "Ultima Modificacion", numeric: false },
     { id: "status", label: "Estado", numeric: false },
-    { id: "", label: "Acciones", numeric: true },
 ] as HeadCell[]
 
 const headerTicket = [
