@@ -1,4 +1,4 @@
-import { Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material'
+import { Button, Paper, Table, TableBody, TableContainer, Typography } from '@mui/material'
 import { useCallback, useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { ticketSupportURI } from '../../components/dev/URIs'
@@ -7,22 +7,60 @@ import { Ticket } from '../../components/types/ticketTypes'
 import PageTitle from '../../components/UI/Dashboard/PageTitle'
 import AddTicketModal from '../../components/UI/Tickets/AddTicketModal'
 import EditTicketModal from '../../components/UI/Tickets/EditTicketModal'
+import EnhancedTableHead from '../../components/UI/Tickets/EnhancedTableHead'
 import TicketTableRow from '../../components/UI/Tickets/TicketTableRow'
 
-
+type Order = 'asc' | 'desc';
+interface Data {
+    id: number;
+    title: string;
+    razonSocial: string;
+    productName: string;
+    createdAt: string;
+    status: string;
+    updatedAt: string
+}
 
 interface TicketsProps {
 
 }
+interface HeadCell {
+    id: keyof Data;
+    label: string;
+    numeric?: boolean;
+}
+
+const tableHeaders = [
+    { id: "id", label: "Codigo de identificacion", numeric: false },
+    { id: "title", label: "Titulo", numeric: false },
+    { id: "razonSocial", label: "Cliente", numeric: false },
+    { id: "productName", label: "Producto", numeric: false },
+    { id: "createdAt", label: "Fecha de creacion", numeric: false },
+    { id: "updatedAt", label: "Ultima Modificacion", numeric: false },
+    { id: "status", label: "Estado", numeric: false },
+    { id: "", label: "Acciones", numeric: true },
+] as HeadCell[]
+
+const headerTicket = [
+    { headerId: "id", ticketId: "id" },
+    { headerId: "title", ticketId: "title" },
+    { headerId: "razonSocial", ticketId: "authorId" },
+    { headerId: "productName", ticketId: "productId" },
+    { headerId: "createdAt", ticketId: "createdAt" },
+    { headerId: "updatedAt", ticketId: "updatedAt" },
+    { headerId: "status", ticketId: "status" },
+]
+
 
 const Tickets = (props: TicketsProps) => {
-
 
     const [loadedTickets, setLoadedTickets] = useState<Ticket[]>([])
     const [isLoading, setLoading] = useState<boolean>(false)
     const [showAddModal, setShowAddModal] = useState(false)
     const [showEditModal, setShowEditModal] = useState(false)
     const [currentId, setCurrentID] = useState<number | null>(null)
+    const [order, setOrder] = useState<Order>('asc');
+    const [orderBy, setOrderBy] = useState<keyof Data>('razonSocial');
 
     const handleAddOpen = () => {
         setShowAddModal(true)
@@ -44,6 +82,12 @@ const Tickets = (props: TicketsProps) => {
         setShowEditModal(false)
     }
 
+    const handleRequestSort = (event: React.MouseEvent<unknown>, property: keyof Data,) => {
+        const isAsc = orderBy === property && order === 'asc';
+        setOrder(isAsc ? 'desc' : 'asc');
+        setOrderBy(property);
+    };
+
 
     const gatherTickets = useCallback(() => {
         setLoading(true)
@@ -58,6 +102,18 @@ const Tickets = (props: TicketsProps) => {
                 console.log(err)
             })
     }, [])
+
+    const sortFunction = (a: any, b: any) => {
+        const currKey = headerTicket.find(el => el.headerId === orderBy)?.ticketId || "title"
+        if (order === 'asc') {
+            if (a?.[currKey] < b?.[currKey]) return 1
+            if (a?.[currKey] > b?.[currKey]) return -1
+            return 0
+        }
+        if (a?.[currKey] < b?.[currKey]) return -1
+        if (a?.[currKey] > b?.[currKey]) return 1
+        return 0
+    }
 
     useEffect(() => {
         gatherTickets()
@@ -78,29 +134,16 @@ const Tickets = (props: TicketsProps) => {
             </PageTitle>
             <Typography variant='h5' className={'mb-10'}>Tickets</Typography>
             <LoadingIndicator show={isLoading} className={`flex flex-col items-start  transition-all duration-200`} >
-
                 <div className="self-end mr-10 border-2 text-center  rounded-xl shadow-lg text-slate-800 hover:bg-gray-200 hover:text-teal-600 transition-all duration-300 cursor-pointer" onClick={handleAddOpen}>
                     <div className="m-4" > Crear Ticket</div>
                 </div>
-
                 <AddTicketModal onSubmit={handleSubmit} onClose={handleClose} show={showAddModal} />
                 <EditTicketModal onSubmit={handleSubmit} onClose={handleClose} show={showEditModal} currentId={currentId} />
                 <TableContainer component={Paper} className="mt-10"  >
                     <Table>
-                        <TableHead>
-                            <TableRow>
-                                <TableCell align="left">Codigo de identificacion</TableCell>
-                                <TableCell align="left">Titulo</TableCell>
-                                <TableCell align="left">Cliente</TableCell>
-                                <TableCell align="left">Producto</TableCell>
-                                <TableCell align="left">Fecha de creacion</TableCell>
-                                <TableCell align="left">Ultima Modificacion</TableCell>
-                                <TableCell align="left">Estado</TableCell>
-                                <TableCell align="right">Accciones</TableCell>
-                            </TableRow>
-                        </TableHead>
+                        <EnhancedTableHead order={order} orderBy={orderBy} onRequestSort={handleRequestSort} headers={tableHeaders} />
                         <TableBody>
-                            {loadedTickets && loadedTickets.map(row => <TicketTableRow refresh={gatherTickets} row={row} key={row.id} onEdit={handleEditOpen} />)}
+                            {loadedTickets && loadedTickets.sort(sortFunction).map(row => <TicketTableRow refresh={gatherTickets} row={row} key={row.id} onEdit={handleEditOpen} />)}
                         </TableBody>
                     </Table>
                 </TableContainer>
