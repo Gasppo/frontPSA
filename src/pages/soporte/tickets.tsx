@@ -1,4 +1,4 @@
-import { Button, Paper, Table, TableBody, TableContainer, Typography } from '@mui/material'
+import { Button, Paper, Table, TableBody, TableContainer, TableFooter, TablePagination, TableRow, Typography } from '@mui/material'
 import { useCallback, useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { ticketSupportURI } from '../../components/dev/URIs'
@@ -38,7 +38,6 @@ const tableHeaders = [
     { id: "createdAt", label: "Fecha de creacion", numeric: false },
     { id: "updatedAt", label: "Ultima Modificacion", numeric: false },
     { id: "status", label: "Estado", numeric: false },
-    { id: "", label: "Acciones", numeric: true },
 ] as HeadCell[]
 
 const headerTicket = [
@@ -61,6 +60,8 @@ const Tickets = (props: TicketsProps) => {
     const [currentId, setCurrentID] = useState<number | null>(null)
     const [order, setOrder] = useState<Order>('asc');
     const [orderBy, setOrderBy] = useState<keyof Data>('razonSocial');
+    const [rowsPerPage, setRowsPerPage] = useState(5)
+    const [page, setPage] = useState(0)
 
     const handleAddOpen = () => {
         setShowAddModal(true)
@@ -86,6 +87,15 @@ const Tickets = (props: TicketsProps) => {
         const isAsc = orderBy === property && order === 'asc';
         setOrder(isAsc ? 'desc' : 'asc');
         setOrderBy(property);
+    };
+
+    const handleChangePage = (event: React.MouseEvent<HTMLButtonElement> | null, newPage: number) => {
+        setPage(newPage);
+    };
+
+    const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        setRowsPerPage(parseInt(event.target.value, 10));
+        setPage(0);
     };
 
 
@@ -143,8 +153,31 @@ const Tickets = (props: TicketsProps) => {
                     <Table>
                         <EnhancedTableHead order={order} orderBy={orderBy} onRequestSort={handleRequestSort} headers={tableHeaders} />
                         <TableBody>
-                            {loadedTickets && loadedTickets.sort(sortFunction).map(row => <TicketTableRow refresh={gatherTickets} row={row} key={row.id} onEdit={handleEditOpen} />)}
+                            {loadedTickets &&
+                                loadedTickets
+                                    .sort(sortFunction)
+                                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                                    .map(row => <TicketTableRow refresh={gatherTickets} row={row} key={row.id} onEdit={handleEditOpen} />)}
                         </TableBody>
+                        <TableFooter>
+                            <TableRow>
+                                <TablePagination
+                                    rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
+                                    colSpan={8}
+                                    count={loadedTickets.length}
+                                    rowsPerPage={rowsPerPage}
+                                    page={page}
+                                    SelectProps={{
+                                        inputProps: {
+                                            'aria-label': 'rows per page',
+                                        },
+                                        native: true,
+                                    }}
+                                    onPageChange={handleChangePage}
+                                    onRowsPerPageChange={handleChangeRowsPerPage}
+                                />
+                            </TableRow>
+                        </TableFooter>
                     </Table>
                 </TableContainer>
             </LoadingIndicator>
