@@ -34,8 +34,8 @@ const EditTicketModal = (props: EditTicketModalProps) => {
     const [author, setAuthor] = useState(emptyAuthor)
     const [input, setInput] = useState(defaultTicketData)
 
-    const invalidFields = (!input?.title || !author?.id || !input.productLicenseId || !dirty)
-    const disabled =  runValidations && invalidFields
+    const invalidFields = (!input?.title || !author?.id || !input.productLicenseId)
+    const disabled =  (runValidations && invalidFields) || !dirty
 
     const handleChangeText = (e: any) => {
         setInput( prev => ({ ...prev, [e.target.name]: e.target.value }))
