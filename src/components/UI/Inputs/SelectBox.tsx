@@ -14,11 +14,12 @@ interface SelectProps {
     disabled?: boolean,
     validations?: ((value: any) => string)[]
     required?: boolean
+    disabledText?: string
 }
 
 const SelectBox = (props: SelectProps) => {
 
-    const { value, onChange, options, valueKey, text, name, className, label, disabled, validations = [], required } = props
+    const { value, onChange, options, valueKey, text, name, className, label, disabled, validations = [], required, disabledText = 'Disabled' } = props
 
     const errorMessage = validations.reduce((prev, validation) => {
         const newError = validation(value)
@@ -28,6 +29,8 @@ const SelectBox = (props: SelectProps) => {
         }
         return prev
     }, "")
+
+    const renderText = () => disabled ? disabledText : options.find(el => el?.[valueKey] === value)?.[text] || ''
 
     return (
         <FormControl error={!!errorMessage} required={required}>
@@ -41,7 +44,7 @@ const SelectBox = (props: SelectProps) => {
                 variant="outlined"
                 color='primary'
                 disabled={disabled}
-
+                renderValue={renderText}
             >
                 {options.map((el, i) => <MenuItem value={el[valueKey]} key={i}>{el?.[text] || 'N/A'}</MenuItem>)}
             </Select>
