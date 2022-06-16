@@ -1,5 +1,4 @@
-import { TextField } from '@mui/material'
-import React from 'react'
+import { TextField } from '@mui/material';
 
 interface ValidatingInputProps {
     value: any
@@ -13,6 +12,7 @@ interface ValidatingInputProps {
     multiline?: boolean
     rows?: number
 }
+
 
 const ValidatingInput = (props: ValidatingInputProps) => {
     const { required, value, onChange, label, name, className, validations = [], disabled, multiline, rows } = props
@@ -33,6 +33,7 @@ const ValidatingInput = (props: ValidatingInputProps) => {
             label={label}
             InputLabelProps={{ shrink: true }}
             variant="outlined"
+            color='primary'
             onChange={onChange}
             value={value}
             helperText={errorMessage}

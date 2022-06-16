@@ -1,5 +1,5 @@
 import { StyledEngineProvider } from '@mui/material';
-import React from 'react';
+import { ThemeProvider } from "@mui/material/styles";
 import ReactDOM from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
 import App from './App';
@@ -10,6 +10,7 @@ import LoadingSlider from './components/Loading/LoadingSlider';
 import './index.css';
 import reportWebVitals from './reportWebVitals';
 import { AuthContextProvider } from './store/AuthContext';
+import { defaultTheme } from './themes/defaultTheme';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -17,19 +18,22 @@ const root = ReactDOM.createRoot(
 
 
 
+
 root.render(
-  <StyledEngineProvider injectFirst>
-    <LoadingIndicatorProvider
-      blocking={LoadingOverlay}
-      nonBlocking={LoadingSlider}
-      replacing={LoadingSkeleton}>
-      <AuthContextProvider>
-        <BrowserRouter>
-          <App />
-        </BrowserRouter>
-      </AuthContextProvider>
-    </LoadingIndicatorProvider>
-  </StyledEngineProvider>
+  <ThemeProvider theme={defaultTheme}>
+    <StyledEngineProvider injectFirst>
+      <LoadingIndicatorProvider
+        blocking={LoadingOverlay}
+        nonBlocking={LoadingSlider}
+        replacing={LoadingSkeleton}>
+        <AuthContextProvider>
+          <BrowserRouter>
+            <App />
+          </BrowserRouter>
+        </AuthContextProvider>
+      </LoadingIndicatorProvider>
+    </StyledEngineProvider>
+  </ThemeProvider>
 );
 
 

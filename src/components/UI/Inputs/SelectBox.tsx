@@ -39,6 +39,7 @@ const SelectBox = (props: SelectProps) => {
                 onChange={onChange}
                 className={className || ''}
                 variant="outlined"
+                color='primary'
                 disabled={disabled}
 
             >

@@ -24,9 +24,9 @@ const Soporte = (props: SoporteProps) => {
                 </Link>
             </PageTitle>
             <div >
-                <div className={`flex flex-col items-center transition-all duration-200`} >
-                    <div className="grid grid-cols-4 gap-4 my-8" >
-                        {sections.map((section, i) => <LinkCard customSize='w-96 h-96' {...section} key={i} />)}
+                <div className={`flex flex-col items-start ml-20     transition-all duration-200`} >
+                    <div className="flex flex-wrap my-8 -m-4" >
+                        {sections.map((section, i) => <LinkCard customSize='w-96 h-96  md:w-80 md:h-80 m-4' {...section} key={i} />)}
                     </div>
                 </div>
             </div>

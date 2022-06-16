@@ -25,7 +25,7 @@ const App = () => {
         <HeaderBar sidebarExpanded={sideBarExpanded} />
       </div>
       <div className={`${sideBarExpanded ? 'ml-60' : 'ml-20'} transition-all duration-200 `}>
-        <Router />
+          <Router />
       </div>
     </div>
   )
