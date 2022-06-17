@@ -1,6 +1,7 @@
 import React from 'react';
-import AccountBalanceIcon from '@mui/icons-material/AccountBalance'
-import SupportAgentIcon from '@mui/icons-material/SupportAgent'
+import HistoryEduIcon from '@mui/icons-material/HistoryEdu';
+import ContactsIcon from '@mui/icons-material/Contacts';
+import AppsIcon from '@mui/icons-material/Apps';
 import { Button} from '@mui/material'
 import LinkCard from '../../../components/UI/Card/LinkCard';
 import PageTitle from '../../../components/UI/Dashboard/PageTitle'
@@ -13,9 +14,9 @@ interface ProductsProps {
 const ProductsAndVersions = (props: ProductsProps) => {
 
     const sections = [
-        { title: 'Portal Productos', description: 'Acceso a portal de gestion de productos', Icon: SupportAgentIcon, href: 'products' },
-        { title: 'Portal Licencias', description: 'Acceso a portal de gestion de licencias', Icon: AccountBalanceIcon, href: 'licences'},
-        { title: 'Portal Clientes', description: 'Acceso a portal de gestion de clientes', Icon: AccountBalanceIcon, href: 'clients'},
+        { title: 'Portal Productos', description: 'Acceso a portal de gestion de productos', Icon: AppsIcon, href: 'products' },
+        { title: 'Portal Licencias', description: 'Acceso a portal de gestion de licencias', Icon: HistoryEduIcon, href: 'licences'},
+        { title: 'Portal Clientes', description: 'Acceso a portal de gestion de clientes', Icon: ContactsIcon, href: 'clients'},
     ]
 
     return (

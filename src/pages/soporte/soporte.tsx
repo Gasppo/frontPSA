@@ -1,4 +1,4 @@
-import AccountBalanceIcon from '@mui/icons-material/AccountBalance'
+import CategoryIcon from '@mui/icons-material/Category'
 import SupportAgentIcon from '@mui/icons-material/SupportAgent'
 import { Button } from '@mui/material'
 import { Link, Outlet } from 'react-router-dom'
@@ -13,7 +13,7 @@ const Soporte = (props: SoporteProps) => {
 
     const sections = [
         { title: 'Gestion de Tickets', description: 'Acceso a portal de gestion de tickets', Icon: SupportAgentIcon, href: 'tickets' },
-        { title: 'Gestion de Productos', description: 'Acceso a portal de gestion de productos', Icon: AccountBalanceIcon, href: 'productsAndVersions'},
+        { title: 'Gestion de Productos', description: 'Acceso a portal de gestion de productos', Icon: CategoryIcon, href: 'productsAndVersions'},
     ]
 
     return (

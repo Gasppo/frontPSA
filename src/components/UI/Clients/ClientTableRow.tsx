@@ -4,7 +4,6 @@ import {Client } from '../../types/clientTypes'
 interface ClientTableRowProps {
     row: Client,
     refresh: () => void
-    onEdit: (id: number) => void
 }
 
 const ClientTableRow = (props: ClientTableRowProps) => {
