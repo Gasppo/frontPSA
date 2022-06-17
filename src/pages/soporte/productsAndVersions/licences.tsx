@@ -19,7 +19,7 @@ const Licences = () => {
                     <Button>Productos y Versiones</Button>
                 </Link>
             </div>
-          </PageTitle>
+      </PageTitle>
       <div className="flex flex-col justify-center items-center h-full">
         <Typography variant='h1'>Pantalla en Construcción</Typography>
         <Link to={'/'} >
