@@ -13,7 +13,7 @@ const Soporte = (props: SoporteProps) => {
 
     const sections = [
         { title: 'Gestion de Tickets', description: 'Acceso a portal de gestion de tickets', Icon: SupportAgentIcon, href: 'tickets' },
-        { title: 'Gestion de Productos', description: 'Acceso a portal de gestion de productos', Icon: AccountBalanceIcon },
+        { title: 'Gestion de Productos', description: 'Acceso a portal de gestion de productos', Icon: AccountBalanceIcon, href: 'productsAndVersions'},
     ]
 
     return (
