@@ -146,8 +146,8 @@ const Versions = () => {
                 <div className="self-end mr-10 border-2 text-center  rounded-xl shadow-lg text-slate-800 hover:bg-gray-200 hover:text-teal-600 transition-all duration-300 cursor-pointer" onClick={handleAddOpen}>
                     <div className="m-4" > Crear Version</div>
                 </div>
-                <AddVersionModal onSubmit={handleSubmit} onClose={handleClose} show={showAddModal} />
-                <AddVersionModal onSubmit={handleSubmit} onClose={handleClose} show={showEditModal} />
+                <AddVersionModal onSubmit={handleSubmit} onClose={handleClose} show={showAddModal} product={productId}/>
+                <AddVersionModal onSubmit={handleSubmit} onClose={handleClose} show={showEditModal} product={productId}/>
                 <TableContainer component={Paper} className="mt-10"  >
                     <Table>
                         <EnhancedTableHead order={order} orderBy={orderBy} onRequestSort={handleRequestSort} headers={tableHeaders} />
