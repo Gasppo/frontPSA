@@ -24,6 +24,14 @@
         transition-all duration-200 scale-0 origin-left;
       }
 
+      .risk-tooltip {
+        @apply absolute w-auto p-2 m-1 min-w-max left-[50vh]
+        rounded-md shadow-md
+        text-slate-600  bg-gray-100
+        text-xs font-bold
+        transition-all duration-200 scale-0 origin-left;
+      }
+
       .sidebar-tooltip-expanded {
         @apply p-2
         text-xs font-bold
