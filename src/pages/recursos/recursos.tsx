@@ -31,26 +31,31 @@ const Recursos = (props: RecursosProps) => {
         setShowEditModal(false)
     }
 
+    const sendToAddHoras = () =>{
+        
+    }
+
    
 
     return (
         <>
             <PageTitle label='Modulo de Recursos Humanos'>
             <div className="flex flex-row" >
-                    <Link to={'/'}>
-                        <Button>Inicio</Button>
-                    </Link>
-                    <Button disabled>{'>'}</Button>
+                <Link to={'/'} >
+                    <Button>Volver al inicio</Button>
+                </Link>
                 </div>
             </PageTitle>
             <Typography variant='h5' className={'mb-10'}>Recursos</Typography>
             <LoadingIndicator show={isLoading} className={`flex flex-col items-start  transition-all duration-200`} >
 
-                <div className="self-end mr-10 border-2 text-center  rounded-xl shadow-lg text-slate-800 hover:bg-gray-200 hover:text-teal-600 transition-all duration-300 cursor-pointer" onClick={handleAddOpen}>
-                    <div className="m-4" > Cargar Horas</div>
+                <div className="self-end mr-10 border-2 text-center  rounded-xl shadow-lg text-slate-800 hover:bg-gray-200 hover:text-teal-600 transition-all duration-300 cursor-pointer">
+                    <Link to={'addHoras'}>
+                    <div className="m-4"> Cargar Horas</div>
+                    </Link>
                 </div>
                     
-                <AddHourModal onSubmit={handleSubmit} onClose={handleClose} show={showAddModal} />
+                
 
                 <TableContainer component={Paper} className="mt-10"  >
                     <Table>

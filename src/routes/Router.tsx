@@ -5,6 +5,7 @@ import PlaceHolderSite from '../pages/placeholder'
 import Soporte from '../pages/soporte/soporte'
 import Tickets from '../pages/soporte/tickets'
 import Recursos from '../pages/recursos/recursos'
+import AddHoras from '../pages/recursos/addHoras'
 
 interface RouterProps {
     
@@ -15,6 +16,7 @@ const Router = (props: RouterProps) => {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path='recursos' element={<Recursos/>} />
+            <Route path='recursos/addHoras' element= {<AddHoras/>}/>
             <Route path="soporte" element={<Soporte />} />
             <Route path='soporte/tickets' element={<Tickets />} />
             <Route path="placeholder" element={<PlaceHolderSite />} />
