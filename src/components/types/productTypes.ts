@@ -8,3 +8,13 @@ export type Version = {
     name: string
     state: string
 }
+
+export type Licence = {
+    id: number
+    productName: string
+    versionName: string
+    clientName: string
+    expirationDate: Date
+    state: string
+}
+

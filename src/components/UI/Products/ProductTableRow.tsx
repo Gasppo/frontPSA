@@ -3,13 +3,13 @@ import { TableCell, TableRow, Button } from '@mui/material';
 import { Product } from '../../types/productTypes';
 import { Link } from 'react-router-dom'
 
-interface TicketTableRowProps {
+interface ProductTableRowProps {
     row: Product,
     refresh: () => void
     onEdit: (id: number) => void
 }
 
-const ProductTableRow = (props: TicketTableRowProps) => {
+const ProductTableRow = (props: ProductTableRowProps) => {
     const { row, onEdit } = props
 
     const handleEdit = () => {

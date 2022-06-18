@@ -123,7 +123,7 @@ const Versions = () => {
     
     return (
         <>
-            <PageTitle label='Portal de Licencias'>
+            <PageTitle label={'Versiones del producto: ' + productName}>
                 <div className="flex flex-row" >
                         <Link to={'/'}>
                             <Button>Inicio</Button>
