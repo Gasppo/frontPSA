@@ -9,6 +9,7 @@ import Recursos from '../pages/recursos/recursos'
 import Products from '../pages/soporte/productsAndVersions/products'
 import Licences from '../pages/soporte/productsAndVersions/licences'
 import Clients from '../pages/soporte/productsAndVersions/clients'
+import Versions from '../pages/soporte/productsAndVersions/versions'
 
 interface RouterProps {
     
@@ -25,6 +26,7 @@ const Router = (props: RouterProps) => {
             <Route path='soporte/productsAndVersions/products' element={<Products />} />
             <Route path='soporte/productsAndVersions/licences' element={<Licences />} />
             <Route path='soporte/productsAndVersions/clients' element={<Clients />} />
+            <Route path='soporte/productsAndVersions/version' element={<Versions />} />
             <Route path="placeholder" element={<PlaceHolderSite />} />
             <Route path="contacts" element={<PlaceHolderSite />} />
           </Routes>

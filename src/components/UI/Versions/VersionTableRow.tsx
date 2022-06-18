@@ -1,15 +1,14 @@
 import EditIcon from '@mui/icons-material/Edit';
 import { TableCell, TableRow, Button } from '@mui/material';
-import { Product } from '../../types/productTypes';
-import { Link } from 'react-router-dom'
+import { Version } from '../../types/productTypes';
 
-interface TicketTableRowProps {
-    row: Product,
+interface VersionTableRowProps {
+    row: Version,
     refresh: () => void
     onEdit: (id: number) => void
 }
 
-const ProductTableRow = (props: TicketTableRowProps) => {
+const VersionTableRow = (props: VersionTableRowProps) => {
     const { row, onEdit } = props
 
     const handleEdit = () => {
@@ -20,7 +19,7 @@ const ProductTableRow = (props: TicketTableRowProps) => {
         <TableRow hover key={row.id}>
             <TableCell align="left">{row.id}</TableCell>
             <TableCell align="left">{row.name}</TableCell>
-            <TableCell align="left"><Link to="/soporte/productsAndVersions/version" state={{productId:row.id, productName: row.name}}><Button>Ver Versiones</Button></Link></TableCell>
+            <TableCell align="left">{row.state}</TableCell>
             <TableCell align="right">
                 <div className="flex flex-row justify-end" >
                     <div className='hover:text-teal-600 text-slate-600 cursor-pointer' onClick={handleEdit}>
@@ -32,4 +31,4 @@ const ProductTableRow = (props: TicketTableRowProps) => {
     )
 }
 
-export default ProductTableRow
+export default VersionTableRow

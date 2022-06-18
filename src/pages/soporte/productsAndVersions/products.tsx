@@ -24,6 +24,7 @@ interface HeadCell {
 const tableHeaders = [
     { id: "id", label: "Codigo de identificacion", numeric: false },
     { id: "nombre", label: "Nombre", numeric: false },
+    {id: "versiones", label: "Versiones", numeric: false }
 ] as HeadCell[]
 
 const headerProduct = [
