@@ -1,6 +1,8 @@
-import { productAndVersionsURI, ticketSupportURI } from "../dev/URIs"
+import { ticketSupportURI } from "../dev/URIs"
 import { TicketProduct, TicketProductVersion } from "../types/ticketTypes"
 
+
+const productAndVersionsURI  = 'https://modulo-soporte-productos-psa.herokuapp.com'
 
 export const addClientToSystem = async (razonSocial: string, nro_CUIT: string) => {
     const response = await fetch(`${ticketSupportURI}/ticketAuthors`, {

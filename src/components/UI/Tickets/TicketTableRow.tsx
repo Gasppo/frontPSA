@@ -7,14 +7,16 @@ interface TicketTableRowProps {
     refresh: () => void
     onEdit: (id: number) => void,
     product?: TicketProduct
+    client?: {
+        id: number;
+        CUIT: string;
+        razonSocial: string;
+    }
 }
 
 const TicketTableRow = (props: TicketTableRowProps) => {
-    const { row, onEdit, product } = props
-
-
-    
-
+    const { row, onEdit, product, client } = props
+ 
     const handleEdit = () => {
         onEdit(row.id)
     }
@@ -27,7 +29,7 @@ const TicketTableRow = (props: TicketTableRowProps) => {
         <TableRow hover key={row.id}>
             <TableCell align="left">{row.id}</TableCell>
             <TableCell align="left">{row.title}</TableCell>
-            <TableCell align="left">{row.author?.razonSocial || 'N/A'}</TableCell>
+            <TableCell align="left">{client?.razonSocial || 'N/A'}</TableCell>
             <TableCell align="left">{product?.name || 'N/A'}</TableCell>
             <TableCell align="left">{new Date(row.createdAt).toLocaleDateString('es-AR')}</TableCell>
             <TableCell align="left">{new Date(row.updatedAt).toLocaleDateString('es-AR')}</TableCell>

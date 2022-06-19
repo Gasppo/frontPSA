@@ -10,6 +10,7 @@ import Products from '../pages/soporte/productsAndVersions/products'
 import Licences from '../pages/soporte/productsAndVersions/licences'
 import Clients from '../pages/soporte/productsAndVersions/clients'
 import Versions from '../pages/soporte/productsAndVersions/versions'
+import AddHoras from '../pages/recursos/addHoras'
 
 interface RouterProps {
     
@@ -20,6 +21,7 @@ const Router = (props: RouterProps) => {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path='recursos' element={<Recursos/>} />
+            <Route path='recursos/addHoras' element= {<AddHoras/>}/>
             <Route path="soporte" element={<Soporte />} />
             <Route path='soporte/tickets' element={<Tickets />} />
             <Route path='soporte/productsAndVersions' element={<ProductsAndVersions />} />
