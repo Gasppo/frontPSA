@@ -119,6 +119,10 @@ const EditTicketModal = (props: EditTicketModalProps) => {
     }, [input?.productId])
 
     useEffect(() => {
+       if(input?.productId) gatherProductVersions(input?.productId)
+    }, [input?.productId])
+
+    useEffect(() => {
         if (show) {
             setRunValidations(false)
             setIsLoading(true)

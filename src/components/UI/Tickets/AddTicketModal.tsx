@@ -78,7 +78,6 @@ const AddTicketModal = (props: AddTicketModalProps) => {
         setInput(defaultTicketData)
     }, [show]);
 
-
     useEffect(() => {
         gatherLicenses(input?.authorId)
     }, [input?.authorId])
