@@ -18,6 +18,14 @@ export type Ticket = {
     productId: number | null;
 }
 
+
+
+export type Resource = {
+    id: number;
+    razonSocial: string;
+    CUIT: string;
+}
+
 export type User = {
     id: string;
     firstName: string;
@@ -25,3 +33,16 @@ export type User = {
     email: string;
     password: string;
 }
+
+export type TicketProduct = {
+    id: number;
+    name: string;
+}
+
+export type TicketProductVersion = {
+    id: number;
+    name: string;
+    productId: number;
+}
+
+export type TicketLicense = { id: number, productId: number, versionId: number, clientId: number }
