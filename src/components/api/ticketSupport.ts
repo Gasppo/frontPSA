@@ -1,4 +1,4 @@
-import { ticketSupportURI } from "../dev/URIs"
+import { productAndVersionsURI, ticketSupportURI } from "../dev/URIs"
 
 
 export const addClientToSystem = async (razonSocial: string, nro_CUIT: string) => {
@@ -41,4 +41,9 @@ export const updateTicket = async (body: any, ticketURL: any) => {
         },
         body: JSON.stringify(body)
     })
+}
+
+
+export const getExternalResources = async () => {
+    return await fetch(`${productAndVersionsURI}/client`).then(response => response.json())
 }

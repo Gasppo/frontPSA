@@ -1,7 +1,8 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { addClientToSystem, getClientInSystem, updateTicket } from '../../api/ticketSupport'
-import { defaultTicketData, externalResource, prioridades, product, productLicense, productVersion } from '../../dev/dummyData'
+import { defaultTicketData, prioridades, product, productLicense, productVersion } from '../../dev/dummyData'
 import { ticketSupportURI } from '../../dev/URIs'
+import { Resource } from '../../types/ticketTypes'
 import SelectBox from '../Inputs/SelectBox'
 import ValidatingInput from '../Inputs/ValidatingInput'
 import CenteredModal from '../Modal/CenteredModal'
@@ -11,14 +12,15 @@ interface EditTicketModalProps {
     onSubmit: () => void
     show: boolean,
     currentId: number | null
+    resources: Resource[]
 }
 
 
 
 const EditTicketModal = (props: EditTicketModalProps) => {
-    const { onSubmit, onClose, show, currentId } = props
+    const { onSubmit, onClose, show, currentId, resources } = props
 
-    const emptyAuthor = useMemo(() => ({ id: 0, CUIT: "", "razon social": "" }), [])
+    const emptyAuthor = useMemo(() => ({ id: 0, CUIT: "", razonSocial: "" }), [])
     const ticketURL = useMemo(() => `${ticketSupportURI}/tickets/${currentId || 0}`, [currentId])
     const productos = product
     const userProducts = productLicense.map(lic => ({
@@ -35,30 +37,30 @@ const EditTicketModal = (props: EditTicketModalProps) => {
     const [input, setInput] = useState(defaultTicketData)
 
     const invalidFields = (!input?.title || !author?.id || !input.productLicenseId)
-    const disabled =  (runValidations && invalidFields) || !dirty
+    const disabled = (runValidations && invalidFields) || !dirty
 
     const handleChangeText = (e: any) => {
-        setInput( prev => ({ ...prev, [e.target.name]: e.target.value }))
+        setInput(prev => ({ ...prev, [e.target.name]: e.target.value }))
         setDirty(true)
     };
 
     const handleChangeInt = (e: any) => {
-        setInput( prev => ({ ...prev, [e.target.name]: Number(e.target.value) }))
+        setInput(prev => ({ ...prev, [e.target.name]: Number(e.target.value) }))
         setDirty(true)
     };
 
     const handleProductChange = (e: any) => {
-        setInput( prev => ({ ...prev, [e.target.name]: Number(e.target.value) }))
+        setInput(prev => ({ ...prev, [e.target.name]: Number(e.target.value) }))
         checkVersionForProduct()
         setDirty(true)
     }
 
     const handleAuthorChange = (e: any) => {
-        const cliente = externalResource.find(el => el.id === e.target.value)
+        const cliente = resources.find(el => el.id === e.target.value)
         setAuthor({
             id: cliente?.id || 0,
             CUIT: cliente?.CUIT || "",
-            "razon social": cliente?.['razon social'] || ""
+            razonSocial: cliente?.razonSocial || ""
         })
         setDirty(true)
     }
@@ -67,7 +69,7 @@ const EditTicketModal = (props: EditTicketModalProps) => {
     const updateTicketUsingAPI = async () => {
         const inSystem = await getClientInSystem(author?.CUIT)
         if (!inSystem) {
-            const createResponse = await addClientToSystem(author?.['razon social'], author?.CUIT)
+            const createResponse = await addClientToSystem(author?.razonSocial, author?.CUIT)
             const createJSON = await createResponse.json()
             if (createResponse.status > 300) return createJSON
             return updateTicket({ ...input, authorId: createJSON.ticketAuthor.id }, ticketURL)
@@ -77,7 +79,7 @@ const EditTicketModal = (props: EditTicketModalProps) => {
     }
 
     const handleSubmit = async () => {
-        if (invalidFields){
+        if (invalidFields) {
             setRunValidations(true)
             return
         }
@@ -94,9 +96,9 @@ const EditTicketModal = (props: EditTicketModalProps) => {
         async (authorId: number) => {
             const response = await fetch(`${ticketSupportURI}/ticketAuthors/${authorId}`)
             const authorInfo = await response.json()
-            setAuthor(externalResource.find(el => el.CUIT === authorInfo.ticketAuthor.CUIT) || emptyAuthor)
+            setAuthor(resources.find(el => el.CUIT === authorInfo.ticketAuthor.CUIT) || emptyAuthor)
         },
-        [emptyAuthor],
+        [emptyAuthor, resources],
     )
 
     const checkVersionForProduct = () => {
@@ -134,7 +136,7 @@ const EditTicketModal = (props: EditTicketModalProps) => {
         getAuthorInfo(input?.authorId)
     }, [getAuthorInfo, input?.authorId]);
 
-   
+
 
     const statuses = [
         { id: "OPEN" },
@@ -151,7 +153,7 @@ const EditTicketModal = (props: EditTicketModalProps) => {
     return (
         <CenteredModal isLoading={isLoading} onClose={onClose} show={show} onSubmit={handleSubmit} label="Actualizar Ticket" addbuttonLabel="Actualizar" disableSubmit={disabled}>
             <div className='flex mb-6  flex-row'>
-                <SelectBox required validations={validations} name="authorId" className='mr-8 w-80' label="Nombre de Cliente" onChange={handleAuthorChange} disabled={false} valueKey="id" value={author.id} options={externalResource} text="razon social" />
+                <SelectBox required validations={validations} name="authorId" className='mr-8 w-80' label="Nombre de Cliente" onChange={handleAuthorChange} disabled={false} valueKey="id" value={author.id} options={resources} text="razonSocial" />
                 <SelectBox required validations={validations} name="status" className='mr-8 w-80' label="Estado del Ticket" onChange={handleChangeText} valueKey="id" value={input?.status} options={statuses} text="id" />
             </div>
             <div className='flex mb-6 flex-row'>

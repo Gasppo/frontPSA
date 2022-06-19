@@ -18,6 +18,14 @@ export type Ticket = {
     productId: number | null;
 }
 
+
+
+export type Resource = {
+    id: number;
+    razonSocial: string;
+    CUIT: string;
+}
+
 export type User = {
     id: string;
     firstName: string;
