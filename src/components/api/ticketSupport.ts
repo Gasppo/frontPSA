@@ -1,4 +1,5 @@
 import { productAndVersionsURI, ticketSupportURI } from "../dev/URIs"
+import { TicketProduct, TicketProductVersion } from "../types/ticketTypes"
 
 
 export const addClientToSystem = async (razonSocial: string, nro_CUIT: string) => {
@@ -46,4 +47,27 @@ export const updateTicket = async (body: any, ticketURL: any) => {
 
 export const getExternalResources = async () => {
     return await fetch(`${productAndVersionsURI}/client`).then(response => response.json())
+}
+
+
+export const getClientLicenses = async (clientId: number) => {
+    return await fetch(`${productAndVersionsURI}/licence/${clientId}`)
+        .then(response => response.json())
+        .then(json => { return json.licences.map((licence: any) => { return { id: licence.id, productId: licence.productId, versionId: licence.versionId, clientId: licence.clientId } }) })
+}
+
+export const getProducts = async () => {
+    return await fetch(`${productAndVersionsURI}/product`).then(response => response.json()).then(json => { return json.products.map((product: TicketProduct) => { return { id: product.id, name: product.name } }) })
+}
+
+export const getProductVersions = async (productId: number) => {
+    return await fetch(`${productAndVersionsURI}/versions/${productId}`)
+        .then(response => response.json())
+        .then(json => { return json.versions.map((version: TicketProductVersion) => { return { id: version.id, name: version.name, productId: version.productId } }) })
+}
+
+export const getProductName = async (productId: number) => {
+    return await fetch(`${productAndVersionsURI}/product/${productId}`)
+        .then(response => response.json())
+        .then(json => { return json.product[0].name })
 }

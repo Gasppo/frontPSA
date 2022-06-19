@@ -33,3 +33,16 @@ export type User = {
     email: string;
     password: string;
 }
+
+export type TicketProduct = {
+    id: number;
+    name: string;
+}
+
+export type TicketProductVersion = {
+    id: number;
+    name: string;
+    productId: number;
+}
+
+export type TicketLicense = { id: number, productId: number, versionId: number, clientId: number }
