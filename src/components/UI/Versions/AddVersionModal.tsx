@@ -45,8 +45,7 @@ const AddVersionModal = (props: AddVersionModalProps) => {
         const randomId = Math.floor(Math.random() * 300) + 1
         console.log(randomId)
         setInput({ ...input, ['versionId']: randomId })
-        console.log(input);
-        const response = await createVersion(input)
+        const response = await createVersion({ ...input, ['versionId']: randomId })
         setIsLoading(false)
         if (response.status === 200) onSubmit()
     }

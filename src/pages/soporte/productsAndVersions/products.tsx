@@ -7,6 +7,7 @@ import { productAndVersionsURI } from '../../../components/dev/URIs'
 import ProductTableRow from '../../../components/UI/Products/ProductTableRow'
 import LoadingIndicator from '../../../components/Loading/LoadingIndicator'
 import AddProductModal from '../../../components/UI/Products/AddProductModal'
+import EditProductModal from '../../../components/UI/Products/EditProductModal'
 import EnhancedTableHead from '../../../components/UI/Products/EnhacedTableHeader'
 
 type Order = 'asc' | 'desc';
@@ -132,7 +133,7 @@ const Products = () => {
                     <div className="m-4" > Crear Producto</div>
                 </div>
                 <AddProductModal onSubmit={handleSubmit} onClose={handleClose} show={showAddModal} />
-                <AddProductModal onSubmit={handleSubmit} onClose={handleClose} show={showEditModal} />
+                <EditProductModal onSubmit={handleSubmit} onClose={handleClose} show={showEditModal} currentId={currentId}/>
                 <TableContainer component={Paper} className="mt-10"  >
                     <Table>
                         <EnhancedTableHead order={order} orderBy={orderBy} onRequestSort={handleRequestSort} headers={tableHeaders} />

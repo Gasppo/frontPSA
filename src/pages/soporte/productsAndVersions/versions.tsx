@@ -8,7 +8,7 @@ import VersionTableRow from '../../../components/UI/Versions/VersionTableRow'
 import LoadingIndicator from '../../../components/Loading/LoadingIndicator'
 import EnhancedTableHead from '../../../components/UI/Versions/EnhacedTableHeader'
 import AddVersionModal from '../../../components/UI/Versions/AddVersionModal'
-
+import EditVersionModal from '../../../components/UI/Versions/EditVersionModal'
 
 interface LocationState {
       productId: number,
@@ -93,7 +93,7 @@ const Versions = () => {
   
     const gatherVersions = useCallback(() => {
         setLoading(true)
-        fetch(`${productAndVersionsURI}/version/${productId}`)
+        fetch(`${productAndVersionsURI}/versions/${productId}`)
             .then(res => res.json())
             .then(res => {
                 setLoadedVersions(res.versions)
@@ -147,7 +147,7 @@ const Versions = () => {
                     <div className="m-4" > Crear Version</div>
                 </div>
                 <AddVersionModal onSubmit={handleSubmit} onClose={handleClose} show={showAddModal} product={productId}/>
-                <AddVersionModal onSubmit={handleSubmit} onClose={handleClose} show={showEditModal} product={productId}/>
+                <EditVersionModal onSubmit={handleSubmit} onClose={handleClose} show={showEditModal} currentId={currentId}/>
                 <TableContainer component={Paper} className="mt-10"  >
                     <Table>
                         <EnhancedTableHead order={order} orderBy={orderBy} onRequestSort={handleRequestSort} headers={tableHeaders} />

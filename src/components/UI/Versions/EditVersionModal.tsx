@@ -1,13 +1,15 @@
-import { useEffect, useState } from 'react'
-import {createProduct } from '../../api/productAndVersionSupport'
+import { useEffect, useMemo, useState } from 'react'
+import {updateVersion } from '../../api/productAndVersionSupport'
 import SelectBox from '../Inputs/SelectBox'
 import ValidatingInput from '../Inputs/ValidatingInput'
 import CenteredModal from '../Modal/CenteredModal'
+import {productAndVersionsURI} from '../../dev/URIs'
 
 interface AddVersionModalProps {
     onClose: () => void
     onSubmit: () => void
     show: boolean
+    currentId: number | null
 }
 const versionStates = [
     {state: 'Active'},
@@ -15,25 +17,26 @@ const versionStates = [
     {state: 'On hold'}
 ]
 
-const AddProductModal = (props: AddVersionModalProps) => {
-    const { onSubmit, onClose, show} = props
+const EditVersionModal = (props: AddVersionModalProps) => {
+    const { onSubmit, onClose, show, currentId } = props
 
-    const defaultProductData = {
-        id:0,
-        productName: "",
-        versionId:0,
+    const defaultVersionData = {
+        versionId: currentId,
         versionName: "",
         state: "Active"
     }
-
+    
+    const [dirty, setDirty] = useState(false)
+    const [originalData, setOriginalData] = useState({})
     const [runValidations, setRunValidations] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
-    const [input, setInput] = useState(defaultProductData)
+    const [input, setInput] = useState(defaultVersionData)
     const invalidFields = (!input?.versionName || !input?.state)
-    const disabled = runValidations && invalidFields
+    const disabled = (runValidations && invalidFields) || !dirty
 
     const handleChangeText = (e: any) => {
         setInput(({ ...input, [e.target.name]: e.target.value }))
+        setDirty(true)
     };
 
     const handleSubmit = async () => {
@@ -42,30 +45,36 @@ const AddProductModal = (props: AddVersionModalProps) => {
             return
         }
         setIsLoading(true)
-        const randomVersionId = Math.floor(Math.random() * 300) + 1
-        const randomProductId = Math.floor(Math.random() * 300) + 1
-        console.log('versionId: '+randomVersionId + ', productId: '+randomProductId)
-        setIsLoading(false)
-        setInput({ ...input, ['id']: randomProductId, ['versionId']: randomVersionId})
-        const response = await createProduct({ ...input, ['id']: randomProductId, ['versionId']: randomVersionId})
+        console.log('input '+ input)
+        const response = await updateVersion(input)
         setIsLoading(false)
         if (response.status === 200) onSubmit()
     }
 
     useEffect(() => {
-        if (show) return
-        setRunValidations(false)
-        setInput(defaultProductData)
-    }, [show]);
+        if (show) {
+            setRunValidations(false)
+            setIsLoading(true)
+            fetch(`${productAndVersionsURI}/version/${currentId}`)
+                .then(res => res.json())
+                .then(res => {
+                    setInput({ ...input, ['versionId']:res.version[0].id,['versionName']: res.version[0].name,  ['state']: res.version[0].state})
+                    console.log(input)
+                    setOriginalData(input || null);
+                    setIsLoading(false)
+                })
+        }
+    }, [show])
+
+    useEffect(() => {
+        setDirty(JSON.stringify(input) !== JSON.stringify(originalData))
+    }, [input, originalData])
 
     const isEmpty = (value: any) => !value ? "Este campo no puede estar vacio" : ""
     const validations = runValidations ? [isEmpty] : []
 
     return (
-        <CenteredModal isLoading={isLoading} onClose={onClose} show={show} onSubmit={handleSubmit} label="Crear Producto" addbuttonLabel="Crear" disableSubmit={disabled}>
-            <div className='flex mb-6 flex-row'>
-                <ValidatingInput required validations={validations} name="productName" className='mr-8 w-[42rem]' label="Nombre de Producto" value={input?.productName} onChange={handleChangeText} />
-            </div>
+        <CenteredModal isLoading={isLoading} onClose={onClose} show={show} onSubmit={handleSubmit} label="Actualizar Version" addbuttonLabel="Actualizar" disableSubmit={disabled}>
             <div className='flex mb-6 flex-row'>
                 <ValidatingInput required validations={validations} name="versionName" className='mr-8 w-[42rem]' label="Nombre de Versión" value={input?.versionName} onChange={handleChangeText} />
             </div>
@@ -76,4 +85,4 @@ const AddProductModal = (props: AddVersionModalProps) => {
     )
 }
 
-export default AddProductModal
+export default EditVersionModal
