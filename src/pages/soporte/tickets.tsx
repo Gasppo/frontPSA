@@ -114,7 +114,7 @@ const Tickets = (props: TicketsProps) => {
     }
 
     const gatherTickets = useCallback(() => {
-        fetch(`${ticketSupportURI}/tickets/full`)
+        fetch(`${ticketSupportURI}/tickets`)
             .then(res => res.json())
             .then(res => {
                 setLoadedTickets(res.tickets)
@@ -173,7 +173,7 @@ const Tickets = (props: TicketsProps) => {
                                 loadedTickets
                                     .sort(sortFunction)
                                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                                    .map(row => <TicketTableRow product={products.find(el => el.id === row.productId)} refresh={gatherTickets} row={row} key={row.id} onEdit={handleEditOpen} />)}
+                                    .map(row => <TicketTableRow product={products.find(el => el.id === row.productId)} client={resources.find(el => el.id === row.authorId)} refresh={gatherTickets} row={row} key={row.id} onEdit={handleEditOpen} />)}
                         </TableBody>
                         <TableFooter>
                             <TableRow>
