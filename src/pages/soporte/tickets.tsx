@@ -1,9 +1,10 @@
 import { Button, Paper, Table, TableBody, TableContainer, TableFooter, TablePagination, TableRow, Typography } from '@mui/material'
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
+import { getExternalResources, getProducts } from '../../components/api/ticketSupport'
 import { ticketSupportURI } from '../../components/dev/URIs'
 import LoadingIndicator from '../../components/Loading/LoadingIndicator'
-import { Ticket } from '../../components/types/ticketTypes'
+import { Ticket, TicketProduct } from '../../components/types/ticketTypes'
 import PageTitle from '../../components/UI/Dashboard/PageTitle'
 import AddTicketModal from '../../components/UI/Tickets/AddTicketModal'
 import EditTicketModal from '../../components/UI/Tickets/EditTicketModal'
@@ -52,6 +53,7 @@ const headerTicket = [
 
 
 const Tickets = (props: TicketsProps) => {
+    const emptyAuthor = useMemo(() => ({ id: 0, CUIT: "", razonSocial: "" }), [])
 
     const [loadedTickets, setLoadedTickets] = useState<Ticket[]>([])
     const [isLoading, setLoading] = useState<boolean>(false)
@@ -62,6 +64,8 @@ const Tickets = (props: TicketsProps) => {
     const [orderBy, setOrderBy] = useState<keyof Data>('razonSocial');
     const [rowsPerPage, setRowsPerPage] = useState(5)
     const [page, setPage] = useState(0)
+    const [resources, setResources] = useState([emptyAuthor])
+    const [products, setProducts] = useState<TicketProduct[]>([{ id: 0, name: "" }])
 
     const handleAddOpen = () => {
         setShowAddModal(true)
@@ -98,9 +102,18 @@ const Tickets = (props: TicketsProps) => {
         setPage(0);
     };
 
+    const gatherResources = async () => {
+        const extResources = await getExternalResources()
+        setResources(extResources?.clients || [])
+    }
+
+    const gatherProducts = async () => {
+        const prods = await getProducts()
+        setProducts(prods || [])
+        console.log(prods)
+    }
 
     const gatherTickets = useCallback(() => {
-        setLoading(true)
         fetch(`${ticketSupportURI}/tickets/full`)
             .then(res => res.json())
             .then(res => {
@@ -126,6 +139,9 @@ const Tickets = (props: TicketsProps) => {
     }
 
     useEffect(() => {
+        setLoading(true)
+        gatherResources()
+        gatherProducts()
         gatherTickets()
     }, [gatherTickets]);
 
@@ -147,8 +163,8 @@ const Tickets = (props: TicketsProps) => {
                 <div className="self-end mr-10 border-2 text-center  rounded-xl shadow-lg text-slate-800 hover:bg-gray-200 hover:text-teal-600 transition-all duration-300 cursor-pointer" onClick={handleAddOpen}>
                     <div className="m-4" > Crear Ticket</div>
                 </div>
-                <AddTicketModal onSubmit={handleSubmit} onClose={handleClose} show={showAddModal} />
-                <EditTicketModal onSubmit={handleSubmit} onClose={handleClose} show={showEditModal} currentId={currentId} />
+                <AddTicketModal onSubmit={handleSubmit} onClose={handleClose} show={showAddModal} resources={resources} products={products} />
+                <EditTicketModal onSubmit={handleSubmit} onClose={handleClose} show={showEditModal} currentId={currentId} resources={resources} products={products} />
                 <TableContainer component={Paper} className="mt-10"  >
                     <Table>
                         <EnhancedTableHead order={order} orderBy={orderBy} onRequestSort={handleRequestSort} headers={tableHeaders} />
@@ -157,7 +173,7 @@ const Tickets = (props: TicketsProps) => {
                                 loadedTickets
                                     .sort(sortFunction)
                                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                                    .map(row => <TicketTableRow refresh={gatherTickets} row={row} key={row.id} onEdit={handleEditOpen} />)}
+                                    .map(row => <TicketTableRow product={products.find(el => el.id === row.productId)} refresh={gatherTickets} row={row} key={row.id} onEdit={handleEditOpen} />)}
                         </TableBody>
                         <TableFooter>
                             <TableRow>

@@ -1,18 +1,19 @@
 import EditIcon from '@mui/icons-material/Edit';
 import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1';
 import { TableCell, TableRow } from '@mui/material';
-import { product } from '../../dev/dummyData';
-import { Ticket } from '../../types/ticketTypes';
+import { Ticket, TicketProduct } from '../../types/ticketTypes';
 interface TicketTableRowProps {
     row: Ticket,
     refresh: () => void
-    onEdit: (id: number) => void
+    onEdit: (id: number) => void,
+    product?: TicketProduct
 }
 
 const TicketTableRow = (props: TicketTableRowProps) => {
-    const { row, onEdit } = props
+    const { row, onEdit, product } = props
 
-    const productName = product.find(el => el.id === row.productId)?.name
+
+    
 
     const handleEdit = () => {
         onEdit(row.id)
@@ -27,7 +28,7 @@ const TicketTableRow = (props: TicketTableRowProps) => {
             <TableCell align="left">{row.id}</TableCell>
             <TableCell align="left">{row.title}</TableCell>
             <TableCell align="left">{row.author?.razonSocial || 'N/A'}</TableCell>
-            <TableCell align="left">{productName || 'N/A'}</TableCell>
+            <TableCell align="left">{product?.name || 'N/A'}</TableCell>
             <TableCell align="left">{new Date(row.createdAt).toLocaleDateString('es-AR')}</TableCell>
             <TableCell align="left">{new Date(row.updatedAt).toLocaleDateString('es-AR')}</TableCell>
             <TableCell align="left">{row.status}</TableCell>
