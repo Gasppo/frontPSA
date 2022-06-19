@@ -2,9 +2,20 @@ import { useEffect, useMemo, useState } from 'react'
 import { addClientToSystem, createTicket, getClientInSystem } from '../../api/ticketSupport'
 import { defaultTicketData, externalResource, prioridades, product, productLicense, productVersion } from '../../dev/dummyData'
 import SelectBox from '../Inputs/SelectBox'
+import { MultiSelect } from "react-multi-select-component";
 import ValidatingInput from '../Inputs/ValidatingInput'
 import CenteredModal from '../Modal/CenteredModal'
+import { Select, TextField } from '@mui/material';
+import { Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material'
 //import DatePicker from "react-datepicker"
+
+const options = [
+    { label: "Grapes 🍇", value: "grapes" },
+    { label: "Mango 🥭", value: "mango" },
+    { label: "Strawberry 🍓", value: "strawberry", disabled: true },
+  ];
+
+
 
 interface AddTicketModalProps {
     onClose: () => void
@@ -12,9 +23,11 @@ interface AddTicketModalProps {
     show: boolean
 }
 
+
 const AddHourModal = (props: AddTicketModalProps) => {
     const { onSubmit, onClose, show } = props
     const emptyAuthor = useMemo(() => ({ id: 0, CUIT: "", "razon social": "" }), [])
+    
 
     
     //TODO - Delete when product license API avaialble
@@ -30,6 +43,8 @@ const AddHourModal = (props: AddTicketModalProps) => {
     const [author, setAuthor] = useState(emptyAuthor)
     const [isLoading, setIsLoading] = useState(false)
     const [input, setInput] = useState(defaultTicketData)
+    const [selected, setSelected] = useState([]);
+
 
     const invalidFields = (!input?.title || !author?.id || !input.productLicenseId)
     const disabled = runValidations && invalidFields
@@ -82,18 +97,30 @@ const AddHourModal = (props: AddTicketModalProps) => {
 
     const isEmpty = (value: any) => !value ? "Este campo no puede estar vacio" : ""
     const validations = runValidations ? [isEmpty] : []
-
+    
+  
     return (
+        
         <CenteredModal isLoading={isLoading} onClose={onClose} show={show} onSubmit={handleSubmit} label="Crear Ticket" addbuttonLabel="Cargar Horas" disableSubmit={disabled}>
-            <div className='flex mb-6  flex-row '>
-                <SelectBox required name="authorId" validations={validations} className='mr-8 w-[42rem]' label="Nombre de Proyecto" onChange={handleAuthorChange} valueKey="id" value={author.id} options={externalResource} text="Nombre de proyecto" />
-            </div>
-            <div className='flex mb-6  flex-row '>
-                <SelectBox required name="authorId" validations={validations} className='mr-8 w-[42rem]' label="Proyectos Seleccionados" onChange={handleAuthorChange} valueKey="id" value={author.id} options={externalResource} text="Proyectos Seleccionados" />
-            </div>
+            <TextField type='date'inputProps={{max: new Date().toISOString().slice(0, 10)}} defaultValue='2022-06-16'></TextField>
+            <MultiSelect options={options} value={selected} onChange={setSelected} labelledBy="Select" />
+            <TableContainer component={Paper} className="mt-10"  >
+                    <Table>
+                        <TableHead>
+                            <TableRow>
+                            <TableCell align="left">Codigo de Proyecto</TableCell>
+                                <TableCell align="left">Proyecto</TableCell>
+                                <TableCell align="left">Codigo de Tarea</TableCell>
+                                <TableCell align="left">Tarea</TableCell>
+                                <TableCell align="left">Descripcion</TableCell>
+                                <TableCell align='left'>Seleccionar</TableCell>
+                            </TableRow>
+                        </TableHead>
+                    </Table>
+            </TableContainer>
         </CenteredModal>
     
-    )
+    ) 
 }
 
 export default AddHourModal
