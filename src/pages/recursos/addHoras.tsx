@@ -1,9 +1,11 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { MultiSelect } from "react-multi-select-component";
 import {  TextField } from '@mui/material';
 import { Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material'
 import { Link } from 'react-router-dom'
+import { proyectsAPI } from "../../components/dev/URIs"
 //import DatePicker from "react-datepicker"
+
 
 const options = [
     { label: "Proyecto 1", value: "grapes" },
@@ -18,9 +20,30 @@ interface AddHorasProps {
 }
 
 
+
+
 const AddHoras= (props: AddHorasProps) => {
 
     const [selected, setSelected] = useState([]);
+    const [proyectos, setProyectos] = useState([]);
+
+
+
+    const fetchProyects = () => {
+        fetch('https://modulo-proyectos-psa-2022.herokuapp.com/projects')
+        .then(res => res.json())
+        .then(res => {
+            setProyectos(res)
+        })
+        .catch(err => {
+            console.log(JSON.stringify(err))
+        })
+    }
+
+    useEffect(() => {
+        fetchProyects()
+    }, []);
+
       
 return(    
     <>

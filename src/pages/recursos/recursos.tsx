@@ -4,6 +4,7 @@ import PageTitle from '../../components/UI/Dashboard/PageTitle'
 import LoadingIndicator from '../../components/Loading/LoadingIndicator'
 import { Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material'
 import AddHourModal from '../../components/UI/Horas/AddHourModal'
+import { Hours } from '../../components/types/resourcesTypes'
 import { useCallback, useEffect, useState } from 'react'
 interface RecursosProps {
 
@@ -15,6 +16,21 @@ const Recursos = (props: RecursosProps) => {
     const [isLoading, setLoading] = useState<boolean>(false)
     const [showAddModal, setShowAddModal] = useState(false)
     const [showEditModal, setShowEditModal] = useState(false)
+    const [horas, setHoras] = useState([])
+
+    const fetchHours = () => {
+        fetch('https://modulo-recursos-psa.herokuapp.com/hours')
+        .then(res => res.json())
+        .then(res => {
+            let horasId = res.filter((element:Hours) => {return element.hourAssignee==4})
+            setHoras(horasId)
+        })
+        .catch(err => {
+            console.log(JSON.stringify(err))
+        })
+        
+
+    }
 
     const handleAddOpen = () => {
         setShowAddModal(true)
@@ -35,7 +51,11 @@ const Recursos = (props: RecursosProps) => {
         
     }
 
-   
+    useEffect(() => {
+        fetchHours()
+    }, []);
+
+
 
     return (
         <>
@@ -70,12 +90,9 @@ const Recursos = (props: RecursosProps) => {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            <td>128219</td>
-                            <td>Implementacion de SAP</td>
-                            <td>41201</td>
-                            <td>Training</td>
-                            <td>Entrenamiento sobre SAP</td>
-                            <td>5</td> 
+                            {
+
+                            }
                         </TableBody>
                     </Table>
                 </TableContainer>
