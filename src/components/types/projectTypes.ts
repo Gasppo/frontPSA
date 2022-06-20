@@ -2,7 +2,7 @@ import {Task} from './taskType'
 
 export type Project = {
     _id: string;
-    code: Number;
+    code: number;
     name: string;
     creationDate: String;
     updatedDate: String;

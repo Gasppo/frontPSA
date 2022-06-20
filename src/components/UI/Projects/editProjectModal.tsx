@@ -63,7 +63,7 @@ const EditProjectModal = (props: EditProjectModalProps) => {
 
 
     const updateProjectUsingAPI = async () => {
-        const response = await fetch(`http://localhost:2000/projects/${props.row._id}`, {
+        const response = await fetch(`http://localhost:2000/projects/${props.row.code}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

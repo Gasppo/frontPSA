@@ -23,7 +23,7 @@ const  ProjectTableRow = (props:  ProjectTableRowProps) => {
     const [showCofirmationModal, setShowConfirmationModal] = useState(false);
     const navigate = useNavigate();
     const deleteItems = async () => {
-        const response = await fetch(`http://localhost:2000/projects/${row._id}`, {
+        const response = await fetch(`http://localhost:2000/projects/${row.code}`, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',
@@ -83,7 +83,7 @@ const  ProjectTableRow = (props:  ProjectTableRowProps) => {
         <>
             <ConfirmModal onSubmit={handleDeleteConfirmation} onClose={handleNotConfirmation} show={showCofirmationModal} txt="Seguro que desea elimiar el proyecto"/>
             <EditProjectModal onRefresh={props.refresh} onClose={handleAddProjectClose} show={showProjectModal} row={props.row} />
-            <TableRow hover key={row._id}>
+            <TableRow hover key={row.code}>
                 <TableCell align="left"><Link to='/proyecto' state={{ projectData: row }}>{row.code.toString()}</Link></TableCell>
                 <TableCell align="left"><Link to='/proyecto' state={{ projectData: row }}>{row.name}</Link></TableCell>
                 <TableCell align="left"><Link to='/proyecto' state={{ projectData: row }}>{row.type}</Link></TableCell>

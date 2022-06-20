@@ -12,6 +12,7 @@ import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import React from 'react';
 import Popup from 'reactjs-popup';
 import EditProjectModal from '../../components/UI/Projects/editProjectModal';
+import { Task } from '../../components/types/taskType'
 
 interface ProyectProps {
     projectData: Project,
@@ -28,7 +29,7 @@ const Proyecto = () => {
     const [project, setProject] = useState(projectData);
     const [isLoading, setLoading] = useState<boolean>(false);
     const [showProjectModal, setshowProjectModal] = useState(false)
-    const [loadedTasks, setLoadedTasks] = useState<Project[]>([])
+    const [loadedTasks, setLoadedTasks] = useState<Task[]>([])
     const [riskColor, setRiskColor] = useState('#9297A0');
     const [riskImpact, setRiskImpact] = useState('None');
     const [stateTagColor, setStateTagColor] = useState('#9297A0');
@@ -41,9 +42,8 @@ const Proyecto = () => {
     });
 
     const recursos = ["RS12345678", "RS87654321", "RS98765432", "RS67543245", "RS87657905"];
-
     const fetchProject = () => {
-        fetch(`http://localhost:2000/projects/${projectData._id}`,{
+        fetch(`http://localhost:2000/projects/${projectData.code}`,{
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json'
@@ -54,7 +54,6 @@ const Proyecto = () => {
             .then((myJson) => {
                 console.log(myJson);
                 setProject(JSON.parse(JSON.stringify(myJson)));
-
             })
             .catch(err => console.log(err));
             sleep(3000).then(res => setLoading(false));
@@ -62,7 +61,7 @@ const Proyecto = () => {
 
     const gatherTasks = () => {
         //setLoading(true)
-        fetch('http://localhost:2000/projects',{
+        fetch('http://localhost:2000/tasks',{
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json'
@@ -80,7 +79,7 @@ const Proyecto = () => {
     }
 
     const updateProjectUsingAPI = async () => {
-        const response = await fetch(`http://localhost:2000/projects/${projectData._id}`, {
+        const response = await fetch(`http://localhost:2000/projects/${projectData.code}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -167,7 +166,7 @@ const Proyecto = () => {
                         Riesgo: {riskImpact}
                     </span>
                 </div>
-                <Typography variant='body2' style={{marginLeft: "85vh", color: '#C5D0CB', marginTop: "1vh"}}>#{project.code.toString()}</Typography>
+                <Typography variant='body2' style={{marginLeft: "85vh", color: '#C5D0CB', marginTop: "1vh"}}>#{project.code}</Typography>
                 <Popup
                     trigger={ <MoreHorizIcon style={{color:'gray', marginLeft: 80}} className= 'hover:bg-gray-100 hover:rounded-3xl transition-all duration-200  group w-8 h-8'></MoreHorizIcon>}
                     closeOnDocumentClick
@@ -205,9 +204,9 @@ const Proyecto = () => {
                                                 <TableCell align="left" style={{color: '#5C7067' }}>Esfuerzo Estimado</TableCell>
                                             </TableRow>
                                         </TableHead>
-                                        <TableBody>
-                                            {loadedTasks && project.tasks.map(row => <TaskTableRow refresh={gatherTasks} row={row} pid= {projectData._id} tasks = {project.tasks} key={row._id} />)}
-                                        </TableBody>
+                                        {<TableBody>
+                                            {loadedTasks && project.tasks.map(row => <TaskTableRow refresh={gatherTasks} row={row} code= {project.code} tasks = {project.tasks} key={row.code} />)}
+                                        </TableBody> }
                                     </Table>
                                 </TableContainer>
                             </>
@@ -261,4 +260,4 @@ const Proyecto = () => {
     )
 }
 
-export default Proyecto
+export default Proyecto;

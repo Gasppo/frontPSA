@@ -13,14 +13,14 @@ import ConfirmModal from './confirmationModal'
 
 interface  TaskTableRowProps {
     row: Task,
-    pid: string,
+    code: number,
     tasks: Task[],
     refresh: () => void,
 }
 
 
 const  TaskTableRow = (props:  TaskTableRowProps) => {
-    const { row, refresh, pid,tasks } = props;
+    const { row, refresh, code,tasks } = props;
     const [showCofirmationModal, setShowConfirmationModal] = useState(false);
     
     const [newTasks, setNewTasks] = useState({
@@ -52,7 +52,7 @@ const  TaskTableRow = (props:  TaskTableRowProps) => {
     };
 
     const updateProjectUsingAPI = async () => {
-        const response = await fetch(`http://localhost:2000/projects/${props.pid}`, {
+        const response = await fetch(`http://localhost:2000/projects/${props.code}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -65,7 +65,7 @@ const  TaskTableRow = (props:  TaskTableRowProps) => {
     }
 
     const deleteTask = () => {
-        const filteredTasks = props.tasks.filter(item => item._id !== row._id);
+        const filteredTasks = props.tasks.filter(item => item.code !== row.code);
         setNewTasks({tasks: filteredTasks});
         updateProjectUsingAPI();
     };
@@ -86,8 +86,8 @@ const  TaskTableRow = (props:  TaskTableRowProps) => {
     return (
         <>
             <ConfirmModal onSubmit={handleDeleteConfirmation} onClose={handleNotConfirmation} show={showCofirmationModal} txt="Seguro que desea elimiar la tarea"/>
-            <TableRow hover key={row._id}>
-                <TableCell align="left"><Link to='/proyecto' state={{ projectData: row }}>{row._id}</Link></TableCell>
+            <TableRow hover key={row.code}>
+                <TableCell align="left"><Link to='/proyecto' state={{ projectData: row }}>{row.code}</Link></TableCell>
                 <TableCell align="left"><Link to='/proyecto' state={{ projectData: row }}>{row.name}</Link></TableCell>
                 <TableCell align="left"><Link to='/proyecto' state={{ projectData: row }}>{row.priority}</Link></TableCell>
                 <TableCell align="left"><Link to='/proyecto' state={{ projectData: row }}>{row.effort}</Link></TableCell>               

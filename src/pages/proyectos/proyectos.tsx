@@ -124,7 +124,7 @@ const Proyectos = (props: ProyectosProps) => {
                                 </TableRow>
                             </TableHead>
                             <TableBody>
-                                {loadedProjects && loadedProjects.map(row => <ProjectTableRow refresh={gatherProjects} row={row} key={row._id} />)}
+                                {loadedProjects && loadedProjects.map(row => <ProjectTableRow refresh={gatherProjects} row={row} key={row.code} />)}
                             </TableBody>
                         </Table>
                     </TableContainer>
