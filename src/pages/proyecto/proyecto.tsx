@@ -15,6 +15,7 @@ import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import Popup from 'reactjs-popup';
 import EditProjectModal from '../../components/UI/Projects/editProjectModal';
 import { Task } from '../../components/types/taskType'
+import AddResourcesModal from '../proyectos/AddResourcesModal'
 
 interface ProyectProps {
     projectData: Project,
@@ -34,6 +35,7 @@ const Proyecto = () => {
     const [loadedTasks, setLoadedTasks] = useState<Task[]>([])
     const [riskColor, setRiskColor] = useState('#9297A0');
     const [riskImpact, setRiskImpact] = useState('None');
+    const [showResourcesModal, setshowResourcesModal] = useState(false);
     const [stateTagColor, setStateTagColor] = useState('#9297A0');
     const [expandedRecursos, setexpandedRecursos] = useState(false);
     const [expandedDates, setexpandedDates] = useState(false);
@@ -79,6 +81,19 @@ const Proyecto = () => {
             .catch(err => console.log(err))
             sleep(3000).then(res => setLoading(false));
     }
+
+    const handleAddResourcesSubmit = () => {
+        //asociar los recursos
+        setshowResourcesModal(false);
+    };
+    
+    const handleModalAddResourcesClose = () => {
+        setshowResourcesModal(false);
+    };
+
+    const handleOpenModalAddResources = () =>{
+        setshowResourcesModal(true);
+    };
 
     const updateProjectUsingAPI = async () => {
         const response = await fetch(`http://localhost:2000/projects/${projectData.code}`, {
@@ -162,6 +177,7 @@ const Proyecto = () => {
     return (
         <>
             <EditProjectModal onRefresh={fetchProject} onClose={handleAddProjectClose} show={showProjectModal} row={project} />
+            <AddResourcesModal onSubmit={handleAddResourcesSubmit} onClose={handleModalAddResourcesClose} show={showResourcesModal} /> 
             <div style={{display: 'flex', flexDirection: 'row', margin: 25, paddingBottom: 20, paddingLeft: 80, borderBottomColor:'#C5D0CB', borderBottomWidth: '1px'}}> 
                 
                 <ArrowBackIosNewIcon  onClick={() => navigate(-1)} style={{color: 'slate', fontSize: 25, marginTop: -9, marginRight: 20}} className= 'hover:bg-gray-200 hover:text-teal-900 hover:rounded-3xl hover:shadow-lg transition-all duration-200  group  h-12'/>
@@ -182,9 +198,10 @@ const Proyecto = () => {
                     arrow={false}
                     position="right top"
                 >
-                    <div className="menu" style={{backgroundColor: '#F4F6F5', borderRadius: 20, height: 88, width: 200}} >
+                    <div className="menu" style={{backgroundColor: '#F4F6F5', borderRadius: 20, height: 132, width: 230}} >
                         <Typography variant='body2' className='menu-item hover:bg-gray-200' style={{ padding: 12, color: '#5C7067', borderTopLeftRadius: 20, borderTopRightRadius: 20}} onClick={handleModalOpen}>Editar Proyecto</Typography>
-                        <Typography variant='body2' className='menu-item hover:bg-gray-200' style={{ padding: 12, color: '#5C7067', borderBottomLeftRadius: 20, borderBottomRightRadius: 20}}>Agregar nueva tarea</Typography>
+                        <Typography variant='body2' className='menu-item hover:bg-gray-200' style={{ padding: 12, color: '#5C7067'}}>Agregar nueva tarea</Typography>
+                        <Typography variant='body2' className='menu-item hover:bg-gray-200' style={{ padding: 12, color: '#5C7067', borderBottomLeftRadius: 20, borderBottomRightRadius: 20}} onClick={handleOpenModalAddResources}>Agregar recursos al proyecto</Typography>
                     </div>
                 </Popup>
             </div>
