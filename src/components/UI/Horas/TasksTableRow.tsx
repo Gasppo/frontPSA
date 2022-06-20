@@ -1,5 +1,5 @@
 import { TableCell, TableRow } from '@mui/material'
-import React from 'react'
+import React, { useState } from 'react'
 import { Hours } from '../../types/resourcesTypes'
 import DeleteIcon from '@mui/icons-material/Delete';
 import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1';
@@ -7,10 +7,18 @@ import EditIcon from '@mui/icons-material/Edit';
 import { Proyect, Task } from '../../types/resourcesTypes'
 interface TasksTableRowProps {
     row: Task,
+    onSelect: (item: any) => void,
+    onRemove: (itemId: number) => void
 }
 
 const TasksTableRow = (props: TasksTableRowProps) => {
-    const { row } = props
+    const [selected, setSelected] = useState<boolean>(false)
+    const { row, onSelect, onRemove } = props
+
+    const handleChange = (e: any) => {
+        setSelected(prev => !prev)
+        !selected ? onSelect(row) : onRemove(row.code)
+    }
 
     return (
         <TableRow hover key={row._id}>
@@ -21,10 +29,10 @@ const TasksTableRow = (props: TasksTableRowProps) => {
             <TableCell align="left">{row.description}</TableCell>
             <TableCell align="left">
                 <div className="flex flex-row" >
-                    <input type="checkbox"></input>
+                    <input type="checkbox" checked={selected} onChange={handleChange}></input>
                 </div>
             </TableCell>
-        
+
         </TableRow>
     )
 }
