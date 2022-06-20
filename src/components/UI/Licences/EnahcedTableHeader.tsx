@@ -5,9 +5,25 @@ import TableRow from '@mui/material/TableRow';
 import TableSortLabel from '@mui/material/TableSortLabel';
 import { visuallyHidden } from '@mui/utils';
 import * as React from 'react';
-import { Data, HeadCell, Order } from '../../types/ticketTypes';
 
 
+interface Data {
+    id: number,
+    name: string,
+    product: string,
+    version: string,
+    client: string,
+    expirationDate: string,
+    state: string
+}
+
+type Order = 'asc' | 'desc';
+
+interface HeadCell {
+    id: keyof Data;
+    label: string;
+    numeric?: boolean;
+}
 
 interface EnhancedTableHeadProps {
     onRequestSort: (event: React.MouseEvent<unknown>, property: keyof Data) => void;

@@ -1,44 +1,51 @@
 import EditIcon from '@mui/icons-material/Edit';
-import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1';
 import { TableCell, TableRow } from '@mui/material';
-import { product } from '../../dev/dummyData';
-import { Ticket } from '../../types/ticketTypes';
+import { Ticket, TicketProduct } from '../../types/ticketTypes';
 interface TicketTableRowProps {
     row: Ticket,
     refresh: () => void
-    onEdit: (id: number) => void
+    onEdit: (id: number) => void,
+    product?: TicketProduct
+    client?: {
+        id: number;
+        CUIT: string;
+        razonSocial: string;
+    }
+    onView: (id: number) => void
 }
 
 const TicketTableRow = (props: TicketTableRowProps) => {
-    const { row, onEdit } = props
-
-    const productName = product.find(el => el.id === row.productId)?.name
+    const { row, onEdit, onView, product, client } = props
 
     const handleEdit = () => {
         onEdit(row.id)
     }
 
-    const handleAsignTask = () => {
-        console.log('TODO')
+    // const handleAsignTask = () => {
+    //     console.log('TODO')
+    // }
+
+    const handleOpenDetails = () => {
+        onView(row.id)
     }
 
     return (
-        <TableRow hover key={row.id}>
-            <TableCell align="left">{row.id}</TableCell>
-            <TableCell align="left">{row.title}</TableCell>
-            <TableCell align="left">{row.author?.razonSocial || 'N/A'}</TableCell>
-            <TableCell align="left">{productName || 'N/A'}</TableCell>
-            <TableCell align="left">{new Date(row.createdAt).toLocaleDateString('es-AR')}</TableCell>
-            <TableCell align="left">{new Date(row.updatedAt).toLocaleDateString('es-AR')}</TableCell>
-            <TableCell align="left">{row.status}</TableCell>
+        <TableRow hover key={row.id} >
+            <TableCell align="left" onClick={handleOpenDetails} >{row.id}</TableCell>
+            <TableCell align="left" onClick={handleOpenDetails}>{row.title}</TableCell>
+            <TableCell align="left" onClick={handleOpenDetails}>{client?.razonSocial || 'N/A'}</TableCell>
+            <TableCell align="left" onClick={handleOpenDetails}>{product?.name || 'N/A'}</TableCell>
+            <TableCell align="left" onClick={handleOpenDetails}>{new Date(row.createdAt).toLocaleDateString('es-AR')}</TableCell>
+            <TableCell align="left" onClick={handleOpenDetails}>{new Date(row.updatedAt).toLocaleDateString('es-AR')}</TableCell>
+            <TableCell align="left" onClick={handleOpenDetails}>{row.status}</TableCell>
             <TableCell align="right">
-                <div className="flex flex-row justify-end" >
+                <div className="flex flex-row justify-end">
                     <div className='hover:text-teal-600 text-slate-600 cursor-pointer' onClick={handleEdit}>
                         <EditIcon />
                     </div>
-                    <div className='hover:text-teal-600 text-slate-600 cursor-pointer' onClick={handleAsignTask}>
+                    {/* <div className='hover:text-teal-600 text-slate-600 cursor-pointer' onClick={handleAsignTask}>
                         <PersonAddAlt1Icon />
-                    </div>
+                    </div> */}
                 </div>
             </TableCell>
         </TableRow>

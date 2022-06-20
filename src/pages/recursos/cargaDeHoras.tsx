@@ -52,7 +52,7 @@ return(
                                 <TableCell align="left">Codigo de Tarea</TableCell>
                                 <TableCell align="left">Tarea</TableCell>
                                 <TableCell align="left">Descripcion</TableCell>
-                                <TableCell align='left'>Seleccionar</TableCell>
+                                <TableCell align='left'>Horas a cargar</TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
