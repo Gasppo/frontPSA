@@ -6,6 +6,7 @@ import { Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, 
 import AddHourModal from '../../components/UI/Horas/AddHourModal'
 import { Hours } from '../../components/types/resourcesTypes'
 import { useCallback, useEffect, useState } from 'react'
+import HoursTableRow from '../../components/UI/Horas/HoursTableRow'
 interface RecursosProps {
 
 }
@@ -14,41 +15,64 @@ interface RecursosProps {
 const Recursos = (props: RecursosProps) => {
 
     const [isLoading, setLoading] = useState<boolean>(false)
-    const [showAddModal, setShowAddModal] = useState(false)
-    const [showEditModal, setShowEditModal] = useState(false)
-    const [horas, setHoras] = useState([])
+    const [horas, setHoras] = useState<Hours[]>([])
 
     const fetchHours = () => {
-        fetch('https://modulo-recursos-psa.herokuapp.com/hours')
+        let body = JSON.stringify({
+            startDate:'2022-06-14',
+            finalDate: '2022-06-21',
+            hourAssignee: 2})
+
+
+        fetch('https://modulo-recursos-psa.herokuapp.com/hours/filterByDate',{
+            method:'POST',
+            body:body,
+            headers: {"Content-Type":"application/json"},
+        })
         .then(res => res.json())
         .then(res => {
-            let horasId = res.filter((element:Hours) => {return element.hourAssignee==4})
-            setHoras(horasId)
+
+            //let horasId = res.filter((element:Hours) => {return element.hourAssignee==4})
+            let horasAgrupadasPorTask:{[id: string]:Hours[]} = {}
+            res.forEach((item:Hours) => {
+               if(!Object.keys(horasAgrupadasPorTask).includes(item.task.code.toString())){
+                    horasAgrupadasPorTask[item.task.code]=[item] 
+                }else{
+                    horasAgrupadasPorTask[item.task.code].push(item)
+                }
+                
+            });
+
+            let horas: Hours[]= [] 
+
+            Object.keys(horasAgrupadasPorTask).forEach((key:string) =>{
+                let horaInicial:Hours = {
+                    _id: horasAgrupadasPorTask[key][0]._id,
+                    hourAssignee:horasAgrupadasPorTask[key][0].hourAssignee,
+                    created: horasAgrupadasPorTask[key][0].created,
+                    _v: horasAgrupadasPorTask[key][0]._v,
+                    task: horasAgrupadasPorTask[key][0].task,
+                    duration: 0,
+                }
+
+                horasAgrupadasPorTask[key].forEach((item:Hours)=>{
+                    horaInicial.duration += item.duration
+                })
+
+                horas.push(horaInicial)
+
+            })
+
+            console.log(horas);
+            setHoras(horas);
+
+
         })
         .catch(err => {
             console.log(JSON.stringify(err))
         })
         
 
-    }
-
-    const handleAddOpen = () => {
-        setShowAddModal(true)
-    }
-
-
-    const handleClose = () => {
-        setShowAddModal(false)
-        setShowEditModal(false)
-    }
-
-    const handleSubmit = () => {
-        setShowAddModal(false)
-        setShowEditModal(false)
-    }
-
-    const sendToAddHoras = () =>{
-        
     }
 
     useEffect(() => {
@@ -70,7 +94,7 @@ const Recursos = (props: RecursosProps) => {
             <LoadingIndicator show={isLoading} className={`flex flex-col items-start  transition-all duration-200`} >
 
                 <div className="self-end mr-10 border-2 text-center  rounded-xl shadow-lg text-slate-800 hover:bg-gray-200 hover:text-teal-600 transition-all duration-300 cursor-pointer">
-                    <Link to={'addHoras'}>
+                    <Link to={'/recursos/horasSemanales/carga'}>
                     <div className="m-4"> Cargar Horas</div>
                     </Link>
                 </div>
@@ -90,9 +114,7 @@ const Recursos = (props: RecursosProps) => {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {
-
-                            }
+                            {horas.map((row:Hours)=><HoursTableRow row={row} key={row._id}/>)}
                         </TableBody>
                     </Table>
                 </TableContainer>
