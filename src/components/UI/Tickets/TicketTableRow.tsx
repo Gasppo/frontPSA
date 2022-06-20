@@ -11,11 +11,12 @@ interface TicketTableRowProps {
         CUIT: string;
         razonSocial: string;
     }
+    onView: (id: number) => void
 }
 
 const TicketTableRow = (props: TicketTableRowProps) => {
-    const { row, onEdit, product, client } = props
- 
+    const { row, onEdit, onView, product, client } = props
+
     const handleEdit = () => {
         onEdit(row.id)
     }
@@ -24,17 +25,21 @@ const TicketTableRow = (props: TicketTableRowProps) => {
     //     console.log('TODO')
     // }
 
+    const handleOpenDetails = () => {
+        onView(row.id)
+    }
+
     return (
-        <TableRow hover key={row.id}>
-            <TableCell align="left">{row.id}</TableCell>
-            <TableCell align="left">{row.title}</TableCell>
-            <TableCell align="left">{client?.razonSocial || 'N/A'}</TableCell>
-            <TableCell align="left">{product?.name || 'N/A'}</TableCell>
-            <TableCell align="left">{new Date(row.createdAt).toLocaleDateString('es-AR')}</TableCell>
-            <TableCell align="left">{new Date(row.updatedAt).toLocaleDateString('es-AR')}</TableCell>
-            <TableCell align="left">{row.status}</TableCell>
+        <TableRow hover key={row.id} >
+            <TableCell align="left" onClick={handleOpenDetails} >{row.id}</TableCell>
+            <TableCell align="left" onClick={handleOpenDetails}>{row.title}</TableCell>
+            <TableCell align="left" onClick={handleOpenDetails}>{client?.razonSocial || 'N/A'}</TableCell>
+            <TableCell align="left" onClick={handleOpenDetails}>{product?.name || 'N/A'}</TableCell>
+            <TableCell align="left" onClick={handleOpenDetails}>{new Date(row.createdAt).toLocaleDateString('es-AR')}</TableCell>
+            <TableCell align="left" onClick={handleOpenDetails}>{new Date(row.updatedAt).toLocaleDateString('es-AR')}</TableCell>
+            <TableCell align="left" onClick={handleOpenDetails}>{row.status}</TableCell>
             <TableCell align="right">
-                <div className="flex flex-row justify-end" >
+                <div className="flex flex-row justify-end">
                     <div className='hover:text-teal-600 text-slate-600 cursor-pointer' onClick={handleEdit}>
                         <EditIcon />
                     </div>
