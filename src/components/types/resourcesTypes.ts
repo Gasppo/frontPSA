@@ -15,11 +15,10 @@ export type Hours = {
     _id: string;
     hourAssignee:number;
     created: Date;
-    startingDate: Date;
+    startingDate: string;
     _v: number;
     task: Task;
     duration: number;
-
 }
 
 export type SelectProyect = {
@@ -48,5 +47,17 @@ export type Proyect = {
 
 export type Event = {
     title: string;
-    date: string;
+    start: number;
+    end: number;
+    allDay: boolean;
+    timeZone: string;
+    color: string;
+}
+
+export type License = {
+    licensedPersonCode: number;
+    startingDate: string;
+    durationDays: number;
+    licenseType: string;
+    created: Date;
 }
