@@ -20,10 +20,15 @@ const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
 const Proyectos = (props: ProyectosProps) => {
     const [loadedProjects, setLoadedProjects] = useState<Project[]>([])
+    const [filteredProjects, setFilteredProjects] = useState<Project[]>([])
     const [isLoading, setLoading] = useState<boolean>(false)
     const [showProjectModal, setshowProjectModal] = useState(false)
     const [showResourcesModal, setshowResourcesModal] = useState(false)
     const [showFiltersModal, setshowFiltersModal] = useState(false)
+
+    const updateCurrentProjects = (filterProjects: Project[] ) =>{
+        setFilteredProjects(filterProjects);
+    }
 
     const handleModalOpen = () => {
         setshowProjectModal(true)
@@ -78,7 +83,7 @@ const Proyectos = (props: ProyectosProps) => {
                 .then((myJson) => {
                     console.log(myJson);
                     setLoadedProjects(JSON.parse(JSON.stringify(myJson)));
-
+                    setFilteredProjects(JSON.parse(JSON.stringify(myJson)));
                 })
                 .catch(err => console.log(err))
                 //sleep(3000).then(res => setLoading(false));
@@ -99,8 +104,8 @@ const Proyectos = (props: ProyectosProps) => {
                     </Link>
                 </PageTitle>
                 <FilterAltIcon style={{color: 'slate', fontSize: 25, marginLeft: '4vh', marginTop: '1vh'}} className= 'hover:bg-gray-200 hover:text-teal-900 hover:rounded-3xl hover:shadow-lg transition-all duration-200  group  h-12' onClick={handleFiltersModalOpen}></FilterAltIcon>
-                <FilterProjectsModal onSubmit={handleFiltersSubmit} onClose={handleModalFiltersClose} show={showFiltersModal} /> 
-                <div className="mt-[1vh] mb-[3vh] ml-[110vh] border-2 text-center  rounded-xl shadow-lg text-slate-800 hover:bg-gray-200 hover:text-teal-600 transition-all duration-300 cursor-pointer" onClick={handleModalOpen}>
+                <FilterProjectsModal refreshProjects={updateCurrentProjects} currentProjects={loadedProjects} onSubmit={handleFiltersSubmit} onClose={handleModalFiltersClose} show={showFiltersModal} /> 
+                <div className="h-[9vh] mt-[1vh] mb-[3vh] ml-[110vh] border-2 text-center  rounded-xl shadow-lg text-slate-800 hover:bg-gray-200 hover:text-teal-600 transition-all duration-300 cursor-pointer" onClick={handleModalOpen}>
                     <div className="m-4" > Crear Proyecto</div>
                 </div>
             </div>
@@ -124,7 +129,7 @@ const Proyectos = (props: ProyectosProps) => {
                                 </TableRow>
                             </TableHead>
                             <TableBody>
-                                {loadedProjects && loadedProjects.map(row => <ProjectTableRow refresh={gatherProjects} row={row} key={row._id} />)}
+                                {filteredProjects && filteredProjects.map(row => <ProjectTableRow refresh={gatherProjects} row={row} key={row._id} />)}
                             </TableBody>
                         </Table>
                     </TableContainer>
