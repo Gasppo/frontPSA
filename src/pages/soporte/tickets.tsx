@@ -4,11 +4,12 @@ import { Link } from 'react-router-dom'
 import { getExternalResources, getProducts } from '../../components/api/ticketSupport'
 import { ticketSupportURI } from '../../components/dev/URIs'
 import LoadingIndicator from '../../components/Loading/LoadingIndicator'
-import { Ticket, TicketProduct } from '../../components/types/ticketTypes'
+import { Ticket, TicketDetails, TicketProduct } from '../../components/types/ticketTypes'
 import PageTitle from '../../components/UI/Dashboard/PageTitle'
 import AddTicketModal from '../../components/UI/Tickets/AddTicketModal'
 import EditTicketModal from '../../components/UI/Tickets/EditTicketModal'
 import EnhancedTableHead from '../../components/UI/Tickets/EnhancedTableHead'
+import TicketDetailsModal from '../../components/UI/Tickets/TicketDetailsModal'
 import TicketTableRow from '../../components/UI/Tickets/TicketTableRow'
 
 type Order = 'asc' | 'desc';
@@ -59,13 +60,15 @@ const Tickets = (props: TicketsProps) => {
     const [isLoading, setLoading] = useState<boolean>(false)
     const [showAddModal, setShowAddModal] = useState(false)
     const [showEditModal, setShowEditModal] = useState(false)
-    const [currentId, setCurrentID] = useState<number | null>(null)
+    const [currentId, setCurrentID] = useState<number>(0)
     const [order, setOrder] = useState<Order>('asc');
     const [orderBy, setOrderBy] = useState<keyof Data>('razonSocial');
     const [rowsPerPage, setRowsPerPage] = useState(5)
     const [page, setPage] = useState(0)
     const [resources, setResources] = useState([emptyAuthor])
     const [products, setProducts] = useState<TicketProduct[]>([{ id: 0, name: "" }])
+    const [showCurrTicket, setShowCurrTicket] = useState<boolean>(false)
+
 
     const handleAddOpen = () => {
         setShowAddModal(true)
@@ -76,9 +79,16 @@ const Tickets = (props: TicketsProps) => {
         setShowEditModal(true)
     }
 
+    const handleTicketOpen = (id: number) => {
+        setCurrentID(id)
+        setShowCurrTicket(true)
+    }
+
     const handleClose = () => {
         setShowAddModal(false)
         setShowEditModal(false)
+        setShowCurrTicket(false)
+
     }
 
     const handleSubmit = () => {
@@ -102,6 +112,7 @@ const Tickets = (props: TicketsProps) => {
         setPage(0);
     };
 
+
     const gatherResources = async () => {
         const extResources = await getExternalResources()
         setResources(extResources?.clients || [])
@@ -110,8 +121,8 @@ const Tickets = (props: TicketsProps) => {
     const gatherProducts = async () => {
         const prods = await getProducts()
         setProducts(prods || [])
-        console.log(prods)
     }
+
 
     const gatherTickets = useCallback(() => {
         fetch(`${ticketSupportURI}/tickets`)
@@ -165,6 +176,7 @@ const Tickets = (props: TicketsProps) => {
                 </div>
                 <AddTicketModal onSubmit={handleSubmit} onClose={handleClose} show={showAddModal} resources={resources} products={products} />
                 <EditTicketModal onSubmit={handleSubmit} onClose={handleClose} show={showEditModal} currentId={currentId} resources={resources} products={products} />
+                {showCurrTicket && <TicketDetailsModal currTicket={loadedTickets.find(ticket => ticket.id === currentId)} onClose={handleClose} show={showCurrTicket} resources={resources} products={products} />}
                 <TableContainer component={Paper} className="mt-10"  >
                     <Table>
                         <EnhancedTableHead order={order} orderBy={orderBy} onRequestSort={handleRequestSort} headers={tableHeaders} />
@@ -173,14 +185,14 @@ const Tickets = (props: TicketsProps) => {
                                 loadedTickets
                                     .sort(sortFunction)
                                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                                    .map(row => <TicketTableRow product={products.find(el => el.id === row.productId)} client={resources.find(el => el.id === row.authorId)} refresh={gatherTickets} row={row} key={row.id} onEdit={handleEditOpen} />)}
+                                    .map(row => <TicketTableRow product={products.find(el => el.id === row.productId)} client={resources.find(el => el.id === row.authorId)} refresh={gatherTickets} row={row} key={row.id} onEdit={handleEditOpen} onView={handleTicketOpen} />)}
                         </TableBody>
                         <TableFooter>
                             <TableRow>
                                 <TablePagination
                                     rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
                                     colSpan={8}
-                                    count={loadedTickets.length}
+                                    count={loadedTickets?.length || 0}
                                     rowsPerPage={rowsPerPage}
                                     page={page}
                                     SelectProps={{

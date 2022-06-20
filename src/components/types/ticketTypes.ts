@@ -46,3 +46,8 @@ export type TicketProductVersion = {
 }
 
 export type TicketLicense = { id: number, productId: number, versionId: number, clientId: number }
+
+export type TicketDetails = Ticket & {
+    razonSocial: string;
+    productName: string;
+}
