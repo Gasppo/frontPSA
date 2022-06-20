@@ -52,8 +52,8 @@ const Proyecto = () => {
             .then((response) => {
                 return response.json()})
             .then((myJson) => {
-                console.log(myJson);
-                setProject(JSON.parse(JSON.stringify(myJson)));
+                setProject((JSON.parse(JSON.stringify(myJson)))[0]);
+                //console.log(project);
             })
             .catch(err => console.log(err));
             sleep(3000).then(res => setLoading(false));
@@ -70,9 +70,8 @@ const Proyecto = () => {
             .then((response) => {
                 return response.json()})
             .then((myJson) => {
-                console.log(myJson);
+                console.log((JSON.parse(JSON.stringify(myJson))));
                 setLoadedTasks(JSON.parse(JSON.stringify(myJson)));
-
             })
             .catch(err => console.log(err))
             sleep(3000).then(res => setLoading(false));
@@ -204,9 +203,9 @@ const Proyecto = () => {
                                                 <TableCell align="left" style={{color: '#5C7067' }}>Esfuerzo Estimado</TableCell>
                                             </TableRow>
                                         </TableHead>
-                                        {<TableBody>
+                                        <TableBody>
                                             {loadedTasks && project.tasks.map(row => <TaskTableRow refresh={gatherTasks} row={row} code= {project.code} tasks = {project.tasks} key={row.code} />)}
-                                        </TableBody> }
+                                        </TableBody>
                                     </Table>
                                 </TableContainer>
                             </>
