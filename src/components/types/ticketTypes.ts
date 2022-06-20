@@ -51,3 +51,22 @@ export type TicketDetails = Ticket & {
     razonSocial: string;
     productName: string;
 }
+
+
+export interface Data {
+    id: number;
+    title: string;
+    razonSocial: string;
+    productName: string;
+    createdAt: string;
+    status: string;
+    updatedAt: string
+}
+
+export interface HeadCell {
+    id: keyof Data;
+    label: string;
+    numeric?: boolean;
+}
+
+export type Order = 'asc' | 'desc';
