@@ -49,7 +49,7 @@ const AddProductModal = (props: AddVersionModalProps) => {
         setInput({ ...input, ['id']: randomProductId, ['versionId']: randomVersionId})
         const response = await createProduct({ ...input, ['id']: randomProductId, ['versionId']: randomVersionId})
         setIsLoading(false)
-        if (response.status === 200) onSubmit()
+        if (response.status >= 200 && response.status < 300) onSubmit()
     }
 
     useEffect(() => {

@@ -19,7 +19,7 @@ const versionStates = [
     {state: 'On hold'}
 ]
 
-const AddProductModal = (props: AddLicenceModalProps) => {
+const AddLicenceModal = (props: AddLicenceModalProps) => {
     const { onSubmit, onClose, show, clients, products} = props
 
     const defaultLicenceData = {
@@ -94,12 +94,11 @@ const AddProductModal = (props: AddLicenceModalProps) => {
         setIsLoading(true)
         const randomLicenceId = Math.floor(Math.random() * 300) + 1
         console.log('licenceId: '+randomLicenceId)
-        setIsLoading(false)
         setInput({ ...input, ['licenceId']: randomLicenceId})
         console.log({ ...input, ['licenceId']: randomLicenceId})
         const response = await createLicence({ ...input, ['licenceId']: randomLicenceId})
         setIsLoading(false)
-        if (response.status === 200) onSubmit()
+        if (response.status >= 200 && response.status < 300) onSubmit()
     }
 
     const gatherVersions = async () => {
@@ -139,10 +138,10 @@ const AddProductModal = (props: AddLicenceModalProps) => {
             </div>
             <div className='flex mb-6  flex-row'>
                 <SelectBox required name="state" validations={validations} className='mr-8 w-80' label="Estado" onChange={handleChangeText} valueKey="state" value={input.state} options={versionStates} text="state" />
-                <TextField type='date' className='mr-8 w-80' inputProps={{min: new Date().toISOString().slice(0, 10)}} defaultValue={new Date().toISOString().slice(0, 10)} label='Fecha de Expiración' onChange={handleChangeText} name='expirationDate'></TextField>
+                <TextField required type='date' className='mr-8 w-80' inputProps={{min: new Date().toISOString().slice(0, 10)}} defaultValue={new Date().toISOString().slice(0, 10)} label='Fecha de Expiración' onChange={handleChangeText} name='expirationDate'></TextField>
             </div>
         </CenteredModal>
     )
 }
 
-export default AddProductModal
+export default AddLicenceModal

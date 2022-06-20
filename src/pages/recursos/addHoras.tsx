@@ -1,5 +1,4 @@
 import { useState } from 'react'
-import { MultiSelect } from "react-multi-select-component";
 import {  TextField } from '@mui/material';
 import { Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material'
 import { Link } from 'react-router-dom'
@@ -34,7 +33,6 @@ return(
         <div>
  
             <TextField type='date'inputProps={{max: new Date().toISOString().slice(0, 10)}} defaultValue='2022-06-16'></TextField>
-            <MultiSelect options={options} value={selected} onChange={setSelected} labelledBy="Select" />
             <TableContainer component={Paper} className="mt-10"  >
                     <Table>
                         <TableHead>

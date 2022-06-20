@@ -9,6 +9,7 @@ import LoadingIndicator from '../../../components/Loading/LoadingIndicator'
 import AddLicenceModal from '../../../components/UI/Licences/AddLicenceModel'
 import EnhancedTableHead from '../../../components/UI/Licences/EnahcedTableHeader'
 import { Client } from '../../../components/types/clientTypes'
+import EditLicenceModal from '../../../components/UI/Licences/EditLicenceModal'
 
 type Order = 'asc' | 'desc';
 interface Data {
@@ -184,7 +185,7 @@ useEffect(() => {
                     <div className="m-4" > Crear Licencia</div>
                 </div>
                 <AddLicenceModal onSubmit={handleSubmit} onClose={handleClose} show={showAddModal} clients={loadedClients} products={loadedProducts}/>
-                <AddLicenceModal onSubmit={handleSubmit} onClose={handleClose} show={showEditModal} clients={loadedClients} products={loadedProducts}/>
+                <EditLicenceModal onSubmit={handleSubmit} onClose={handleClose} show={showEditModal} currentId={currentId}/>
                 <TableContainer component={Paper} className="mt-10"  >
                     <Table>
                         <EnhancedTableHead order={order} orderBy={orderBy} onRequestSort={handleRequestSort} headers={tableHeaders} />

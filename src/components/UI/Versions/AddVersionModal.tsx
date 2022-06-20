@@ -47,7 +47,7 @@ const AddVersionModal = (props: AddVersionModalProps) => {
         setInput({ ...input, ['versionId']: randomId })
         const response = await createVersion({ ...input, ['versionId']: randomId })
         setIsLoading(false)
-        if (response.status === 200) onSubmit()
+        if (response.status >= 200 && response.status < 300) onSubmit()
     }
 
     useEffect(() => {

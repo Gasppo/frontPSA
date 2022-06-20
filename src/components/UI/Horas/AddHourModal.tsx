@@ -2,7 +2,6 @@ import { useEffect, useMemo, useState } from 'react'
 import { addClientToSystem, createTicket, getClientInSystem } from '../../api/ticketSupport'
 import { defaultTicketData, externalResource, prioridades, product, productLicense, productVersion } from '../../dev/dummyData'
 import SelectBox from '../Inputs/SelectBox'
-import { MultiSelect } from "react-multi-select-component";
 import ValidatingInput from '../Inputs/ValidatingInput'
 import CenteredModal from '../Modal/CenteredModal'
 import { Select, TextField } from '@mui/material';
@@ -103,7 +102,6 @@ const AddHourModal = (props: AddTicketModalProps) => {
         
         <CenteredModal isLoading={isLoading} onClose={onClose} show={show} onSubmit={handleSubmit} label="Crear Ticket" addbuttonLabel="Cargar Horas" disableSubmit={disabled}>
             <TextField type='date'inputProps={{max: new Date().toISOString().slice(0, 10)}} defaultValue='2022-06-16'></TextField>
-            <MultiSelect options={options} value={selected} onChange={setSelected} labelledBy="Select" />
             <TableContainer component={Paper} className="mt-10"  >
                     <Table>
                         <TableHead>
