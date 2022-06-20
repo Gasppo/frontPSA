@@ -40,7 +40,6 @@ const Calendario = (props: CalendarioProps) => {
         fetchHours()
     }, []);
 
-
     return (
         <>
             <FullCalendar
