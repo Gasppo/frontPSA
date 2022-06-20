@@ -10,6 +10,8 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import TaskTableRow from '../../components/UI/Projects/TaskTableRow';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import React from 'react';
+import { Link, useNavigate} from 'react-router-dom';
+import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import Popup from 'reactjs-popup';
 import EditProjectModal from '../../components/UI/Projects/editProjectModal';
 import { Task } from '../../components/types/taskType'
@@ -36,10 +38,12 @@ const Proyecto = () => {
     const [expandedRecursos, setexpandedRecursos] = useState(false);
     const [expandedDates, setexpandedDates] = useState(false);
     const [expandedDetails, setexpandedDetails] = useState(false);
+    const navigate = useNavigate();
     const [isADevelopmentProject, setIfItIsADevelomentProject]= useState(false);
     const [newProject, setNewProject] = useState({
         tasks: projectData.tasks,
     });
+
 
     const recursos = ["RS12345678", "RS87654321", "RS98765432", "RS67543245", "RS87657905"];
     const fetchProject = () => {
@@ -70,7 +74,6 @@ const Proyecto = () => {
             .then((response) => {
                 return response.json()})
             .then((myJson) => {
-                console.log((JSON.parse(JSON.stringify(myJson))));
                 setLoadedTasks(JSON.parse(JSON.stringify(myJson)));
             })
             .catch(err => console.log(err))
@@ -152,15 +155,20 @@ const Proyecto = () => {
         setexpandedDates(false);
         setexpandedDetails(false);
         checkIfItIsADevelopmentProject();
+        console.log(loadedTasks);
+        console.log(project);
     }, []);
 
     return (
         <>
             <EditProjectModal onRefresh={fetchProject} onClose={handleAddProjectClose} show={showProjectModal} row={project} />
             <div style={{display: 'flex', flexDirection: 'row', margin: 25, paddingBottom: 20, paddingLeft: 80, borderBottomColor:'#C5D0CB', borderBottomWidth: '1px'}}> 
+                
+                <ArrowBackIosNewIcon  onClick={() => navigate(-1)} style={{color: 'slate', fontSize: 25, marginTop: -9, marginRight: 20}} className= 'hover:bg-gray-200 hover:text-teal-900 hover:rounded-3xl hover:shadow-lg transition-all duration-200  group  h-12'/>
+               
                 <Typography variant='h5' className={'slate'}>{project.name}</Typography>
                 <div className = 'group'>
-                    <Circle  style={{ alignSelf: 'left', color: riskColor, height: '5vh', marginLeft: '5vh'}}></Circle>
+                    <Circle  style={{ alignSelf: 'left', color: riskColor, height: '5vh', marginLeft: '5vh', marginTop: -8}}></Circle>
                     <span className="risk-tooltip group-hover:scale-100" >
                         Riesgo: {riskImpact}
                     </span>
