@@ -6,6 +6,8 @@ import { Link } from 'react-router-dom'
 import { proyectsAPI } from "../../components/dev/URIs"
 import { SelectProyect, Proyect, Task } from '../../components/types/resourcesTypes'
 import TasksTableRow from '../../components/UI/Horas/TasksTableRow'
+import LoadHoursTableRow from '../../components/UI/Horas/LoadHoursTableRow';
+//import AddHourModal from '../../components/UI/Horas/AddHourModal';
 //import DatePicker from "react-datepicker"
 
 
@@ -18,13 +20,52 @@ interface CargaDeHorasProps {
 
 const CargaDeHoras= (props: CargaDeHorasProps,) => {
 
-    const [selected, setSelected] = useState<SelectProyect[]>([]);
-    const [proyectos, setProyectos] = useState<SelectProyect[]>([]);
-    const [tasks, setTasks] =useState<Task[]>([]);
+    const [tasks, setTasks] = useState<Task[]>([]);
+    const [showAddModal, setShowAddModal] = useState(false)
 
     useEffect(() => {
+        fetchTasks()
+    },[]);
 
-    });
+const handleAddOpen = () => {
+    setShowAddModal(true)
+}
+const handleSubmit = () =>{
+    /* cargar las horas */
+    alert("Las horas han sido cargadas")
+}
+
+const handleClose = () => {
+    setShowAddModal(false);
+}
+
+
+    const fetchTasks = () => { 
+        fetch('https://modulo-proyectos-psa-2022.herokuapp.com/projects')
+        .then(res => res.json())
+        .then(res => {
+            console.log(res)
+            setTasks([])
+            let tasks:Task[] = []
+            res.forEach((element:Proyect) => {
+                element.tasks.forEach((item:Task) => {
+                    let proyectTask = {
+                        ...item,
+                        proyectName: element.name,
+                        proyectCode: element.code,
+                    }
+                    tasks.push(proyectTask)
+                });
+            setTasks(tasks)
+            });
+            
+            
+        })
+        .catch(err => {
+            console.log(JSON.stringify(err))
+        })
+
+    }
 
       
 return(    
@@ -56,17 +97,18 @@ return(
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                        {tasks.map((row:Task)=><TasksTableRow row={row} key={row._id}/>)}
+                        {tasks.map((row:Task)=><LoadHoursTableRow row={row} key={row._id}/>)}
                         </TableBody>
                     </Table>
             </TableContainer>
         </div>
 
         <div className="self-end mr-10 border-2 text-center  rounded-xl shadow-lg text-slate-800 hover:bg-gray-200 hover:text-teal-600 transition-all duration-300 cursor-pointer">
-                    <Link to={'/recursos/horasSemanales'}>
+                    <Button onClick={handleAddOpen}>
                     <div className="m-4"> Guardar</div>
-                    </Link>
+                    </Button>
             </div>
+            {/* <AddHourModal onSubmit={handleSubmit} onClose={handleClose} show={showAddModal}></AddHourModal> */}
     
         
         </>
