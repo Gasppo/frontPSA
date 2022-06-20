@@ -1,5 +1,4 @@
 import EditIcon from '@mui/icons-material/Edit';
-import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1';
 import { TableCell, TableRow } from '@mui/material';
 import { Ticket, TicketProduct } from '../../types/ticketTypes';
 interface TicketTableRowProps {
@@ -21,9 +20,9 @@ const TicketTableRow = (props: TicketTableRowProps) => {
         onEdit(row.id)
     }
 
-    const handleAsignTask = () => {
-        console.log('TODO')
-    }
+    // const handleAsignTask = () => {
+    //     console.log('TODO')
+    // }
 
     return (
         <TableRow hover key={row.id}>
@@ -39,9 +38,9 @@ const TicketTableRow = (props: TicketTableRowProps) => {
                     <div className='hover:text-teal-600 text-slate-600 cursor-pointer' onClick={handleEdit}>
                         <EditIcon />
                     </div>
-                    <div className='hover:text-teal-600 text-slate-600 cursor-pointer' onClick={handleAsignTask}>
+                    {/* <div className='hover:text-teal-600 text-slate-600 cursor-pointer' onClick={handleAsignTask}>
                         <PersonAddAlt1Icon />
-                    </div>
+                    </div> */}
                 </div>
             </TableCell>
         </TableRow>
