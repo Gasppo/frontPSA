@@ -13,6 +13,7 @@ import React from 'react';
 import { Link, useNavigate} from 'react-router-dom';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import Popup from 'reactjs-popup';
+import AddTaskModal from './AddTaskModal';
 import EditProjectModal from '../../components/UI/Projects/editProjectModal';
 import { Task } from '../../components/types/taskType'
 import AddResourcesModal from '../proyectos/AddResourcesModal'
@@ -31,8 +32,9 @@ const Proyecto = () => {
     const projectData = prop.projectData;
     const [project, setProject] = useState(projectData);
     const [isLoading, setLoading] = useState<boolean>(false);
-    const [showProjectModal, setshowProjectModal] = useState(false)
-    const [loadedTasks, setLoadedTasks] = useState<Task[]>([])
+    const [showProjectModal, setshowProjectModal] = useState(false);
+    const [isOpenNewTaskModal, setIsOpenNewTaskModal] = useState(false);
+    const [loadedTasks, setLoadedTasks] = useState<Task[]>([]);
     const [riskColor, setRiskColor] = useState('#9297A0');
     const [riskImpact, setRiskImpact] = useState('None');
     const [showResourcesModal, setshowResourcesModal] = useState(false);
@@ -76,10 +78,13 @@ const Proyecto = () => {
             .then((response) => {
                 return response.json()})
             .then((myJson) => {
+                console.log(myJson);
                 setLoadedTasks(JSON.parse(JSON.stringify(myJson)));
+
             })
             .catch(err => console.log(err))
             sleep(3000).then(res => setLoading(false));
+            console.log(loadedTasks);
     }
 
     const handleAddResourcesSubmit = () => {
@@ -161,6 +166,19 @@ const Proyecto = () => {
         setIfItIsADevelomentProject((project.type=="Desarrollo"));
     }
 
+    const openNewTaskModal = () => {
+        setIsOpenNewTaskModal(true);
+    };
+    
+    const handleAddTaskSubmit = () =>{
+        //agregar la tarea
+        setIsOpenNewTaskModal(false);
+    };
+
+    const handleNewTaskClose = () =>{
+        setIsOpenNewTaskModal(false);
+    };
+
     useEffect(() => {
         fetchProject();
         gatherTasks();
@@ -170,14 +188,13 @@ const Proyecto = () => {
         setexpandedDates(false);
         setexpandedDetails(false);
         checkIfItIsADevelopmentProject();
-        console.log(loadedTasks);
-        console.log(project);
-    }, []);
+    }, [loadedTasks]);
 
     return (
         <>
             <EditProjectModal onRefresh={fetchProject} onClose={handleAddProjectClose} show={showProjectModal} row={project} />
-            <AddResourcesModal onSubmit={handleAddResourcesSubmit} onClose={handleModalAddResourcesClose} show={showResourcesModal} /> 
+            <AddTaskModal onSubmit={handleAddTaskSubmit} onClose={handleNewTaskClose} show={isOpenNewTaskModal} toProject={project.code}/>
+            <AddResourcesModal onSubmit={handleAddResourcesSubmit} onClose={handleModalAddResourcesClose} show={showResourcesModal}/> 
             <div style={{display: 'flex', flexDirection: 'row', margin: 25, paddingBottom: 20, paddingLeft: 80, borderBottomColor:'#C5D0CB', borderBottomWidth: '1px'}}> 
                 
                 <ArrowBackIosNewIcon  onClick={() => navigate(-1)} style={{color: 'slate', fontSize: 25, marginTop: -9, marginRight: 20}} className= 'hover:bg-gray-200 hover:text-teal-900 hover:rounded-3xl hover:shadow-lg transition-all duration-200  group  h-12'/>
@@ -200,7 +217,7 @@ const Proyecto = () => {
                 >
                     <div className="menu" style={{backgroundColor: '#F4F6F5', borderRadius: 20, height: 132, width: 230}} >
                         <Typography variant='body2' className='menu-item hover:bg-gray-200' style={{ padding: 12, color: '#5C7067', borderTopLeftRadius: 20, borderTopRightRadius: 20}} onClick={handleModalOpen}>Editar Proyecto</Typography>
-                        <Typography variant='body2' className='menu-item hover:bg-gray-200' style={{ padding: 12, color: '#5C7067'}}>Agregar nueva tarea</Typography>
+                        <Typography variant='body2' className='menu-item hover:bg-gray-200' style={{ padding: 12, color: '#5C7067'}} onClick={openNewTaskModal}>Agregar nueva tarea</Typography>
                         <Typography variant='body2' className='menu-item hover:bg-gray-200' style={{ padding: 12, color: '#5C7067', borderBottomLeftRadius: 20, borderBottomRightRadius: 20}} onClick={handleOpenModalAddResources}>Agregar recursos al proyecto</Typography>
                     </div>
                 </Popup>

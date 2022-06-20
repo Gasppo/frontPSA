@@ -6,9 +6,6 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { Circle } from '@mui/icons-material';
 import { Link, useNavigate } from 'react-router-dom';
 import EditIcon from '@mui/icons-material/Edit';
-import EditProjectModal from './editProjectModal'
-import CircleIcon from '@mui/icons-material/Circle';
-import LoadingIndicator from '../../../components/Loading/LoadingIndicator';
 import ConfirmModal from './confirmationModal'
 
 interface  TaskTableRowProps {
@@ -22,6 +19,7 @@ interface  TaskTableRowProps {
 const  TaskTableRow = (props:  TaskTableRowProps) => {
     const { row, refresh, code,tasks } = props;
     const [showCofirmationModal, setShowConfirmationModal] = useState(false);
+    const [priorityValue, setPriorityValue] = useState('Baja');
     
     const [newTasks, setNewTasks] = useState({
         tasks: props.tasks
@@ -42,10 +40,6 @@ const  TaskTableRow = (props:  TaskTableRowProps) => {
     const openConfirmationDeleteModal = () =>{
         setShowConfirmationModal(true);
     }
-
-    const handleAddProjectClose = () => {
-        setshowProjectModal(false)
-    };
 
     const handleModalOpen = () => {
         setshowProjectModal(true)
@@ -75,11 +69,20 @@ const  TaskTableRow = (props:  TaskTableRowProps) => {
  
       };*/
 
-    const [riskImpact, setRiskImpact] = useState('');
-    const [riskColor, setRiskColor] = useState('#9297A0');
+    const determinePrioriryValue = () => {
+        if(row.priority == 1 ){
+            setPriorityValue(state => ('Baja'));
+        }else if (row.priority == 2){
+            setPriorityValue(state => ('Media'));
+        }else if (row.priority == 3){
+            setPriorityValue(state => ('Alta'));
+        }else if (row.priority == 4){
+            setPriorityValue(state => ('Critica'));
+        }
+    }
 
     useEffect(() => {
-
+        determinePrioriryValue();
     }, []);
 
 
@@ -89,7 +92,7 @@ const  TaskTableRow = (props:  TaskTableRowProps) => {
             <TableRow hover key={row.code}>
                 <TableCell align="left"><Link to='/proyecto' state={{ projectData: row }}>{row.code}</Link></TableCell>
                 <TableCell align="left"><Link to='/proyecto' state={{ projectData: row }}>{row.name}</Link></TableCell>
-                <TableCell align="left"><Link to='/proyecto' state={{ projectData: row }}>{row.priority}</Link></TableCell>
+                <TableCell align="left"><Link to='/proyecto' state={{ projectData: row }}>{priorityValue}</Link></TableCell>
                 <TableCell align="left"><Link to='/proyecto' state={{ projectData: row }}>{row.effort}</Link></TableCell>               
                 <TableCell align="right">
                     <div className='hover:text-teal-600 text-slate-600 cursor-pointer' onClick={openConfirmationDeleteModal}>
