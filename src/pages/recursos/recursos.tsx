@@ -52,6 +52,7 @@ const Recursos = (props: RecursosProps) => {
                     created: horasAgrupadasPorTask[key][0].created,
                     _v: horasAgrupadasPorTask[key][0]._v,
                     task: horasAgrupadasPorTask[key][0].task,
+                    startingDate: horasAgrupadasPorTask[key][0].startingDate,
                     duration: 0,
                 }
 

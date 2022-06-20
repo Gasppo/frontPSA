@@ -15,6 +15,7 @@ export type Hours = {
     _id: string;
     hourAssignee:number;
     created: Date;
+    startingDate: Date;
     _v: number;
     task: Task;
     duration: number;
@@ -45,4 +46,7 @@ export type Proyect = {
     code:number;
 }
 
-
+export type Event = {
+    title: string;
+    date: string;
+}
