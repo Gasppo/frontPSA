@@ -31,10 +31,10 @@ const Proyecto = () => {
     const prop = location.state as ProyectProps;
     const projectData = prop.projectData;
     const [project, setProject] = useState(projectData);
+    const [projectTasks, setProjectTasks] = useState<Task[]>([])
     const [isLoading, setLoading] = useState<boolean>(false);
     const [showProjectModal, setshowProjectModal] = useState(false);
     const [isOpenNewTaskModal, setIsOpenNewTaskModal] = useState(false);
-    const [loadedTasks, setLoadedTasks] = useState<Task[]>([]);
     const [riskColor, setRiskColor] = useState('#9297A0');
     const [riskImpact, setRiskImpact] = useState('None');
     const [showResourcesModal, setshowResourcesModal] = useState(false);
@@ -44,9 +44,6 @@ const Proyecto = () => {
     const [expandedDetails, setexpandedDetails] = useState(false);
     const navigate = useNavigate();
     const [isADevelopmentProject, setIfItIsADevelomentProject]= useState(false);
-    const [newProject, setNewProject] = useState({
-        tasks: projectData.tasks,
-    });
 
 
     const fetchProject = () => {
@@ -65,7 +62,7 @@ const Proyecto = () => {
             sleep(3000).then(res => setLoading(false));
     }
 
-    const gatherTasks = () => {
+    /*const gatherTasks = () => {
         //setLoading(true)
         fetch('http://localhost:2000/tasks',{
             method: 'GET',
@@ -83,7 +80,7 @@ const Proyecto = () => {
             .catch(err => console.log(err))
             sleep(3000).then(res => setLoading(false));
             //console.log(loadedTasks);
-    }
+    }*/
 
     const handleAddResourcesSubmit = () => {
         //asociar los recursos
@@ -98,7 +95,7 @@ const Proyecto = () => {
         setshowResourcesModal(true);
     };
 
-    const updateProjectUsingAPI = async () => {
+    /*const updateProjectUsingAPI = async () => {
         const response = await fetch(`http://localhost:2000/projects/${projectData.code}`, {
             method: 'POST',
             headers: {
@@ -108,7 +105,7 @@ const Proyecto = () => {
             body: JSON.stringify(newProject)
         })
         return response
-    }
+    }*/
 
     const determineRisk = () => {
         if(project.risk?.impact == 1){
@@ -175,17 +172,33 @@ const Proyecto = () => {
         setIsOpenNewTaskModal(false);
     };
 
+    const getTasksByProject = async () => {
+        fetch(`http://localhost:2000/tasks/getbyproject/${project.code}`,{
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        .then((response) => {
+            return response.json()})
+        .then((myJson) => {
+            //console.log(JSON.parse(JSON.stringify(myJson)));
+            setProjectTasks(JSON.parse(JSON.stringify(myJson)));
+        })
+        .catch(err => console.log(err))
+        //sleep(3000).then(res => setLoading(false));
+    }
+
     useEffect(() => {
         fetchProject();
-        gatherTasks();
+        getTasksByProject();
         determineRisk();
         determineStateTagColor();
         setexpandedRecursos(false);
         setexpandedDates(false);
         setexpandedDetails(false);
         checkIfItIsADevelopmentProject();
-        console.log(project.resources);
-    }, []);
+    }, [projectTasks]);
 
     return (
         <>
@@ -243,7 +256,7 @@ const Proyecto = () => {
                                             </TableRow>
                                         </TableHead>
                                         <TableBody>
-                                            {loadedTasks && (project.tasks.sort((a, b) => b.priority - a.priority)).map(row => <TaskTableRow refresh={gatherTasks} row={row} code= {project.code} tasks = {project.tasks} key={row.code} />)}
+                                            {(projectTasks.sort((a, b) => b.priority - a.priority)).map(row => <TaskTableRow refresh={getTasksByProject} row={row} code= {project.code} tasks = {projectTasks} key={row.code} />)}
                                         </TableBody>
                                     </Table>
                                 </TableContainer>
