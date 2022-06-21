@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { MultiSelect } from "react-multi-select-component";
 import { TextField } from '@mui/material';
 import { Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material'
-import { Link, useLocation } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { proyectsAPI } from "../../components/dev/URIs"
 import { SelectProyect, Proyect, Task } from '../../components/types/resourcesTypes'
 import TasksTableRow from '../../components/UI/Horas/TasksTableRow'
@@ -20,7 +20,6 @@ interface CargaDeHorasProps {
 
 
 const CargaDeHoras = (props: CargaDeHorasProps,) => {
-
     const [tasks, setTasks] = useState<{[id: string]:string}>({});
     const [showAddModal, setShowAddModal] = useState(false)
 
@@ -30,8 +29,8 @@ const CargaDeHoras = (props: CargaDeHorasProps,) => {
         setShowAddModal(true)
     }
     const handleSubmit = () => {
-        /* cargar las horas */
-        alert("Las horas han sido cargadas")
+        sendHoursToAPI();
+
     }
 
     const handleClose = () => {
@@ -100,7 +99,6 @@ const CargaDeHoras = (props: CargaDeHorasProps,) => {
         tasksCopy[task.code] = event.currentTarget.value
         
         setTasks(tasksCopy);
-        console.log(tasks)
     }
 
 
@@ -140,7 +138,7 @@ const CargaDeHoras = (props: CargaDeHorasProps,) => {
             </div>
 
             <div className="self-end mr-10 border-2 text-center  rounded-xl shadow-lg text-slate-800 hover:bg-gray-200 hover:text-teal-600 transition-all duration-300 cursor-pointer">
-                <Button onClick={sendHoursToAPI}>
+                <Button onClick={handleAddOpen}>
                     <div className="m-4"> Guardar</div>
                 </Button>
             </div>
