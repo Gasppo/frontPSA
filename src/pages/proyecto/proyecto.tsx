@@ -13,9 +13,11 @@ import { Link, useNavigate} from 'react-router-dom';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import Popup from 'reactjs-popup';
 import AddTaskModal from './AddTaskModal';
+import{Resource} from '../../components/types/resourceType';
 import EditProjectModal from '../../components/UI/Projects/editProjectModal';
 import { Task } from '../../components/types/taskType'
 import AddResourcesModal from '../proyectos/AddResourcesModal'
+import AddCircleIcon from '@mui/icons-material/AddCircle';
 
 interface ProyectProps {
     projectData: Project,
@@ -31,6 +33,7 @@ const Proyecto = () => {
     const prop = location.state as ProyectProps;
     const projectData = prop.projectData;
     const [project, setProject] = useState(projectData);
+    const [products, setProducts] = useState<any[]>([]);
     const [isLoading, setLoading] = useState<boolean>(false);
     const [showProjectModal, setshowProjectModal] = useState(false);
     const [isOpenNewTaskModal, setIsOpenNewTaskModal] = useState(false);
@@ -42,6 +45,8 @@ const Proyecto = () => {
     const [expandedRecursos, setexpandedRecursos] = useState(false);
     const [expandedDates, setexpandedDates] = useState(false);
     const [expandedDetails, setexpandedDetails] = useState(false);
+    const [resources, setLoadedResources] = useState<Resource []>([]);
+    const [clients, setClients] = useState<any[]>([]);
     const navigate = useNavigate();
     const [isADevelopmentProject, setIfItIsADevelomentProject]= useState(false);
     const [newProject, setNewProject] = useState({
@@ -175,6 +180,62 @@ const Proyecto = () => {
         setIsOpenNewTaskModal(false);
     };
 
+    const getResources = () => {
+        //setLoading(true)
+        fetch('https://modulo-recursos-psa.herokuapp.com/employees',{
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+            .then((response) => {
+                return response.json()})
+            .then((myJson) => {
+                setLoadedResources(Object.values(JSON.parse(JSON.stringify(myJson))));
+            })
+            .catch(err => console.log(err))
+    };
+
+    const getProducts = () => {
+        //setLoading(true)
+        fetch('https://modulo-soporte-productos-psa.herokuapp.com/product',{
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+            .then((response) => {
+                return response.json()})
+            .then((myJson) => {
+                setProducts(Object.values(JSON.parse(JSON.stringify(myJson))));
+            })
+            .catch(err => console.log(err))
+            //sleep(3000).then(res => setLoading(false));
+    }
+
+    const getClients = () => {
+        //setLoading(true)
+        fetch('https://modulo-soporte-productos-psa.herokuapp.com/client',{
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+            .then((response) => {
+                return response.json()})
+            .then((myJson) => {
+                setClients(Object.values(JSON.parse(JSON.stringify(myJson))));
+            })
+            .catch(err => console.log(err))
+            //sleep(3000).then(res => setLoading(false));
+    }
+
+    /*useEffect(()=>{
+        getResources();
+        getClients();
+        getProducts();
+    },[resources, clients, products])*/
+
     useEffect(() => {
         fetchProject();
         gatherTasks();
@@ -281,7 +342,8 @@ const Proyecto = () => {
                             </>}
                         </div>
                     </div>
-                    <div className='hover:bg-gray-100' style={{marginTop: 10, padding: 15, display: 'flex', flexDirection: 'column', borderColor: "#B0BFB8", borderRadius: 15, borderWidth: '1px',marginRight: '5vh'}} onClick={changeexpandedDatesSetUp}>
+                    {expandedRecursos && <AddCircleIcon style={{marginLeft:320, color: '#C5D0CB', zIndex:4, marginTop: -50}} className='hover:teal-600' onClick={handleOpenModalAddResources}/>}
+                    <div className='hover:bg-gray-100' style={{marginTop: expandedRecursos? 35:10, padding: 15, display: 'flex', flexDirection: 'column', borderColor: "#B0BFB8", borderRadius: 15, borderWidth: '1px',marginRight: '5vh'}} onClick={changeexpandedDatesSetUp}>
                         <div style={{ borderBottomColor: expandedDates ? "#B0BFB8":'transparent', paddingBottom: expandedDates ? 10:0, marginBottom:expandedDates ? 10:0, display: 'flex', flexDirection: 'row',color: '#5C7067', borderBottomWidth: '1px'}}><Typography variant='body2' className='w-[30vh] ml-5' style={{fontWeight: 'bold'}}>Actividad </Typography>
                             {expandedDates && <KeyboardArrowUpIcon className='ml-7' style={{color: '#5C7067'}}/>}
                             {!expandedDates && <KeyboardArrowDownIcon className='ml-7' style={{color: '#5C7067'}}/>}

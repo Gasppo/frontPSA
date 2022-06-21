@@ -108,12 +108,10 @@ const Proyectos = (props: ProyectosProps) => {
                 .then((response) => {
                     return response.json()})
                 .then((myJson) => {
-                    //console.log(myJson);
                     setLoadedProjects(JSON.parse(JSON.stringify(myJson)));
                     setFilteredProjects(JSON.parse(JSON.stringify(myJson)));
                 })
                 .catch(err => console.log(err))
-                //sleep(3000).then(res => setLoading(false));
     }
 
 
