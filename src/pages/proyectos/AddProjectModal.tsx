@@ -6,7 +6,8 @@ import AccountCircle from '@mui/icons-material/AccountCircle';
 import {Project} from '../../components/types/projectTypes'
 import ValidatingInput from '../../components/UI/Inputs/ValidatingInput';
 import ValidatingInputDates from '../../components/UI/Inputs/ValidatingInputDates';
-import SelectBox from '../../components/UI/Inputs/SelectBox'
+import SelectBox from '../../components/UI/Inputs/SelectBox';
+import Autocomplete from '@mui/material/Autocomplete';
 import CenteredModal from '../../components/UI/Modal/CenteredModal'
 import { VoicemailRounded } from '@mui/icons-material';
 import { isPrivateIdentifier } from 'typescript';
@@ -30,9 +31,11 @@ const AddProjectModal = (props: AddTicketModalProps) => {
     const [type, setType] = useState('Desarrollo');
     const { onSubmit, onClose, show} = props
     const [clientType, setClientType] = useState('Externo');
+    const [clients, setClients] = useState<any[]>([]);
     const [showProductModal, setProductModal] = useState(false);
     const [runValidations, setRunValidations] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
+    const [products, setProducts] = useState<any[]>([]);
     const [newProject, setNewProject] = useState({
         name: "",
        // id: 0, //realizar un generador de id
@@ -129,9 +132,49 @@ const AddProjectModal = (props: AddTicketModalProps) => {
         onClose();
     };
 
+    const getClients = () => {
+        //setLoading(true)
+        fetch('https://modulo-soporte-productos-psa.herokuapp.com/client',{
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+            .then((response) => {
+                return response.json()})
+            .then((myJson) => {
+                setClients(Object.values(JSON.parse(JSON.stringify(myJson))));
+                console.log(clients[0]);
+            })
+            .catch(err => console.log(err))
+            //sleep(3000).then(res => setLoading(false));
+    }
+
+    const getProducts = () => {
+        //setLoading(true)
+        fetch('https://modulo-soporte-productos-psa.herokuapp.com/product',{
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+            .then((response) => {
+                return response.json()})
+            .then((myJson) => {
+                setProducts(Object.values(JSON.parse(JSON.stringify(myJson))));
+            })
+            .catch(err => console.log(err))
+            //sleep(3000).then(res => setLoading(false));
+    }
+
     useEffect(() => {
         setRunValidations(false)
     }, []);
+
+    useEffect(()=>{
+        getClients();
+        getProducts();
+    }, [clients, products]);
 
 
     const generateProjectUsingAPI = async () => {
@@ -163,7 +206,18 @@ const AddProjectModal = (props: AddTicketModalProps) => {
                     <div className='absolute bg-gray-200  text-slate-800 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[70vh] h-[55vh] rounded-xl shadow-lg'>
                         <Typography variant='h5' className={'m-10'}>Ingrese el poducto correspondiente al proyecto de desarrollo</Typography>
                         <div className='flex mb-6 flex-row ml-[6vh]'>  
-                            <TextField required id="outlined-basic" name="productId" className='mr-8 w-80' label="Seleccione el producto asociado al proyecto" InputLabelProps={{ shrink: true}} variant="outlined" onChange={handleChangeText} /> 
+                            <Autocomplete
+                                disablePortal
+                                className='mr-8 w-80'
+                                id="combo-box-demo"
+                                options={products[1]}
+                                getOptionLabel={(option) => (option.name) ? option.name : ""}
+                                sx={{ width: 300 }}
+                                renderInput={(params) => <TextField {...params} name= 'productId' label="Producto" variant="outlined" color='primary' required/>}
+                                onChange={(event: any, newValue: any) => {
+                                    setNewProject(({ ...newProject, productId: newValue.id }))
+                                }}
+                            />
                         </div>
                         <div className='flex mb-6 flex-row ml-[6vh]'>  </div>
                         <div className="flex flex-row ml-[6vh]" >
@@ -188,6 +242,18 @@ const AddProjectModal = (props: AddTicketModalProps) => {
                 </div>
                 <div className='flex mb-6 flex-row'>
                     <SelectBox required validations={validations} name="clientType" className='mr-8 w-80' label="Seleccione el tipo de cliente" onChange={handleClientTypeSelection} valueKey="id" value={clientType} options={clientTypes} text="valor" />
+                    <Autocomplete
+                            disablePortal
+                            className='mr-8 w-80'
+                            id="combo-box-demo"
+                            options={clients[0]}
+                            getOptionLabel={(option) => option.CUIT ? option.CUIT : ""}
+                            sx={{ width: 300 }}
+                            renderInput={(params) => <TextField {...params} name= 'client' label="Seleccione un Cliente" required/>}
+                            onChange={(event: any, newValue: any) => {
+                                setNewProject(({ ...newProject, client: newValue.id }))
+                            }}
+                        />
                 </div>
                 <div className='flex mb-6 flex-row' >
                     <ValidatingInputDates required validations={validationsDates} name="startDate" className='mr-8 w-80' label="Fecha de inicio del Proyecto" value={newProject?.startDate} onChange={handleChangeText} />
