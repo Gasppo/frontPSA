@@ -9,12 +9,13 @@ import CenteredModal from '../../components/UI/Modal/CenteredModal'
 import { VoicemailRounded } from '@mui/icons-material';
 import { isPrivateIdentifier } from 'typescript';
 import {Task} from '../../components/types/taskType'
+import {Project} from '../../components/types/projectTypes'
 
 interface AddTicketModalProps {
     onSubmit: () => void
     onClose: () => void
     show: boolean
-    toProject: number
+    toProject: Project
 }
 
 const AddTaskModal = (props: AddTicketModalProps) => {
@@ -22,18 +23,15 @@ const AddTaskModal = (props: AddTicketModalProps) => {
     const { onSubmit, onClose, show, toProject } = props;
     const [runValidations, setRunValidations] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
-    const [projectTasks, setProjectTasks] = useState<Task[]>([])
+    const [projectTasks, setProjectTasks] = useState<Task[]>(toProject.tasks)
     const [newTask, setNewTask] = useState({
-        projectCode: props.toProject,
+        projectCode: toProject.code,
         name: "",
-        priority: 1,
+        priority: 0,
         effort: 0,
-        resource: 0,
+        resource: 1,
         description: "",
     })
-    const [newProject, setNewProject] = useState({
-        tasks: [{}],
-    });
 
 
 
@@ -41,22 +39,20 @@ const AddTaskModal = (props: AddTicketModalProps) => {
     const prioridades = [{ id: 1, valor: "Baja" }, { id: 2, valor: "Media" }, { id: 3, valor: "Alta" }, { id: 4, valor: "Critica" }];
 
     const generateTaskUsingAPI = async () => {
-        console.log("bienvenido")
-        //nose si funciona
         console.log(newTask);
         const response = await fetch('http://localhost:2000/tasks', {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json',
-
+               // 'Content-Type': 'application/json',
             },
             body: JSON.stringify(newTask)
         })
-        return response
+        console.log(response)
+        return response;
     }
     
     const getTasksByProject = async () => {
-        fetch(`http://localhost:2000/tasks/getbyproject/${props.toProject}`,{
+        fetch(`http://localhost:2000/tasks/getbyproject/${toProject.code}`,{
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json'
@@ -65,7 +61,8 @@ const AddTaskModal = (props: AddTicketModalProps) => {
         .then((response) => {
             return response.json()})
         .then((myJson) => {
-            //console.log(myJson);
+            console.log(myJson);
+            console.log(JSON.parse(JSON.stringify(myJson)));
             setProjectTasks(JSON.parse(JSON.stringify(myJson)));
         })
         .catch(err => console.log(err))
@@ -73,7 +70,7 @@ const AddTaskModal = (props: AddTicketModalProps) => {
     }
 
     const updateProject = async () => {
-        const response = await fetch(`http://localhost:2000/projects/${props.toProject}`, {
+        const response = await fetch(`http://localhost:2000/projects/${toProject.code}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -102,10 +99,7 @@ const AddTaskModal = (props: AddTicketModalProps) => {
         }
         setIsLoading(true);
         generateTaskUsingAPI();
-        alert("confirmacion");
         getTasksByProject();
-        alert("espera");
-        console.log(projectTasks);
         updateProject();
         setIsLoading(false);
         onSubmit();
@@ -125,7 +119,7 @@ const AddTaskModal = (props: AddTicketModalProps) => {
 
     useEffect(() => {
         setRunValidations(false)
-    }, []);
+    }, [newTask, projectTasks]);
 
 
     const isEmpty = (value: any) => !value ? "Este campo no puede estar vacio" : ""
