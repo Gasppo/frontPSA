@@ -1,11 +1,13 @@
 import { useState, useEffect } from 'react'
 import { MultiSelect } from "react-multi-select-component";
-import { TextField } from '@mui/material';
+import { TableFooter, TablePagination, TextField } from '@mui/material';
 import { Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material'
 import { Link } from 'react-router-dom'
+import { format } from 'date-fns'
 import { proyectsAPI } from "../../components/dev/URIs"
 import { SelectProyect, Proyect, Task } from '../../components/types/resourcesTypes'
 import TasksTableRow from '../../components/UI/Horas/TasksTableRow'
+import LoadingIndicator from '../../components/Loading/LoadingIndicator';
 //import DatePicker from "react-datepicker"
 
 
@@ -17,11 +19,14 @@ interface AddHorasProps {
 
 
 const AddHoras = (props: AddHorasProps) => {
-
+    const [isLoading, setLoading] = useState<boolean>(false)
     const [selected, setSelected] = useState<SelectProyect[]>([]);
     const [proyectos, setProyectos] = useState<SelectProyect[]>([]);
     const [tasks, setTasks] = useState<Task[]>([]);
-    const [selectedItems, setSelectedItems] = useState<any[]>([])
+    const [selectedItems, setSelectedItems] = useState<any[]>([]);
+    const [date,setDate]= useState<any>();
+    const [rowsPerPage, setRowsPerPage] = useState(9);
+    const [page, setPage] = useState(0);
 
     const fetchProyects = () => {
         fetch('https://modulo-proyectos-psa-2022.herokuapp.com/projects')
@@ -80,6 +85,17 @@ const AddHoras = (props: AddHorasProps) => {
         setSelectedItems(prev => prev.filter(el => el.code !== itemId))
     }
 
+    const handleChangePage = (event: React.MouseEvent<HTMLButtonElement> | null, newPage: number) => {
+        setPage(newPage);
+    };
+  
+    const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        setRowsPerPage(parseInt(event.target.value, 10));
+        setPage(0);
+    };
+
+
+
     useEffect(() => {
         fetchProyects();
         fetchTasks();
@@ -101,15 +117,34 @@ const AddHoras = (props: AddHorasProps) => {
                 </Link>
             </div>
 
+            <div className='flex-row'>
+                <div className="self-end mr-10 border-2 text-center  rounded-xl shadow-lg text-slate-800 hover:bg-gray-200 hover:text-teal-600 transition-all duration-300 cursor-pointer">
+                    <Link to={'/recursos/horasSemanales/carga/seleccion'} state={{ items: selectedItems }} >
+                        <div className="m-4"> Siguiente</div>
+                    </Link>
+                
+                </div>
+                <div>
+                <TextField  type='date' inputProps={{ max: new Date().toISOString().slice(0, 10) }} defaultValue={new Date().toISOString().split('T')[0]} ></TextField>
+                </div>
+                
+                
+
+                
+
+            </div>
             <div>
+            <MultiSelect options={proyectos} value={selected} onChange={setSelected} labelledBy="Select" />
+            
+            </div>
 
+            
+           
+            <Typography variant='h5' className={'mb-10'}></Typography>
+            <LoadingIndicator show={isLoading} className={`flex flex-col items-start  transition-all duration-200`} >
 
-
-                <TextField type='date' inputProps={{ max: new Date().toISOString().slice(0, 10) }} defaultValue='2022-06-16'></TextField>
-
-
-                <MultiSelect options={proyectos} value={selected} onChange={setSelected} labelledBy="Select" />
-
+                
+                
                 <TableContainer component={Paper} className="mt-10"  >
                     <Table>
                         <TableHead>
@@ -123,17 +158,37 @@ const AddHoras = (props: AddHorasProps) => {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {tasks.map((row: Task) => <TasksTableRow row={row} key={row._id} onSelect={handleSelect} onRemove={handleRemoveItem} />)}
+                            {
+                            tasks &&
+                                    tasks
+                                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                                    .map((row: Task) => <TasksTableRow row={row} key={row._id} onSelect={handleSelect} onRemove={handleRemoveItem} />)}
                         </TableBody>
+                        <TableFooter>
+                          <TableRow>
+                              <TablePagination
+                                  rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
+                                  colSpan={8}
+                                  count={tasks.length}
+                                  rowsPerPage={rowsPerPage}
+                                  page={page}
+                                  SelectProps={{
+                                      inputProps: {
+                                          'aria-label': 'rows per page',
+                                      },
+                                      native: true,
+                                  }}
+                                  onPageChange={handleChangePage}
+                                  onRowsPerPageChange={handleChangeRowsPerPage}
+                              />
+                          </TableRow>
+                      </TableFooter>
                     </Table>
                 </TableContainer>
-            </div>
+                </LoadingIndicator>
+            
 
-            <div className="self-end mr-10 border-2 text-center  rounded-xl shadow-lg text-slate-800 hover:bg-gray-200 hover:text-teal-600 transition-all duration-300 cursor-pointer">
-                <Link to={'/recursos/horasSemanales/carga/seleccion'} state={{ items: selectedItems }} >
-                    <div className="m-4"> Siguiente</div>
-                </Link>
-            </div>
+
 
 
         </>

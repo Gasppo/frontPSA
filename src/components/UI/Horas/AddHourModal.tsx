@@ -40,50 +40,24 @@ const AddHourModal = (props: AddTicketModalProps) => {
     const [selected, setSelected] = useState([]);
 
 
-    const invalidFields = (!input?.title || !author?.id || !input.productLicenseId)
-    const disabled = runValidations && invalidFields
 
 
     const handleSubmit = async () => {
-        if (invalidFields) {
-            setRunValidations(true)
-            return
-        }
+        console.log("HOLA")
 
-        setIsLoading(true)
+        /*setIsLoading(true)
         const response = await generateTicketUsingAPI()
         setIsLoading(false)
-        if (response.status === 200) onSubmit()
+        if (response.status === 200) onSubmit()*/
     }
 
     useEffect(() => {
-        if (show) return
-        setRunValidations(false)
-        setInput(defaultTicketData)
-        setAuthor(emptyAuthor)
-    }, [emptyAuthor, show]);
-
-
-
-
-    const generateTicketUsingAPI = async () => {
-        const inSystemId = await getClientInSystem(author?.CUIT)
-        if (!inSystemId) {
-            const createResponse = await addClientToSystem(author?.['razon social'], author?.CUIT)
-            const createJSON = await createResponse.json()
-            if (createResponse.status > 300) return createJSON
-            return createTicket({ ...input, authorId: createJSON.ticketAuthor.id })
-        }
-        return createTicket({ ...input, authorId: inSystemId })
-    }
-
-    const isEmpty = (value: any) => !value ? "Este campo no puede estar vacio" : ""
-    const validations = runValidations ? [isEmpty] : []
+    }, []);
     
   
     return (
         
-        <CenteredModal isLoading={isLoading} onClose={onClose} show={show} onSubmit={handleSubmit} label="¿Esta seguro que desea cargar las horas?" addbuttonLabel="Cargar Horas" disableSubmit={disabled}>
+        <CenteredModal isLoading={isLoading} onClose={onClose} show={show} onSubmit={handleSubmit} label="¿Esta seguro que desea cargar las horas?" addbuttonLabel="Cargar Horas" >
         </CenteredModal>
     
     ) 

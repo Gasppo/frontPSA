@@ -74,3 +74,12 @@ export type Resource = {
     Apellido: string;
 }
 
+export type ProjectReport={
+    _id: string;
+    name: string;
+    description: string;
+    resource:number;
+    code:number;
+    totalHours:number | 0;
+
+}

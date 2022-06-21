@@ -1,11 +1,11 @@
 import { TableCell, TableRow } from '@mui/material'
 import React from 'react'
-import { Task } from '../../types/resourcesTypes'
+import { ProjectReport } from '../../types/resourcesTypes'
 import DeleteIcon from '@mui/icons-material/Delete';
 import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1';
 import EditIcon from '@mui/icons-material/Edit';
 interface EmployeeReportTableRowProps {
-    row: Task
+    row: ProjectReport
 }
 
 const EmployeeReportTableRow = (props: EmployeeReportTableRowProps) => {
