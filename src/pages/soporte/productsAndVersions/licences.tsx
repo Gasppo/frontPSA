@@ -31,20 +31,20 @@ interface HeadCell {
 
 const tableHeaders = [
     { id: "id", label: "Codigo de identificacion", numeric: false },
-    { id: "product", label: "Producto", numeric: false },
-    {id: "version", label: "Version", numeric: false },
-    {id: "cliente", label: "Cliente", numeric: false },
-    {id: "fechaDeExpiracion", label: "Fecha de Expiración", numeric: false },
-    {id: "estado", label: "Estado", numeric: false },
+    { id: "productName", label: "Producto", numeric: false },
+    {id: "versionName", label: "Version", numeric: false },
+    {id: "clientName", label: "Cliente", numeric: false },
+    {id: "expirationDate", label: "Fecha de Expiración", numeric: false },
+    {id: "state", label: "Estado", numeric: false },
 ] as HeadCell[]
 
 const headerLicence = [
     { headerId: "id", licenceId: "id" },
-    { headerId: "product", licenceId: "product" },
-    { headerId: "version", licenceId: "version" },
-    { headerId: "cliente", licenceId: "cliente" },
-    { headerId: "fechaDeExpiracion", licenceId: "fechaDeExpiracion" },
-    { headerId: "estado", licenceId: "estado" }
+    { headerId: "productName", licenceId: "productName" },
+    { headerId: "versionName", licenceId: "versionName" },
+    { headerId: "clientName", licenceId: "clientName" },
+    { headerId: "expirationDate", licenceId: "expirationDate" },
+    { headerId: "state", licenceId: "state" }
 ]
 
 const Licences = () => {

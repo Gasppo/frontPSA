@@ -5,6 +5,7 @@ import SelectBox from '../Inputs/SelectBox'
 import CenteredModal from '../Modal/CenteredModal'
 import {productAndVersionsURI} from '../../dev/URIs'
 import { Version } from '../../../components/types/productTypes'
+import ValidatingDateInput from '../../../components/UI/Inputs/validatinDateInput'
 
 interface AddLicenceModalProps {
     onClose: () => void
@@ -22,12 +23,15 @@ const versionStates = [
 const AddLicenceModal = (props: AddLicenceModalProps) => {
     const { onSubmit, onClose, show, clients, products} = props
 
+    const defaultDate = new Date(new Date)
+    defaultDate.setDate(defaultDate.getDate() + 1)
+
     const defaultLicenceData = {
         licenceId:0,
         productId: 0,
         versionId: 0,
         clientId: 0,
-        expirationDate: "",
+        expirationDate: defaultDate.toISOString().slice(0, 10),
         state: "Active"
     }
 
@@ -49,6 +53,7 @@ const AddLicenceModal = (props: AddLicenceModalProps) => {
     }
 
     const [runValidations, setRunValidations] = useState(false)
+    const [invalidDate, setInvalidDate] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
     const [input, setInput] = useState(defaultLicenceData)
     const [author, setAuthor] = useState(emptyAuthor)
@@ -87,18 +92,19 @@ const AddLicenceModal = (props: AddLicenceModalProps) => {
     }
 
     const handleSubmit = async () => {
-        if (invalidFields) {
-            setRunValidations(true)
-            return
+        if (!invalidFields && validateDate()) {
+            setIsLoading(true)
+            const randomLicenceId = Math.floor(Math.random() * 300) + 1
+            console.log('licenceId: '+randomLicenceId)
+            setInput({ ...input, ['licenceId']: randomLicenceId})
+            const response = await createLicence({ ...input, ['licenceId']: randomLicenceId})
+            setIsLoading(false)
+            if (response.status >= 200 && response.status < 300) onSubmit()
         }
-        setIsLoading(true)
-        const randomLicenceId = Math.floor(Math.random() * 300) + 1
-        console.log('licenceId: '+randomLicenceId)
-        setInput({ ...input, ['licenceId']: randomLicenceId})
-        console.log({ ...input, ['licenceId']: randomLicenceId})
-        const response = await createLicence({ ...input, ['licenceId']: randomLicenceId})
-        setIsLoading(false)
-        if (response.status >= 200 && response.status < 300) onSubmit()
+        if(invalidFields) setRunValidations(true)
+        //if(!validateDate()) setInvalidDate(true)
+        return
+        
     }
 
     const gatherVersions = async () => {
@@ -116,29 +122,48 @@ const AddLicenceModal = (props: AddLicenceModalProps) => {
         if (show) return
         setRunValidations(false)
         setInput(defaultLicenceData)
+        setAuthor(emptyAuthor)
+        setProduct(emptyProduct)
+        setVersion(emptyVersion)
+        setInvalidDate(false)
     }, [show]);
+
+    useEffect(() => {
+        validateDate() ? setInvalidDate(false) : setInvalidDate(true) 
+    }, [input.expirationDate])
+
+    const validateDate = () => {
+        const date = new Date(input.expirationDate)
+        const minDate = new Date()
+        /*const maxDate = new Date(minDate)
+        maxDate.setDate(maxDate.getDate() + 1460)
+        console.log('validando')*/
+        return (date > minDate)
+    }
 
     useEffect(() => {
         gatherVersions()
     }, [product]);
 
     const isEmpty = (value: any) => !value ? "Este campo no puede estar vacio" : ""
+    const isInvalidDate = (value: any) => !value ? "La fecha debe ser posterior al día de hoy" : ""
     const validations = runValidations ? [isEmpty] : []
+    const dateValidations = invalidDate ? [isInvalidDate] : []
 
     return (
         <CenteredModal isLoading={isLoading} onClose={onClose} show={show} onSubmit={handleSubmit} label="Crear Licencia" addbuttonLabel="Crear" disableSubmit={disabled}>
             <div className='flex mb-6 flex-row'>
-            <SelectBox required name="clientId" validations={validations} className='mr-8 w-[42rem]' label="Seleccione un Cliente" onChange={handleClientChange} valueKey="id" value={author.id} options={clients} text="razonSocial" />
+                <SelectBox required name="clientId" validations={validations} className='mr-8 w-[42rem]' label="Seleccione un Cliente" onChange={handleClientChange} valueKey="id" value={author.id} options={clients} text="razonSocial" />
             </div>
             <div className='flex mb-6 flex-row'>
-            <SelectBox required name="productId" validations={validations} className='mr-8 w-[42rem]' label="Seleccione un Producto" onChange={handleProductChange} valueKey="id" value={product.id} options={products} text="name" />
+                <SelectBox required name="productId" validations={validations} className='mr-8 w-[42rem]' label="Seleccione un Producto" onChange={handleProductChange} valueKey="id" value={product.id} options={products} text="name" />
             </div>
             <div className='flex mb-6  flex-row'>
                 <SelectBox disabledText='Primero ingrese un producto...'  required validations={validations} name="versionId" className='mr-8 w-[42rem]' disabled={input?.productId <= 0} label="Seleccione una Version" onChange={handleVersionChange} valueKey="id" value={version?.id} options={loadedVersions} text="name" />
             </div>
             <div className='flex mb-6  flex-row'>
-                <SelectBox required name="state" validations={validations} className='mr-8 w-80' label="Estado" onChange={handleChangeText} valueKey="state" value={input.state} options={versionStates} text="state" />
-                <TextField required type='date' className='mr-8 w-80' inputProps={{min: new Date().toISOString().slice(0, 10)}} defaultValue={new Date().toISOString().slice(0, 10)} label='Fecha de Expiración' onChange={handleChangeText} name='expirationDate'></TextField>
+                <SelectBox name="state" validations={validations} className='mr-8 w-80' label="Estado" onChange={handleChangeText} valueKey="state" value={input.state} options={versionStates} text="state" />
+                <ValidatingDateInput required  validations={dateValidations} className='mr-8 w-80' inputProps={{min: defaultDate.toISOString().slice(0, 10)}} defaultValue={defaultDate.toISOString().slice(0, 10)} label='Fecha de Expiración' onChange={handleChangeText} name='expirationDate'></ValidatingDateInput>
             </div>
         </CenteredModal>
     )

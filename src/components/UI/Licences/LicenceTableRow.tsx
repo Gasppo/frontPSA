@@ -15,9 +15,8 @@ const TicketTableRow = (props: TicketTableRowProps) => {
         onEdit(row.id)
     }
 
-    const handleAsignTask = () => {
-        console.log('TODO')
-    }
+    const date = new Date(row.expirationDate)
+    date.setDate(date.getDate() + 1)
 
     return (
         <TableRow hover key={row.id}>
@@ -25,7 +24,7 @@ const TicketTableRow = (props: TicketTableRowProps) => {
             <TableCell align="left">{row.productName}</TableCell>
             <TableCell align="left">{row.versionName}</TableCell>
             <TableCell align="left">{row.clientName}</TableCell>
-            <TableCell align="left">{new Date(row.expirationDate).toLocaleDateString('es-AR')}</TableCell>
+            <TableCell align="left">{date.toLocaleDateString('es-AR') }</TableCell>
             <TableCell align="left">{row.state}</TableCell>
             <TableCell align="right">
                 <div className="flex flex-row justify-end" >
