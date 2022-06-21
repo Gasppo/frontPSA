@@ -13,9 +13,9 @@ interface AddLicenceModalProps {
     currentId: number | null
 }
 const versionStates = [
-    {state: 'ACTIVE'},
-    {state: 'EXPIRED'},
-    {state: 'CANCELLED'}
+    {state: 'Activa'},
+    {state: 'Expirada'},
+    {state: 'Cancelada'}
 ]
 
 const EditLicenceModal = (props: AddLicenceModalProps) => {
@@ -27,7 +27,7 @@ const EditLicenceModal = (props: AddLicenceModalProps) => {
         versionName: "",
         clientName: "",
         expirationDate: new Date().toISOString().slice(0, 10),
-        state: "ACTIVE"
+        state: "Activa"
     }
 
     const [dirty, setDirty] = useState(false)
