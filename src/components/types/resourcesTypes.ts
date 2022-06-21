@@ -9,6 +9,7 @@ export type Task= {
     _v: number;
     proyectCode: number;
     proyectName: string;
+    totalHours:number;
 }
 
 export type Hours = {
@@ -71,4 +72,14 @@ export type Resource = {
     legajo: number;
     Nombre: string;
     Apellido: string;
+}
+
+export type ProjectReport={
+    _id: string;
+    name: string;
+    description: string;
+    resource:number;
+    code:number;
+    totalHours:number | 0;
+
 }

@@ -1,11 +1,14 @@
 import { TableCell, TableRow } from '@mui/material'
+import { FunctionComponentFactory } from 'react'
 import { Proyect, Task } from '../../types/resourcesTypes'
 interface LoadHoursTableRowProps {
     row: Task,
+    onChange: any
 }
 
 const LoadHoursTableRow = (props: LoadHoursTableRowProps) => {
     const { row } = props
+
 
     return (
         <TableRow hover key={row._id}>
@@ -16,7 +19,7 @@ const LoadHoursTableRow = (props: LoadHoursTableRowProps) => {
             <TableCell align="left">{row.description}</TableCell>
             <TableCell align="left">
                 <div className="flex flex-row" >
-                    <input className="width-20" defaultValue={0}></input>
+                    <input className="width-20" defaultValue={0} onChange={(value)=>props.onChange(value, row)}></input>
                 </div>
             </TableCell>
         

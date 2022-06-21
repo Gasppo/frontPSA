@@ -2,7 +2,7 @@ import { Link, Outlet } from 'react-router-dom'
 import LinkCard from '../../components/UI/Card/LinkCard'
 import PageTitle from '../../components/UI/Dashboard/PageTitle'
 import LoadingIndicator from '../../components/Loading/LoadingIndicator'
-import { Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material'
+import { Button, Paper, Table, TableBody, TableCell, TableContainer, TableFooter, TableHead, TablePagination, TableRow, Typography } from '@mui/material'
 //import AddHourModal from '../../components/UI/Horas/AddHourModal'
 import { Hours } from '../../components/types/resourcesTypes'
 import { useCallback, useEffect, useState } from 'react'
@@ -16,6 +16,9 @@ const Recursos = (props: RecursosProps) => {
 
     const [isLoading, setLoading] = useState<boolean>(false)
     const [horas, setHoras] = useState<Hours[]>([])
+    const [rowsPerPage, setRowsPerPage] = useState(9)
+    const [page, setPage] = useState(0)
+
 
     const fetchHours = () => {
         let body = JSON.stringify({
@@ -75,6 +78,14 @@ const Recursos = (props: RecursosProps) => {
         
 
     }
+    const handleChangePage = (event: React.MouseEvent<HTMLButtonElement> | null, newPage: number) => {
+        setPage(newPage);
+    };
+  
+    const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        setRowsPerPage(parseInt(event.target.value, 10));
+        setPage(0);
+    };
 
     useEffect(() => {
         fetchHours()
@@ -115,8 +126,30 @@ const Recursos = (props: RecursosProps) => {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {horas.map((row:Hours)=><HoursTableRow row={row} key={row._id}/>)}
+                            {horas &&
+                                    horas
+                                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                                    .map((row:Hours)=><HoursTableRow row={row} key={row._id}/>)}
                         </TableBody>
+                        <TableFooter>
+                          <TableRow>
+                              <TablePagination
+                                  rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
+                                  colSpan={8}
+                                  count={horas.length}
+                                  rowsPerPage={rowsPerPage}
+                                  page={page}
+                                  SelectProps={{
+                                      inputProps: {
+                                          'aria-label': 'rows per page',
+                                      },
+                                      native: true,
+                                  }}
+                                  onPageChange={handleChangePage}
+                                  onRowsPerPageChange={handleChangeRowsPerPage}
+                              />
+                          </TableRow>
+                      </TableFooter>
                     </Table>
                 </TableContainer>
             </LoadingIndicator>

@@ -1,12 +1,15 @@
 import { useState, useEffect } from 'react'
 import { MultiSelect } from "react-multi-select-component";
-import { TextField } from '@mui/material';
+import { TableFooter, TablePagination, TextField } from '@mui/material';
 import { Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material'
-import { Link, useLocation } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { proyectsAPI } from "../../components/dev/URIs"
 import { SelectProyect, Proyect, Task } from '../../components/types/resourcesTypes'
 import TasksTableRow from '../../components/UI/Horas/TasksTableRow'
 import LoadHoursTableRow from '../../components/UI/Horas/LoadHoursTableRow';
+import AddHourModal from '../../components/UI/Horas/AddHourModal';
+import LoadingIndicator from '../../components/Loading/LoadingIndicator';
+import CenteredModal from '../../components/UI/Modal/CenteredModal';
 //import AddHourModal from '../../components/UI/Horas/AddHourModal';
 //import DatePicker from "react-datepicker"
 
@@ -19,34 +22,46 @@ interface CargaDeHorasProps {
 
 
 const CargaDeHoras = (props: CargaDeHorasProps,) => {
-
-    const [tasks, setTasks] = useState<Task[]>([]);
+    const [isLoading, setLoading] = useState<boolean>(false)
+    const [tasks, setTasks] = useState<{[id: string]:string}>({});
     const [showAddModal, setShowAddModal] = useState(false)
+    const [rowsPerPage, setRowsPerPage] = useState(9)
+    const [page, setPage] = useState(0)
 
     const { state }: any = useLocation()
-
-    useEffect(() => {
-        fetchTasks()
-    }, []);
 
     const handleAddOpen = () => {
         setShowAddModal(true)
     }
     const handleSubmit = () => {
-        /* cargar las horas */
-        alert("Las horas han sido cargadas")
+        
+        console.log('Mando a la api')
+        sendHoursToAPI();
+        console.log('NO LLEGO')
+        return(<Link to={'/'}></Link>)
+
+        
+
     }
 
     const handleClose = () => {
         setShowAddModal(false);
     }
 
+    const handleChangePage = (event: React.MouseEvent<HTMLButtonElement> | null, newPage: number) => {
+        setPage(newPage);
+    };
+  
+    const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        setRowsPerPage(parseInt(event.target.value, 10));
+        setPage(0);
+    };
 
-    const fetchTasks = () => {
+
+    /*const fetchTasks = () => {
         fetch('https://modulo-proyectos-psa-2022.herokuapp.com/projects')
             .then(res => res.json())
             .then(res => {
-                console.log(res)
                 setTasks([])
                 let tasks: Task[] = []
                 res.forEach((element: Proyect) => {
@@ -67,12 +82,43 @@ const CargaDeHoras = (props: CargaDeHorasProps,) => {
                 console.log(JSON.stringify(err))
             })
 
-    }
+    }*/
 
     useEffect(() => {
-        console.log(state?.items)
+        let tasks:{[id: number]:string} = {}
+        state.items.forEach((item:Task)=>{
+            tasks[item.code] = "0"
+        })
+        setTasks(tasks)
     }, [state]);
 
+    const sendHoursToAPI = async () =>{
+        let information:any = []
+        Object.keys(tasks).forEach((key:string)=>{
+            let body = {
+                duration:tasks[key],
+                hourAssignee: 2,
+                startingDate: "2022-06-16",
+                taskCode: key
+            }
+            information.push(body)
+        })
+
+        for (const data of information){
+            const request = await fetch("https://modulo-recursos-psa.herokuapp.com/hours", {
+            method: 'POST',
+            body: JSON.stringify(data),
+            headers: {'Content-Type': 'application/json; charset=UTF-8'} });
+        }
+    }
+
+
+    const onChange = (event:React.KeyboardEvent<HTMLInputElement>, task:Task) => {
+        let tasksCopy = tasks
+        tasksCopy[task.code] = event.currentTarget.value
+        
+        setTasks(tasksCopy);
+    }
 
     return (
         <>
@@ -83,13 +129,20 @@ const CargaDeHoras = (props: CargaDeHorasProps,) => {
                     <Button>Volver atras</Button>
                 </Link>
             </div>
+                
+            <div className="self-end mr-10 border-2 text-center  rounded-xl shadow-lg text-slate-800 hover:bg-gray-200 hover:text-teal-600 transition-all duration-300 cursor-pointer">
+                <Button onClick={handleAddOpen}>
+                    <div className="m-4"> Guardar</div>
+                </Button>
+            </div>
+            <CenteredModal isLoading={isLoading} onClose={handleClose} show={showAddModal} onSubmit={handleSubmit} label="¿Esta seguro que desea cargar las horas?" addbuttonLabel="Cargar Horas" >
+                
+            </CenteredModal>
+    
+            <TextField disabled type='date' inputProps={{ max: new Date().toISOString().slice(0, 10) }} defaultValue='2022-06-16'></TextField>
 
-            <div>
-
-
-
-                <TextField disabled type='date' inputProps={{ max: new Date().toISOString().slice(0, 10) }} defaultValue='2022-06-16'></TextField>
-
+        <Typography variant='h5' className={'mb-10'}></Typography>
+        <LoadingIndicator show={isLoading} className={`flex flex-col items-start  transition-all duration-200`} >
                 <TableContainer component={Paper} className="mt-10"  >
                     <Table>
                         <TableHead>
@@ -103,18 +156,37 @@ const CargaDeHoras = (props: CargaDeHorasProps,) => {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {state?.items.map((row: Task) => <LoadHoursTableRow row={row} key={row._id} />) || []}
+
+                            {state?.items 
+                                &&
+                                state?.items
+                                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                                .map((row: Task) => <LoadHoursTableRow row={row} key={row._id} onChange={onChange}/>) || []}
                         </TableBody>
+                        <TableFooter>
+                          <TableRow>
+                              <TablePagination
+                                  rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
+                                  colSpan={8}
+                                  count={state.length}
+                                  rowsPerPage={rowsPerPage}
+                                  page={page}
+                                  SelectProps={{
+                                      inputProps: {
+                                          'aria-label': 'rows per page',
+                                      },
+                                      native: true,
+                                  }}
+                                  onPageChange={handleChangePage}
+                                  onRowsPerPageChange={handleChangeRowsPerPage}
+                              />
+                          </TableRow>
+                      </TableFooter>
                     </Table>
                 </TableContainer>
-            </div>
+            </LoadingIndicator>
+            
 
-            <div className="self-end mr-10 border-2 text-center  rounded-xl shadow-lg text-slate-800 hover:bg-gray-200 hover:text-teal-600 transition-all duration-300 cursor-pointer">
-                <Button onClick={handleAddOpen}>
-                    <div className="m-4"> Guardar</div>
-                </Button>
-            </div>
-            {/* <AddHourModal onSubmit={handleSubmit} onClose={handleClose} show={showAddModal}></AddHourModal> */}
 
 
         </>
