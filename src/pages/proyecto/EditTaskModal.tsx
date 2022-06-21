@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
-import { Modal, TextField, Typography, MenuItem, InputAdornment } from '@mui/material';
+import { Modal, TextField, Typography, MenuItem, InputAdornment, TextFieldProps } from '@mui/material';
 import{Client} from '../../components/types/clientTypes'
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import ValidatingInput from '../../components/UI/Inputs/ValidatingInput';
@@ -9,6 +9,8 @@ import CenteredModal from '../../components/UI/Modal/CenteredModal'
 import { VoicemailRounded } from '@mui/icons-material';
 import { isPrivateIdentifier } from 'typescript';
 import {Task} from '../../components/types/taskType'
+import{Resource} from '../../components/types/resourceType';
+import Autocomplete from '@mui/material/Autocomplete';
 
 interface EditTaskModalProps {
     onSubmit: () => void
@@ -20,21 +22,8 @@ interface EditTaskModalProps {
 const EditTaskModal = (props: EditTaskModalProps) => {
     const { onSubmit, onClose, show, currentTask } = props;
     const [isLoading, setIsLoading] = useState(false);
-    const [priorityValue, setPriorityValue] = useState('');
-    const [newTask, setNewTask] = useState({
-        name: props.currentTask.name,
-        priority: '',
-        effort: props.currentTask.effort,
-        resource: 0,
-        description: props.currentTask.description,
-    })
-
-    const prioridades = [{ id: 1, valor: "Baja" }, { id: 2, valor: "Media" }, { id: 3, valor: "Alta" }, { id: 4, valor: "Critica" }];
-
-    const handleChangeText = (e: any) => {
-        setNewTask(({ ...newTask, [e.target.name]: e.target.value }))
-    };
-
+    const [priorityValue, setPriorityValue] = useState("Baja");
+    const [resources, setLoadedResources] = useState<Resource []>([]);
     const determinePrioriryValue = () => {
         if(props.currentTask.priority == 1 ){
             setPriorityValue(state => ('Baja'));
@@ -46,6 +35,43 @@ const EditTaskModal = (props: EditTaskModalProps) => {
             setPriorityValue(state => ('Critica'));
         }
     }
+    const [newTask, setNewTask] = useState({
+        code: props.currentTask.code,
+        name: props.currentTask.name,
+        priority: props.currentTask.priority,
+        effort: props.currentTask.effort,
+        resource: props.currentTask.resource,
+        description: props.currentTask.description,
+    })
+    
+    const [runValidations, setRunValidations] = useState(false)
+
+    const getResources = () => {
+        //setLoading(true)
+        fetch('https://modulo-recursos-psa.herokuapp.com/employees',{
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+            .then((response) => {
+                return response.json()})
+            .then((myJson) => {
+                console.log(myJson);
+                setLoadedResources(Object.values(JSON.parse(JSON.stringify(myJson))));
+                //setOptions( resources.map( resource => {resource.legajo }));
+
+            })
+            .catch(err => console.log(err))
+            //sleep(3000).then(res => setLoading(false));
+    };
+    const invalidFields = (!newTask?.name || newTask.resource==0 );
+ 
+    const prioridades = [{ id: 1, valor: "Baja" }, { id: 2, valor: "Media" }, { id: 3, valor: "Alta" }, { id: 4, valor: "Critica" }];
+
+    const handleChangeText = (e: any) => {
+        setNewTask(({ ...newTask, [e.target.name]: e.target.value }))
+    };
 
     const handleChangeInt = (e: any) => {
         setNewTask(({ ...newTask, [e.target.name]: Number(e.target.value) }))
@@ -53,15 +79,19 @@ const EditTaskModal = (props: EditTaskModalProps) => {
 
 
     const handleSubmit = async () => {
+        if (invalidFields) {
+            setRunValidations(true);
+        }
         setIsLoading(true);
-        //update task
-
+        updateTaskUsingAPI();
         setIsLoading(false);
         onSubmit();
     
     };
 
     const handlePrioridadSelection = (event: React.ChangeEvent<HTMLInputElement>) => {
+        console.log(event);
+        console.log(event.target.value);
         setPriorityValue(event.target.value);
         setNewTask(({ ...newTask, [event.target.name]: event.target.value }))
     };
@@ -72,14 +102,38 @@ const EditTaskModal = (props: EditTaskModalProps) => {
     };
 
     useEffect(() => {
+        setRunValidations(false)
+    }, []);
+
+
+    useEffect(() => {
+        getResources();
         determinePrioriryValue();
     }, []);
+
+    const isEmpty = (value: any) => !value ? "Este campo no puede estar vacio" : ""
+    const validations = runValidations ? [isEmpty] : []
+
+    const isEmptyResource = (value: any) => !value ? "Debe seleccionar un recurso para la tarea" : ""
+    const validationsResources = runValidations ? [isEmptyResource] : []
 
 
     const generateTaskUsingAPI = async () => {
         //nose si funciona
         console.log(newTask);
         const response = await fetch('http://localhost:2000/tasks', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+
+            },
+            body: JSON.stringify(newTask)
+        })
+        return response
+    }
+
+    const updateTaskUsingAPI = async () => {
+        const response = await fetch(`http://localhost:2000/tasks/${newTask.code}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -98,11 +152,23 @@ const EditTaskModal = (props: EditTaskModalProps) => {
                 <div className='ml-10 flex flex-col items-center'>
 
                 <div className='flex mb-6  flex-row' style={{marginTop: 10}}>
-                    <ValidatingInput required validations={[]} name="name" className='mr-8 w-80' label="Nombre de la tarea" value={newTask?.name} onChange={handleChangeText} />
-                    <SelectBox required validations={[]} name="priority" className='mr-8 w-80' label="Seleccione la prioridad" onChange={handlePrioridadSelection} valueKey="id" value={priorityValue} options={prioridades} text="valor" />
+                    <ValidatingInput required validations={validations} name="name" className='mr-8 w-80' label="Nombre de la tarea" value={newTask?.name} onChange={handleChangeText} />
+                    <SelectBox required validations={validations} name="priority" className='mr-8 w-80' label="Seleccione la prioridad" onChange={handlePrioridadSelection} valueKey="id" value={priorityValue} options={prioridades} text="valor" />
                 </div>
                 <div className='flex mb-6 flex-row'>
-                    <ValidatingInput required validations={[]} name="effort" className='mr-8 w-80' label="Esfuerzo Estimado" value={newTask?.effort} onChange={handleChangeInt} />
+                    <Autocomplete
+                            disablePortal
+                            className='mr-8 w-80'
+                            id="combo-box-demo"
+                            options={resources}
+                            getOptionLabel={(option: { Nombre: any; }) => (option.Nombre) ? option.Nombre : ""}
+                            sx={{ width: 300 }}
+                            renderInput={(params: JSX.IntrinsicAttributes & TextFieldProps) => <TextField {...params} name= 'resource' label="Recurso" variant="outlined" color='primary' required/>}
+                            onChange={(event: any, newValue: any) => {
+                                setNewTask(({ ...newTask, resource: newValue.legajo }))
+                            }}
+                    />
+                    <ValidatingInput required validations={validations} name="effort" className='mr-8 w-80' label="Esfuerzo Estimado" value={newTask?.effort} onChange={handleChangeInt} />
                 </div>
                 <div className='flex mb-6 flex-row' ></div>
                 <TextField id="outlined-basic" className='mb-6 w-[42rem] mr-8' name='description' label="Descripcion" multiline rows={3} InputLabelProps={{ shrink: true }} variant="outlined" onChange={handleChangeText} />

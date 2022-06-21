@@ -46,17 +46,6 @@ const  TaskTableRow = (props:  TaskTableRowProps) => {
         setshowProjectModal(true)
     };
 
-    const updateProjectUsingAPI = async () => {
-        const response = await fetch(`http://localhost:2000/projects/${props.code}`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-
-            },
-            body: JSON.stringify({tasks:newTasks})
-        })
-        return response
-    }
 
     const removeTask = async () => {
         const response = await fetch(`http://localhost:2000/tasks/${row.code}`, {
@@ -70,12 +59,7 @@ const  TaskTableRow = (props:  TaskTableRowProps) => {
     }
 
     const deleteTask = () => {
-        console.log(props.tasks);
-        //deleteTask();
-        const filteredTasks = props.tasks.filter(item => item.code !== row.code);
-        setNewTasks(filteredTasks);
-        console.log(newTasks)
-        updateProjectUsingAPI();
+        removeTask();
         props.refresh();
     };
     

@@ -15,7 +15,7 @@ export type Project = {
     productId: number;
     iteration: number;
     fase: number;
-    tasks: Task[];
+    //tasks: Task[];
     //resoursed debería de ser un set
     resources: number[];
     risk: Risk ;
