@@ -1,6 +1,7 @@
 import AccessAlarm from '@mui/icons-material/AccessAlarm'
 import FileOpen from '@mui/icons-material/FileOpen'
 import Event from '@mui/icons-material/Event'
+import Assessment from '@mui/icons-material/Assessment'
 import { Button } from '@mui/material'
 import { Link, Outlet } from 'react-router-dom'
 import LinkCard from '../../components/UI/Card/LinkCard'
@@ -16,6 +17,8 @@ const LandingPageHR = (props: LandingPageHRProps) => {
         { title: 'Gestion de Licencias', description: 'Acceso a portal de gestion de licencias', Icon: FileOpen },
         { title: 'Carga de Horas', description: 'Acceso a portal de carga de horas', Icon: AccessAlarm, href:'/recursos/horasSemanales' },
         { title: 'Vista Calendario', description: 'Acceso a la vista calendario', Icon: Event, href:'/recursos/calendario' },
+        { title: 'Reportes por persona', description: 'Registro de las horas trabajadas por persona', Icon: Assessment, href:'/recursos/reportePorPersona' },
+        { title: 'Reportes por proyecto', description: 'Registro de las horas trabajadas por proyecto', Icon: Assessment, href:'/recursos/reportePorProyecto' },
     ]
 
     return (
