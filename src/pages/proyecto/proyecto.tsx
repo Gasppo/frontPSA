@@ -49,7 +49,7 @@ const Proyecto = () => {
     });
 
 
-    const recursos = ["RS12345678", "RS87654321", "RS98765432", "RS67543245", "RS87657905"];
+    //const recursos = ["RS12345678", "RS87654321", "RS98765432", "RS67543245", "RS87657905"];
     const fetchProject = () => {
         fetch(`http://localhost:2000/projects/${projectData.code}`,{
             method: 'GET',
@@ -61,7 +61,6 @@ const Proyecto = () => {
                 return response.json()})
             .then((myJson) => {
                 setProject((JSON.parse(JSON.stringify(myJson)))[0]);
-                //console.log(project);
             })
             .catch(err => console.log(err));
             sleep(3000).then(res => setLoading(false));
@@ -279,7 +278,7 @@ const Proyecto = () => {
                             {expandedRecursos && 
                             <>
                                 <div style={{width: 400}}>
-                                    {recursos.map(recurso =>  <div style={{display: 'flex', flexDirection: 'row', margin: 5, padding: 5, width: 120, height: 30, backgroundColor: "#E9EDEB", borderRadius: 5}}><AccountCircleIcon className= 'mr-1 h-5' style={{color: '#5C7067'}}/><Typography variant='caption' className='slate' >{recurso}</Typography></div>)}
+                                    {project.resources.map(recurso =>  <div style={{display: 'flex', flexDirection: 'row', margin: 5, padding: 5, width: 120, height: 30, backgroundColor: "#E9EDEB", borderRadius: 5}}><AccountCircleIcon className= 'mr-1 h-5' style={{color: '#5C7067'}}/><Typography variant='caption' className='slate' >{recurso}</Typography></div>)}
                                 </div>
                             </>}
                         </div>

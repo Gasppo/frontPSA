@@ -114,10 +114,9 @@ const AddProjectModal = (props: AddProjectModalProps) => {
     }
     useEffect(() => {
         getResources();
-    }, []);
+    }, [resourcesNumbers,selectedResources, newProject]);
 
     const handleSubmit = async () => {
-        setResourcesNumbers(resources.map((resource) => resource.legajo));
         setNewProject({
             name: project.name,
             updatedDate: currentDate,
@@ -131,6 +130,7 @@ const AddProjectModal = (props: AddProjectModalProps) => {
             productId: project.productId,
             resources: resourcesNumbers
         })
+        sleep(10);
         updateProjectUsingAPI();
         onSubmit();
         /*const response = await addResourcesToProjectUsingAPI()
@@ -149,7 +149,9 @@ const AddProjectModal = (props: AddProjectModalProps) => {
             },
             body: JSON.stringify(newProject)
         })
-        return response
+        console.log(newProject)
+        console.log(response)
+        return response;
     }
 
 
@@ -171,6 +173,8 @@ const AddProjectModal = (props: AddProjectModalProps) => {
                                 if (selectedResources.includes(newValue) === false) {
                                 
                                 setSelectedResources(prevSelection => [...prevSelection,newValue]);
+                                setResourcesNumbers(selectedResources.map((resource) => resource.legajo));
+                                
                                 }
                             }}
                         />
