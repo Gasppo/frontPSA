@@ -7,6 +7,7 @@ import { proyectsAPI } from "../../components/dev/URIs"
 import { SelectProyect, Proyect, Task } from '../../components/types/resourcesTypes'
 import TasksTableRow from '../../components/UI/Horas/TasksTableRow'
 import LoadHoursTableRow from '../../components/UI/Horas/LoadHoursTableRow';
+import AddHourModal from '../../components/UI/Horas/AddHourModal';
 //import AddHourModal from '../../components/UI/Horas/AddHourModal';
 //import DatePicker from "react-datepicker"
 
@@ -20,14 +21,10 @@ interface CargaDeHorasProps {
 
 const CargaDeHoras = (props: CargaDeHorasProps,) => {
 
-    const [tasks, setTasks] = useState<Task[]>([]);
+    const [tasks, setTasks] = useState<{[id: string]:string}>({});
     const [showAddModal, setShowAddModal] = useState(false)
 
     const { state }: any = useLocation()
-
-    useEffect(() => {
-        fetchTasks()
-    }, []);
 
     const handleAddOpen = () => {
         setShowAddModal(true)
@@ -42,11 +39,11 @@ const CargaDeHoras = (props: CargaDeHorasProps,) => {
     }
 
 
-    const fetchTasks = () => {
+
+    /*const fetchTasks = () => {
         fetch('https://modulo-proyectos-psa-2022.herokuapp.com/projects')
             .then(res => res.json())
             .then(res => {
-                console.log(res)
                 setTasks([])
                 let tasks: Task[] = []
                 res.forEach((element: Proyect) => {
@@ -67,11 +64,44 @@ const CargaDeHoras = (props: CargaDeHorasProps,) => {
                 console.log(JSON.stringify(err))
             })
 
-    }
+    }*/
 
     useEffect(() => {
-        console.log(state?.items)
+        let tasks:{[id: number]:string} = {}
+        state.items.forEach((item:Task)=>{
+            tasks[item.code] = "0"
+        })
+        setTasks(tasks)
     }, [state]);
+
+    const sendHoursToAPI = async () =>{
+        let information:any = []
+        Object.keys(tasks).forEach((key:string)=>{
+            let body = {
+                duration:tasks[key],
+                hourAssignee: 2,
+                startingDate: "2022-06-16",
+                taskCode: key
+            }
+            information.push(body)
+        })
+
+        console.log(information)
+
+        const response = await fetch("https://modulo-recursos-psa.herokuapp.com/hours", {
+            method: 'POST',
+            body: JSON.stringify(information[0]),
+            headers: {'Content-Type': 'application/json; charset=UTF-8'} });
+        
+    }
+
+    const onChange = (event:React.KeyboardEvent<HTMLInputElement>, task:Task) => {
+        let tasksCopy = tasks
+        tasksCopy[task.code] = event.currentTarget.value
+        
+        setTasks(tasksCopy);
+        console.log(tasks)
+    }
 
 
     return (
@@ -103,19 +133,18 @@ const CargaDeHoras = (props: CargaDeHorasProps,) => {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {state?.items.map((row: Task) => <LoadHoursTableRow row={row} key={row._id} />) || []}
+                            {state?.items.map((row: Task) => <LoadHoursTableRow row={row} key={row._id} onChange={onChange}/>) || []}
                         </TableBody>
                     </Table>
                 </TableContainer>
             </div>
 
             <div className="self-end mr-10 border-2 text-center  rounded-xl shadow-lg text-slate-800 hover:bg-gray-200 hover:text-teal-600 transition-all duration-300 cursor-pointer">
-                <Button onClick={handleAddOpen}>
+                <Button onClick={sendHoursToAPI}>
                     <div className="m-4"> Guardar</div>
                 </Button>
             </div>
-            {/* <AddHourModal onSubmit={handleSubmit} onClose={handleClose} show={showAddModal}></AddHourModal> */}
-
+            <AddHourModal onSubmit={handleSubmit} onClose={handleClose} show={showAddModal}></AddHourModal>
 
         </>
 
