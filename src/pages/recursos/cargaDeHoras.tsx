@@ -86,14 +86,14 @@ const CargaDeHoras = (props: CargaDeHorasProps,) => {
             information.push(body)
         })
 
-        console.log(information)
-
-        const response = await fetch("https://modulo-recursos-psa.herokuapp.com/hours", {
+        for (const data of information){
+            const request = await fetch("https://modulo-recursos-psa.herokuapp.com/hours", {
             method: 'POST',
-            body: JSON.stringify(information[0]),
+            body: JSON.stringify(data),
             headers: {'Content-Type': 'application/json; charset=UTF-8'} });
-        
+        }
     }
+
 
     const onChange = (event:React.KeyboardEvent<HTMLInputElement>, task:Task) => {
         let tasksCopy = tasks
