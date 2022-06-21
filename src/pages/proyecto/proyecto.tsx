@@ -9,7 +9,6 @@ import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import TaskTableRow from '../../components/UI/Projects/TaskTableRow';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
-import React from 'react';
 import { Link, useNavigate} from 'react-router-dom';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import Popup from 'reactjs-popup';
@@ -28,6 +27,7 @@ const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
 const Proyecto = () => {
     const location = useLocation()
+    
     const prop = location.state as ProyectProps;
     const projectData = prop.projectData;
     const [project, setProject] = useState(projectData);
@@ -78,13 +78,13 @@ const Proyecto = () => {
             .then((response) => {
                 return response.json()})
             .then((myJson) => {
-                console.log(myJson);
+               // console.log(myJson);
                 setLoadedTasks(JSON.parse(JSON.stringify(myJson)));
 
             })
             .catch(err => console.log(err))
             sleep(3000).then(res => setLoading(false));
-            console.log(loadedTasks);
+            //console.log(loadedTasks);
     }
 
     const handleAddResourcesSubmit = () => {
@@ -188,13 +188,13 @@ const Proyecto = () => {
         setexpandedDates(false);
         setexpandedDetails(false);
         checkIfItIsADevelopmentProject();
-    }, [loadedTasks]);
+    }, []);
 
     return (
         <>
             <EditProjectModal onRefresh={fetchProject} onClose={handleAddProjectClose} show={showProjectModal} row={project} />
             <AddTaskModal onSubmit={handleAddTaskSubmit} onClose={handleNewTaskClose} show={isOpenNewTaskModal} toProject={project.code}/>
-            <AddResourcesModal onSubmit={handleAddResourcesSubmit} onClose={handleModalAddResourcesClose} show={showResourcesModal}/> 
+            <AddResourcesModal onSubmit={handleAddResourcesSubmit} onClose={handleModalAddResourcesClose} show={showResourcesModal} project={project}/> 
             <div style={{display: 'flex', flexDirection: 'row', margin: 25, paddingBottom: 20, paddingLeft: 80, borderBottomColor:'#C5D0CB', borderBottomWidth: '1px'}}> 
                 
                 <ArrowBackIosNewIcon  onClick={() => navigate(-1)} style={{color: 'slate', fontSize: 25, marginTop: -9, marginRight: 20}} className= 'hover:bg-gray-200 hover:text-teal-900 hover:rounded-3xl hover:shadow-lg transition-all duration-200  group  h-12'/>

@@ -20,12 +20,35 @@ const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
 const Proyectos = (props: ProyectosProps) => {
     const [loadedProjects, setLoadedProjects] = useState<Project[]>([])
-
+    const [type, setType] = useState('Desarrollo');
+    const partsCurrentDate = (new Date().toLocaleDateString('es-AR')).split("/");
+    var currentDate: string;
+    if(partsCurrentDate[1].length==1){
+        currentDate = partsCurrentDate[0] + "/0" + partsCurrentDate[1] + "/" + partsCurrentDate[2];
+    }else{
+        currentDate= partsCurrentDate[0] + "/" + partsCurrentDate[1] + "/" + partsCurrentDate[2];
+    }
     const [filteredProjects, setFilteredProjects] = useState<Project[]>([])
     const [isLoading, setLoading] = useState<boolean>(false)
     const [showProjectModal, setshowProjectModal] = useState(false)
     const [showResourcesModal, setshowResourcesModal] = useState(false)
     const [showFiltersModal, setshowFiltersModal] = useState(false)
+    const [newProject, setProject] = useState({
+        name: "",
+       // id: 0, //realizar un generador de id
+        creationDate: currentDate,
+        updatedDate: currentDate,
+        startDate: "dd/mm/yyyy",
+        endDate: "dd/mm/yyyy",
+        type: type,
+        state: "No Iniciado",
+        clientType: 'Interno',
+        client: 0,
+        productId: 0,
+        description: " ",
+       // iteration: 1,
+        //fase: 1,
+    })
 
     const updateCurrentProjects = (filterProjects: Project[] ) =>{
         setFilteredProjects(filterProjects);
@@ -65,9 +88,12 @@ const Proyectos = (props: ProyectosProps) => {
         setshowProjectModal(false)
     };
 
-    const handleAddProjectSubmit = () => {
+    const handleAddProjectSubmit = (projectCreated : Project) => {
         setshowProjectModal(false);
-        setshowResourcesModal(true);
+        //setshowResourcesModal(true);
+        setProject(projectCreated);
+        console.log("created project")
+        console.log(projectCreated);
         gatherProjects();
     };
 
@@ -115,7 +141,7 @@ const Proyectos = (props: ProyectosProps) => {
             <LoadingIndicator show={isLoading} className={`flex flex-col items-start  transition-all duration-200`} >
                 {!isLoading && (<> 
                     <AddProjectModal onSubmit={handleAddProjectSubmit} onClose={handleAddProjectClose} show={showProjectModal} />
-                    <AddResourcesModal onSubmit={handleAddResourcesSubmit} onClose={handleModalAddResourcesClose} show={showResourcesModal} /> 
+                    {/* <AddResourcesModal onSubmit={handleAddResourcesSubmit} onClose={handleModalAddResourcesClose} show={showResourcesModal} project={newProject}/>  */}
 
                     <TableContainer component={Paper} className="mt-10"  >
                         <Table>

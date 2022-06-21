@@ -4,10 +4,10 @@ export type Project = {
     _id: string;
     code: number;
     name: string;
-    creationDate: String;
-    updatedDate: String;
-    startDate: String,
-    endDate: String,
+    creationDate: string;
+    updatedDate: string;
+    startDate: string,
+    endDate: string,
     type: string;
     state: string;
     client: number;
@@ -17,9 +17,9 @@ export type Project = {
     phase: number;
     tasks: Task[];
     //resoursed debería de ser un set
-    resources: number[] | null;
-    risk: Risk | null;
-    description: string | null;
+    resources: number[] ;
+    risk: Risk ;
+    description: string ;
 }
 
 export type Risk = {
