@@ -276,7 +276,7 @@ const Proyecto = () => {
                             {expandedRecursos && 
                             <>
                                 <div style={{width: 400}}>
-                                    {project.resources.map(recurso =>  <div style={{display: 'flex', flexDirection: 'row', margin: 5, padding: 5, width: 120, height: 30, backgroundColor: "#E9EDEB", borderRadius: 5}}><AccountCircleIcon className= 'mr-1 h-5' style={{color: '#5C7067'}}/><Typography variant='caption' className='slate' >ID {recurso}</Typography></div>)}
+                                    {project.resources.map(recurso =>  <div style={{display: 'flex', flexDirection: 'row', margin: 5, padding: 5, width: 120, height: 30, backgroundColor: "#E9EDEB", borderRadius: 5}}><AccountCircleIcon className= 'mr-1 h-5' style={{color: '#5C7067'}}/><Typography variant='caption' className='slate' >Legajo {recurso}</Typography></div>)}
                                 </div>
                             </>}
                         </div>
