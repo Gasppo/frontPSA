@@ -1,5 +1,6 @@
 import { Modal, TextField, Typography, MenuItem, InputAdornment } from '@mui/material';
-import React, { useEffect, useMemo, useState } from 'react'
+import React from 'react';
+import { useEffect, useState } from 'react';
 import{Client} from '../../components/types/clientTypes'
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import {Project} from '../../components/types/projectTypes'
