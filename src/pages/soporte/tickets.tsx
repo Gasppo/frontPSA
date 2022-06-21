@@ -1,20 +1,55 @@
-import { Typography } from '@mui/material'
+import { Button, Paper, Table, TableBody, TableContainer, TableFooter, TablePagination, TableRow, Typography } from '@mui/material'
 import { useCallback, useEffect, useMemo, useState } from 'react'
+import { Link } from 'react-router-dom'
 import { getExternalResources, getProducts } from '../../components/api/ticketSupport'
 import { ticketSupportURI } from '../../components/dev/URIs'
 import LoadingIndicator from '../../components/Loading/LoadingIndicator'
 import { Ticket, TicketProduct } from '../../components/types/ticketTypes'
 import PageTitle from '../../components/UI/Dashboard/PageTitle'
 import AddTicketModal from '../../components/UI/Tickets/AddTicketModal'
-import CreateTicketButton from '../../components/UI/Tickets/CreateTicketButton'
 import EditTicketModal from '../../components/UI/Tickets/EditTicketModal'
-import PageLinker from '../../components/UI/Tickets/PageLinker'
-import TicketDetailsModal from '../../components/UI/Tickets/TicketDetailsModal'
-import TicketTable from '../../components/UI/Tickets/TicketTable'
+import EnhancedTableHead from '../../components/UI/Tickets/EnhancedTableHead'
+import TicketTableRow from '../../components/UI/Tickets/TicketTableRow'
+
+type Order = 'asc' | 'desc';
+interface Data {
+    id: number;
+    title: string;
+    razonSocial: string;
+    productName: string;
+    createdAt: string;
+    status: string;
+    updatedAt: string
+}
 
 interface TicketsProps {
 
 }
+interface HeadCell {
+    id: keyof Data;
+    label: string;
+    numeric?: boolean;
+}
+
+const tableHeaders = [
+    { id: "id", label: "Codigo de identificacion", numeric: false },
+    { id: "title", label: "Titulo", numeric: false },
+    { id: "razonSocial", label: "Cliente", numeric: false },
+    { id: "productName", label: "Producto", numeric: false },
+    { id: "createdAt", label: "Fecha de creacion", numeric: false },
+    { id: "updatedAt", label: "Ultima Modificacion", numeric: false },
+    { id: "status", label: "Estado", numeric: false },
+] as HeadCell[]
+
+const headerTicket = [
+    { headerId: "id", ticketId: "id" },
+    { headerId: "title", ticketId: "title" },
+    { headerId: "razonSocial", ticketId: "authorId" },
+    { headerId: "productName", ticketId: "productId" },
+    { headerId: "createdAt", ticketId: "createdAt" },
+    { headerId: "updatedAt", ticketId: "updatedAt" },
+    { headerId: "status", ticketId: "status" },
+]
 
 
 const Tickets = (props: TicketsProps) => {
@@ -24,11 +59,13 @@ const Tickets = (props: TicketsProps) => {
     const [isLoading, setLoading] = useState<boolean>(false)
     const [showAddModal, setShowAddModal] = useState(false)
     const [showEditModal, setShowEditModal] = useState(false)
-    const [currentId, setCurrentID] = useState<number>(0)
+    const [currentId, setCurrentID] = useState<number | null>(null)
+    const [order, setOrder] = useState<Order>('asc');
+    const [orderBy, setOrderBy] = useState<keyof Data>('razonSocial');
+    const [rowsPerPage, setRowsPerPage] = useState(5)
+    const [page, setPage] = useState(0)
     const [resources, setResources] = useState([emptyAuthor])
     const [products, setProducts] = useState<TicketProduct[]>([{ id: 0, name: "" }])
-    const [showCurrTicket, setShowCurrTicket] = useState<boolean>(false)
-
 
     const handleAddOpen = () => {
         setShowAddModal(true)
@@ -39,16 +76,9 @@ const Tickets = (props: TicketsProps) => {
         setShowEditModal(true)
     }
 
-    const handleTicketOpen = (id: number) => {
-        setCurrentID(id)
-        setShowCurrTicket(true)
-    }
-
     const handleClose = () => {
         setShowAddModal(false)
         setShowEditModal(false)
-        setShowCurrTicket(false)
-
     }
 
     const handleSubmit = () => {
@@ -57,6 +87,20 @@ const Tickets = (props: TicketsProps) => {
         setShowEditModal(false)
     }
 
+    const handleRequestSort = (event: React.MouseEvent<unknown>, property: keyof Data,) => {
+        const isAsc = orderBy === property && order === 'asc';
+        setOrder(isAsc ? 'desc' : 'asc');
+        setOrderBy(property);
+    };
+
+    const handleChangePage = (event: React.MouseEvent<HTMLButtonElement> | null, newPage: number) => {
+        setPage(newPage);
+    };
+
+    const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        setRowsPerPage(parseInt(event.target.value, 10));
+        setPage(0);
+    };
 
     const gatherResources = async () => {
         const extResources = await getExternalResources()
@@ -66,8 +110,8 @@ const Tickets = (props: TicketsProps) => {
     const gatherProducts = async () => {
         const prods = await getProducts()
         setProducts(prods || [])
+        console.log(prods)
     }
-
 
     const gatherTickets = useCallback(() => {
         fetch(`${ticketSupportURI}/tickets`)
@@ -82,6 +126,18 @@ const Tickets = (props: TicketsProps) => {
             })
     }, [])
 
+    const sortFunction = (a: any, b: any) => {
+        const currKey = headerTicket.find(el => el.headerId === orderBy)?.ticketId || "title"
+        if (order === 'asc') {
+            if (a?.[currKey] < b?.[currKey]) return 1
+            if (a?.[currKey] > b?.[currKey]) return -1
+            return 0
+        }
+        if (a?.[currKey] < b?.[currKey]) return -1
+        if (a?.[currKey] > b?.[currKey]) return 1
+        return 0
+    }
+
     useEffect(() => {
         setLoading(true)
         gatherResources()
@@ -89,23 +145,57 @@ const Tickets = (props: TicketsProps) => {
         gatherTickets()
     }, [gatherTickets]);
 
-    const links = [
-        { label: "Inicio", href: "/" },
-        { label: "Soporte", href: "/soporte" },
-    ]
-
     return (
         <>
             <PageTitle label='Soporte'>
-                <PageLinker links={links} />
+                <div className="flex flex-row" >
+                    <Link to={'/'}>
+                        <Button>Inicio</Button>
+                    </Link>
+                    <Button disabled>{'>'}</Button>
+                    <Link to={'/soporte'}>
+                        <Button>Soporte</Button>
+                    </Link>
+                </div>
             </PageTitle>
             <Typography variant='h5' className={'mb-10'}>Tickets</Typography>
             <LoadingIndicator show={isLoading} className={`flex flex-col items-start  transition-all duration-200`} >
-                <CreateTicketButton onClick={handleAddOpen} />
+                <div className="self-end mr-10 border-2 text-center  rounded-xl shadow-lg text-slate-800 hover:bg-gray-200 hover:text-teal-600 transition-all duration-300 cursor-pointer" onClick={handleAddOpen}>
+                    <div className="m-4" > Crear Ticket</div>
+                </div>
                 <AddTicketModal onSubmit={handleSubmit} onClose={handleClose} show={showAddModal} resources={resources} products={products} />
                 <EditTicketModal onSubmit={handleSubmit} onClose={handleClose} show={showEditModal} currentId={currentId} resources={resources} products={products} />
-                {showCurrTicket && <TicketDetailsModal currTicket={loadedTickets.find(ticket => ticket.id === currentId)} onClose={handleClose} show={showCurrTicket} resources={resources} products={products} />}
-                <TicketTable loadedTickets={loadedTickets} onRefresh={gatherProducts} onTicketEdit={handleEditOpen} onTicketView={handleTicketOpen} products={products} resources={resources} />
+                <TableContainer component={Paper} className="mt-10"  >
+                    <Table>
+                        <EnhancedTableHead order={order} orderBy={orderBy} onRequestSort={handleRequestSort} headers={tableHeaders} />
+                        <TableBody>
+                            {loadedTickets &&
+                                loadedTickets
+                                    .sort(sortFunction)
+                                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                                    .map(row => <TicketTableRow product={products.find(el => el.id === row.productId)} client={resources.find(el => el.id === row.authorId)} refresh={gatherTickets} row={row} key={row.id} onEdit={handleEditOpen} />)}
+                        </TableBody>
+                        <TableFooter>
+                            <TableRow>
+                                <TablePagination
+                                    rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
+                                    colSpan={8}
+                                    count={loadedTickets.length}
+                                    rowsPerPage={rowsPerPage}
+                                    page={page}
+                                    SelectProps={{
+                                        inputProps: {
+                                            'aria-label': 'rows per page',
+                                        },
+                                        native: true,
+                                    }}
+                                    onPageChange={handleChangePage}
+                                    onRowsPerPageChange={handleChangeRowsPerPage}
+                                />
+                            </TableRow>
+                        </TableFooter>
+                    </Table>
+                </TableContainer>
             </LoadingIndicator>
         </>
     )
