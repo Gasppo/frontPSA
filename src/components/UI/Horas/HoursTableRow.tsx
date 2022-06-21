@@ -1,9 +1,5 @@
-import { TableCell, TableRow } from '@mui/material'
-import React from 'react'
-import { Hours } from '../../types/resourcesTypes'
-import DeleteIcon from '@mui/icons-material/Delete';
-import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1';
-import EditIcon from '@mui/icons-material/Edit';
+import { TableCell, TableRow } from '@mui/material';
+import { Hours } from '../../types/resourcesTypes';
 interface HoursTableRowProps {
     row: Hours
 }

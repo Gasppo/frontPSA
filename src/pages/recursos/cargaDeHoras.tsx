@@ -1,14 +1,9 @@
-import { useState, useEffect } from 'react'
-import { MultiSelect } from "react-multi-select-component";
-import { TableFooter, TablePagination, TextField } from '@mui/material';
-import { Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material'
-import { Link, useLocation, useNavigate } from 'react-router-dom'
-import { proyectsAPI } from "../../components/dev/URIs"
-import { SelectProyect, Proyect, Task } from '../../components/types/resourcesTypes'
-import TasksTableRow from '../../components/UI/Horas/TasksTableRow'
-import LoadHoursTableRow from '../../components/UI/Horas/LoadHoursTableRow';
-import AddHourModal from '../../components/UI/Horas/AddHourModal';
+import { Button, Paper, Table, TableBody, TableCell, TableContainer, TableFooter, TableHead, TablePagination, TableRow, TextField, Typography } from '@mui/material';
+import { useEffect, useState } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import LoadingIndicator from '../../components/Loading/LoadingIndicator';
+import { Task } from '../../components/types/resourcesTypes';
+import LoadHoursTableRow from '../../components/UI/Horas/LoadHoursTableRow';
 import CenteredModal from '../../components/UI/Modal/CenteredModal';
 //import AddHourModal from '../../components/UI/Horas/AddHourModal';
 //import DatePicker from "react-datepicker"
@@ -159,11 +154,10 @@ const CargaDeHoras = (props: CargaDeHorasProps,) => {
                         </TableHead>
                         <TableBody>
 
-                            {state?.items 
-                                &&
-                                state?.items
+                            {state?.items &&  (state?.items
                                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                                .map((row: Task) => <LoadHoursTableRow row={row} key={row._id} onChange={onChange}/>) || []}
+                                .map((row: Task) => <LoadHoursTableRow row={row} key={row._id} onChange={onChange}/>) || []
+                                )}
                         </TableBody>
                         <TableFooter>
                           <TableRow>

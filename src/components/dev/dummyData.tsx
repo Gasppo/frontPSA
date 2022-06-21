@@ -167,7 +167,7 @@ export const productLicense = [
 export const defaultTicketData = {
   title: "",
   description: "",
-  status: "OPEN",
+  status: "Abierto",
   priority: 1,
   productId: 0,
   productLicenseId: 0,

@@ -1,13 +1,13 @@
-import { useState, useEffect } from 'react'
+import { DateComponent } from '@fullcalendar/react';
+import { Paper, Table, TableBody, TableCell, TableContainer, TableFooter, TableHead, TablePagination, TableRow, TextField, Typography } from '@mui/material';
+import { useEffect, useState } from 'react';
 import { MultiSelect } from "react-multi-select-component";
-import { TableFooter, TablePagination, TextField } from '@mui/material';
-import { Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material'
-import { Link } from 'react-router-dom'
-import { format } from 'date-fns'
-import { proyectsAPI } from "../../components/dev/URIs"
-import { SelectProyect, Proyect, Task } from '../../components/types/resourcesTypes'
-import TasksTableRow from '../../components/UI/Horas/TasksTableRow'
+import { Link } from 'react-router-dom';
 import LoadingIndicator from '../../components/Loading/LoadingIndicator';
+import { Proyect, SelectProyect, Task } from '../../components/types/resourcesTypes';
+import PageTitle from '../../components/UI/Dashboard/PageTitle';
+import TasksTableRow from '../../components/UI/Horas/TasksTableRow';
+import PageLinker from '../../components/UI/Tickets/PageLinker';
 //import DatePicker from "react-datepicker"
 
 
@@ -88,7 +88,7 @@ const AddHoras = (props: AddHorasProps) => {
     const handleChangePage = (event: React.MouseEvent<HTMLButtonElement> | null, newPage: number) => {
         setPage(newPage);
     };
-  
+
     const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         setRowsPerPage(parseInt(event.target.value, 10));
         setPage(0);
@@ -106,41 +106,32 @@ const AddHoras = (props: AddHorasProps) => {
         console.log(selectedItems)
     }, [selectedItems]);
 
+    const links = [
+        { label: "Inicio", href: "/" },
+        { label: "Recursos", href: "/recursos/horasSemanales" },
+    ]
 
     return (
         <>
-
-
-            <div className="flex flex-row" >
-                <Link to={'/recursos/horasSemanales'} >
-                    <Button>Volver al inicio</Button>
-                </Link>
-            </div>
-
-            <div className='flex-row'>
-                <div className="self-end mr-10 border-2 text-center  rounded-xl shadow-lg text-slate-800 hover:bg-gray-200 hover:text-teal-600 transition-all duration-300 cursor-pointer">
-                    <Link to={'/recursos/horasSemanales/carga/seleccion'} state={{ items: selectedItems, date:date }} >
-                        <div className="m-4"> Siguiente</div>
-                    </Link>
-                
-                </div>
-                <div>
-                <TextField type='date' onChange={(value)=>{setDate(value.currentTarget.value)}} inputProps={{ max: new Date().toISOString().slice(0, 10) }} defaultValue={new Date().toISOString().split('T')[0]} ></TextField>
-                </div>
-                
-            </div>
-            <div>
-            <MultiSelect options={proyectos} value={selected} onChange={setSelected} labelledBy="Select" />
-            
-            </div>
-
-            
-           
+            <PageTitle label='Carga de Horas'>
+                <PageLinker links={links} />
+            </PageTitle>
             <Typography variant='h5' className={'mb-10'}></Typography>
             <LoadingIndicator show={isLoading} className={`flex flex-col items-start  transition-all duration-200`} >
+                <div className="flex justify-between w-full" >
+                    <div  >
+                        <TextField type='date' onChange={(value)=>{setDate(value.currentTarget.value)}} inputProps={{ max: new Date().toISOString().slice(0, 10) }} defaultValue={new Date().toISOString().split('T')[0]} ></TextField>
+                    </div>
+                    <div className="mr-10 border-2 text-center  rounded-xl shadow-lg text-slate-800 hover:bg-gray-200 hover:text-teal-600 transition-all duration-300 cursor-pointer">
+                        <Link to={'/recursos/horasSemanales/carga/seleccion'} state={{ items: selectedItems, date: date }} >
+                            <div className="m-4">Siguiente</div>
+                        </Link>
+                    </div>
+                </div>
 
-                
-                
+                <div className='w-80 my-8'>
+                    <MultiSelect options={proyectos} value={selected} onChange={setSelected} labelledBy="Select" />
+                </div>
                 <TableContainer component={Paper} className="mt-10"  >
                     <Table>
                         <TableHead>
@@ -155,38 +146,33 @@ const AddHoras = (props: AddHorasProps) => {
                         </TableHead>
                         <TableBody>
                             {
-                            tasks &&
-                                    tasks
+                                tasks &&
+                                tasks
                                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                                     .map((row: Task) => <TasksTableRow row={row} key={row._id} onSelect={handleSelect} onRemove={handleRemoveItem} />)}
                         </TableBody>
                         <TableFooter>
-                          <TableRow>
-                              <TablePagination
-                                  rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
-                                  colSpan={8}
-                                  count={tasks.length}
-                                  rowsPerPage={rowsPerPage}
-                                  page={page}
-                                  SelectProps={{
-                                      inputProps: {
-                                          'aria-label': 'rows per page',
-                                      },
-                                      native: true,
-                                  }}
-                                  onPageChange={handleChangePage}
-                                  onRowsPerPageChange={handleChangeRowsPerPage}
-                              />
-                          </TableRow>
-                      </TableFooter>
+                            <TableRow>
+                                <TablePagination
+                                    rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
+                                    colSpan={8}
+                                    count={tasks.length}
+                                    rowsPerPage={rowsPerPage}
+                                    page={page}
+                                    SelectProps={{
+                                        inputProps: {
+                                            'aria-label': 'rows per page',
+                                        },
+                                        native: true,
+                                    }}
+                                    onPageChange={handleChangePage}
+                                    onRowsPerPageChange={handleChangeRowsPerPage}
+                                />
+                            </TableRow>
+                        </TableFooter>
                     </Table>
                 </TableContainer>
-                </LoadingIndicator>
-            
-
-
-
-
+            </LoadingIndicator>
         </>
 
     )

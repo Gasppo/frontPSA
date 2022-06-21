@@ -1,7 +1,5 @@
 import { Typography } from '@mui/material'
-import React, { useState } from 'react'
-import { defaultTicketData } from '../../dev/dummyData'
-import { Ticket, TicketAuthor, TicketDetails, TicketProduct } from '../../types/ticketTypes'
+import { Ticket, TicketProduct } from '../../types/ticketTypes'
 import TitleAndSpan from '../Inputs/TitleAndSpan'
 import CenteredModal from '../Modal/CenteredModal'
 

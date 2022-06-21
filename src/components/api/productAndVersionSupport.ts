@@ -52,3 +52,14 @@ export const createLicence = async (body: any) => {
         body: JSON.stringify(body)
     })
 }
+
+export const updateLicence = async (body: any) => {
+    console.log(JSON.stringify(body))
+    return await fetch(`${productAndVersionsURI}/updateLicence`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(body)
+    })
+}
