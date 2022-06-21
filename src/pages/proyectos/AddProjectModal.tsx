@@ -29,7 +29,7 @@ const AddProjectModal = (props: AddTicketModalProps) => {
 
     const [type, setType] = useState('Desarrollo');
     const { onSubmit, onClose, show} = props
-    const [clientType, setClientType] = useState('');
+    const [clientType, setClientType] = useState('Externo');
     const [showProductModal, setProductModal] = useState(false);
     const [runValidations, setRunValidations] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
@@ -46,6 +46,7 @@ const AddProjectModal = (props: AddTicketModalProps) => {
         client: 0,
         productId: 0,
         description: " ",
+
         //iteration: 1,
         //fase: 1,
     })
@@ -143,6 +144,7 @@ const AddProjectModal = (props: AddTicketModalProps) => {
             },
             body: JSON.stringify(newProject)
         })
+        console.log(response);
         return response
     }
 

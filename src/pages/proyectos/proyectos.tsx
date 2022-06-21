@@ -90,8 +90,10 @@ const Proyectos = (props: ProyectosProps) => {
 
     const handleAddProjectSubmit = (projectCreated : Project) => {
         setshowProjectModal(false);
-        setshowResourcesModal(true);
+        //setshowResourcesModal(true);
         setProject(projectCreated);
+        console.log("created project")
+        console.log(projectCreated);
         gatherProjects();
     };
 
@@ -139,7 +141,7 @@ const Proyectos = (props: ProyectosProps) => {
             <LoadingIndicator show={isLoading} className={`flex flex-col items-start  transition-all duration-200`} >
                 {!isLoading && (<> 
                     <AddProjectModal onSubmit={handleAddProjectSubmit} onClose={handleAddProjectClose} show={showProjectModal} />
-                    <AddResourcesModal onSubmit={handleAddResourcesSubmit} onClose={handleModalAddResourcesClose} show={showResourcesModal} project={newProject}/> 
+                    {/* <AddResourcesModal onSubmit={handleAddResourcesSubmit} onClose={handleModalAddResourcesClose} show={showResourcesModal} project={newProject}/>  */}
 
                     <TableContainer component={Paper} className="mt-10"  >
                         <Table>
