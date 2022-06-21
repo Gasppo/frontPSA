@@ -144,7 +144,7 @@ const AddProjectModal = (props: AddTicketModalProps) => {
                 return response.json()})
             .then((myJson) => {
                 setClients(Object.values(JSON.parse(JSON.stringify(myJson))));
-                console.log(clients[0]);
+                //console.log(clients[0]);
             })
             .catch(err => console.log(err))
             //sleep(3000).then(res => setLoading(false));
