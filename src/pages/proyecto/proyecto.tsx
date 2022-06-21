@@ -9,7 +9,6 @@ import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import TaskTableRow from '../../components/UI/Projects/TaskTableRow';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
-import React from 'react';
 import { Link, useNavigate} from 'react-router-dom';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import Popup from 'reactjs-popup';
@@ -188,7 +187,7 @@ const Proyecto = () => {
         setexpandedDates(false);
         setexpandedDetails(false);
         checkIfItIsADevelopmentProject();
-    }, [loadedTasks]);
+    }, []);
 
     return (
         <>
