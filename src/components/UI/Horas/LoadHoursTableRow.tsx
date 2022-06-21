@@ -1,6 +1,5 @@
 import { TableCell, TableRow } from '@mui/material'
-import { FunctionComponentFactory } from 'react'
-import { Proyect, Task } from '../../types/resourcesTypes'
+import { Task } from '../../types/resourcesTypes'
 interface LoadHoursTableRowProps {
     row: Task,
     onChange: any

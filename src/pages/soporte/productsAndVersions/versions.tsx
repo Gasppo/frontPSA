@@ -1,14 +1,14 @@
-import { Button, Paper, Table, TableBody, TableContainer, TableFooter, TablePagination, TableRow, Typography } from '@mui/material'
-import { Link, useLocation } from 'react-router-dom'
+import { Button, Paper, Table, TableBody, TableContainer, TableFooter, TablePagination, TableRow } from '@mui/material'
 import { useCallback, useEffect, useState } from 'react'
+import { Link, useLocation } from 'react-router-dom'
+import { productAndVersionsURI } from '../../../components/dev/URIs'
+import LoadingIndicator from '../../../components/Loading/LoadingIndicator'
 import { Version } from '../../../components/types/productTypes'
 import PageTitle from '../../../components/UI/Dashboard/PageTitle'
-import { productAndVersionsURI } from '../../../components/dev/URIs'
-import VersionTableRow from '../../../components/UI/Versions/VersionTableRow'
-import LoadingIndicator from '../../../components/Loading/LoadingIndicator'
-import EnhancedTableHead from '../../../components/UI/Versions/EnhacedTableHeader'
 import AddVersionModal from '../../../components/UI/Versions/AddVersionModal'
 import EditVersionModal from '../../../components/UI/Versions/EditVersionModal'
+import EnhancedTableHead from '../../../components/UI/Versions/EnhacedTableHeader'
+import VersionTableRow from '../../../components/UI/Versions/VersionTableRow'
 
 interface LocationState {
       productId: number,

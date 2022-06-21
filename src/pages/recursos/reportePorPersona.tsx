@@ -1,13 +1,8 @@
-import { useState, useEffect } from 'react'
-import { MultiSelect } from "react-multi-select-component";
-import Select, { SingleValue } from 'react-select'
-import { TextField } from '@mui/material';
-import { Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material'
-import { Link, useLocation } from 'react-router-dom'
-import { proyectsAPI } from "../../components/dev/URIs"
-import { SelectResource, Resource } from '../../components/types/resourcesTypes'
-import TasksTableRow from '../../components/UI/Horas/TasksTableRow'
-import LoadHoursTableRow from '../../components/UI/Horas/LoadHoursTableRow';
+import { Button } from '@mui/material';
+import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
+import Select from 'react-select';
+import { SelectResource } from '../../components/types/resourcesTypes';
 //import AddHourModal from '../../components/UI/Horas/AddHourModal';
 //import DatePicker from "react-datepicker"
 
@@ -55,9 +50,7 @@ const ReportePorPersona = (props: ReportePorPersonaProps,) => {
                     <Button>Volver al inicio</Button>
                 </Link>
             </div>
-
             <Select options={recursos} onChange={(value) => setSelected(value)} />
-
         </>
 
     )
