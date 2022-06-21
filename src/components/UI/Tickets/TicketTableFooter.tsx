@@ -16,7 +16,7 @@ const TicketTableFooter = (props: TicketTableFooterProps) => {
     return (
         <TableRow>
             <TablePagination
-                rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
+                rowsPerPageOptions={[5, 10, 25, 50]}
                 colSpan={8}
                 count={count}
                 rowsPerPage={rowsPerPage}
@@ -27,6 +27,7 @@ const TicketTableFooter = (props: TicketTableFooterProps) => {
                     },
                     native: true,
                 }}
+                labelRowsPerPage={'Filas por pag.'}
                 onPageChange={onPageChange}
                 onRowsPerPageChange={onRowsPerPageChange}
             />

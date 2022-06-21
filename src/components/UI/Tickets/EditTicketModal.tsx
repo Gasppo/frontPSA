@@ -135,10 +135,10 @@ const EditTicketModal = (props: EditTicketModalProps) => {
 
 
     const statuses = [
-        { id: "OPEN" },
-        { id: "CLOSED" },
-        { id: "IN REVIEW" },
-        { id: "REJECTED" },
+        { id: "Abierto" },
+        { id: "Cerrado" },
+        { id: "En analisis" },
+        { id: "Rechazado" },
     ]
 
 
