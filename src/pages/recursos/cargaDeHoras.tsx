@@ -2,57 +2,54 @@ import { useState, useEffect } from 'react'
 import { MultiSelect } from "react-multi-select-component";
 import { TextField } from '@mui/material';
 import { Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material'
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import { proyectsAPI } from "../../components/dev/URIs"
 import { SelectProyect, Proyect, Task } from '../../components/types/resourcesTypes'
 import TasksTableRow from '../../components/UI/Horas/TasksTableRow'
+import LoadHoursTableRow from '../../components/UI/Horas/LoadHoursTableRow';
+//import AddHourModal from '../../components/UI/Horas/AddHourModal';
 //import DatePicker from "react-datepicker"
 
 
-interface AddHorasProps {
+interface CargaDeHorasProps {
 
 }
 
 
 
 
-const AddHoras = (props: AddHorasProps) => {
+const CargaDeHoras = (props: CargaDeHorasProps,) => {
 
-    const [selected, setSelected] = useState<SelectProyect[]>([]);
-    const [proyectos, setProyectos] = useState<SelectProyect[]>([]);
     const [tasks, setTasks] = useState<Task[]>([]);
-    const [selectedItems, setSelectedItems] = useState<any[]>([])
+    const [showAddModal, setShowAddModal] = useState(false)
 
-    const fetchProyects = () => {
-        fetch('https://modulo-proyectos-psa-2022.herokuapp.com/projects')
-            .then(res => res.json())
-            .then(res => {
-                let projs: SelectProyect[] = [];
-                res.forEach((item: any) => {
-                    let proj = {
-                        label: item.name,
-                        value: item.code
-                    }
-                    if (true)
-                        projs.push(proj)
-                })
-                setProyectos(projs)
-            })
-            .catch(err => {
-                console.log(JSON.stringify(err))
-            })
+    const { state }: any = useLocation()
+
+    useEffect(() => {
+        fetchTasks()
+    }, []);
+
+    const handleAddOpen = () => {
+        setShowAddModal(true)
     }
+    const handleSubmit = () => {
+        /* cargar las horas */
+        alert("Las horas han sido cargadas")
+    }
+
+    const handleClose = () => {
+        setShowAddModal(false);
+    }
+
 
     const fetchTasks = () => {
         fetch('https://modulo-proyectos-psa-2022.herokuapp.com/projects')
             .then(res => res.json())
             .then(res => {
+                console.log(res)
                 setTasks([])
-                let proyectsId: any[] = []
-                selected.forEach(item => proyectsId.push(item.value))
-                let selectedProyects = res.filter((item: Proyect) => proyectsId.includes(item.code))
                 let tasks: Task[] = []
-                selectedProyects.forEach((element: Proyect) => {
+                res.forEach((element: Proyect) => {
                     element.tasks.forEach((item: Task) => {
                         let proyectTask = {
                             ...item,
@@ -72,23 +69,9 @@ const AddHoras = (props: AddHorasProps) => {
 
     }
 
-    const handleSelect = (item: any) => {
-        setSelectedItems(prev => [...prev, item])
-    }
-
-    const handleRemoveItem = (itemId: number) => {
-        setSelectedItems(prev => prev.filter(el => el.code !== itemId))
-    }
-
     useEffect(() => {
-        fetchProyects();
-        fetchTasks();
-
-    }, [selected]);
-
-    useEffect(() => {
-        console.log(selectedItems)
-    }, [selectedItems]);
+        console.log(state?.items)
+    }, [state]);
 
 
     return (
@@ -96,8 +79,8 @@ const AddHoras = (props: AddHorasProps) => {
 
 
             <div className="flex flex-row" >
-                <Link to={'/recursos/horasSemanales'} >
-                    <Button>Volver al inicio</Button>
+                <Link to={'/recursos/horasSemanales/carga/'} >
+                    <Button>Volver atras</Button>
                 </Link>
             </div>
 
@@ -105,10 +88,7 @@ const AddHoras = (props: AddHorasProps) => {
 
 
 
-                <TextField type='date' inputProps={{ max: new Date().toISOString().slice(0, 10) }} defaultValue='2022-06-16'></TextField>
-
-
-                <MultiSelect options={proyectos} value={selected} onChange={setSelected} labelledBy="Select" />
+                <TextField disabled type='date' inputProps={{ max: new Date().toISOString().slice(0, 10) }} defaultValue='2022-06-16'></TextField>
 
                 <TableContainer component={Paper} className="mt-10"  >
                     <Table>
@@ -119,21 +99,22 @@ const AddHoras = (props: AddHorasProps) => {
                                 <TableCell align="left">Codigo de Tarea</TableCell>
                                 <TableCell align="left">Tarea</TableCell>
                                 <TableCell align="left">Descripcion</TableCell>
-                                <TableCell align='left'>Seleccionar</TableCell>
+                                <TableCell align='left'>Horas a cargar</TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {tasks.map((row: Task) => <TasksTableRow row={row} key={row._id} onSelect={handleSelect} onRemove={handleRemoveItem} />)}
+                            {state?.items.map((row: Task) => <LoadHoursTableRow row={row} key={row._id} />) || []}
                         </TableBody>
                     </Table>
                 </TableContainer>
             </div>
 
             <div className="self-end mr-10 border-2 text-center  rounded-xl shadow-lg text-slate-800 hover:bg-gray-200 hover:text-teal-600 transition-all duration-300 cursor-pointer">
-                <Link to={'/recursos/horasSemanales/carga/seleccion'} state={{ items: selectedItems }} >
-                    <div className="m-4"> Siguiente</div>
-                </Link>
+                <Button onClick={handleAddOpen}>
+                    <div className="m-4"> Guardar</div>
+                </Button>
             </div>
+            {/* <AddHourModal onSubmit={handleSubmit} onClose={handleClose} show={showAddModal}></AddHourModal> */}
 
 
         </>
@@ -141,4 +122,4 @@ const AddHoras = (props: AddHorasProps) => {
     )
 }
 
-export default AddHoras
+export default CargaDeHoras
