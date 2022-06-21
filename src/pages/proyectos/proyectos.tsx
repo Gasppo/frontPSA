@@ -1,5 +1,5 @@
 import { Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material'
-import { useEffect, useState } from 'react'
+import { useEffect, useState} from 'react'
 import AccountBalanceIcon from '@mui/icons-material/AccountBalance'
 import SupportAgentIcon from '@mui/icons-material/SupportAgent'
 import FilterAltIcon from '@mui/icons-material/FilterAlt';
@@ -20,6 +20,7 @@ const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
 const Proyectos = (props: ProyectosProps) => {
     const [loadedProjects, setLoadedProjects] = useState<Project[]>([])
+
     const [filteredProjects, setFilteredProjects] = useState<Project[]>([])
     const [isLoading, setLoading] = useState<boolean>(false)
     const [showProjectModal, setshowProjectModal] = useState(false)
@@ -81,7 +82,7 @@ const Proyectos = (props: ProyectosProps) => {
                 .then((response) => {
                     return response.json()})
                 .then((myJson) => {
-                    console.log(myJson);
+                    //console.log(myJson);
                     setLoadedProjects(JSON.parse(JSON.stringify(myJson)));
                     setFilteredProjects(JSON.parse(JSON.stringify(myJson)));
                 })
@@ -92,7 +93,9 @@ const Proyectos = (props: ProyectosProps) => {
 
     useEffect(() => {
         gatherProjects();
-    }, []);
+    },);
+
+
 
     return (
         <>
