@@ -11,6 +11,11 @@ import Licences from '../pages/soporte/productsAndVersions/licences'
 import Clients from '../pages/soporte/productsAndVersions/clients'
 import Versions from '../pages/soporte/productsAndVersions/versions'
 import AddHoras from '../pages/recursos/addHoras'
+import CargaDeHoras from '../pages/recursos/cargaDeHoras'
+import LandingPageHR from '../pages/recursos/landingPageHR'
+import Calendario from '../pages/recursos/calendario'
+import ReportePorPersona from '../pages/recursos/reportePorPersona'
+import ReportePorProyecto from '../pages/recursos/reportePorProyecto'
 
 interface RouterProps {
     
@@ -20,8 +25,12 @@ const Router = (props: RouterProps) => {
     return (
           <Routes>
             <Route path="/" element={<Home />} />
-            <Route path='recursos' element={<Recursos/>} />
-            <Route path='recursos/addHoras' element= {<AddHoras/>}/>
+            <Route path='recursos' element={<LandingPageHR/>} />
+            <Route path='recursos/reportePorPersona' element= {<ReportePorPersona/>}/>
+            <Route path='recursos/reportePorProyecto' element= {<ReportePorProyecto/>}/>
+            <Route path='recursos/horasSemanales' element= {<Recursos/>}/>
+            <Route path='recursos/horasSemanales/carga' element= {<AddHoras/>}/>
+            <Route path='recursos/calendario' element= {<Calendario/>}/>
             <Route path="soporte" element={<Soporte />} />
             <Route path='soporte/tickets' element={<Tickets />} />
             <Route path='soporte/productsAndVersions' element={<ProductsAndVersions />} />
@@ -31,6 +40,7 @@ const Router = (props: RouterProps) => {
             <Route path='soporte/productsAndVersions/version' element={<Versions />} />
             <Route path="placeholder" element={<PlaceHolderSite />} />
             <Route path="contacts" element={<PlaceHolderSite />} />
+            <Route path="recursos/horasSemanales/carga/seleccion" element={<CargaDeHoras />} />
           </Routes>
     )
 }
