@@ -8,7 +8,6 @@ import SelectBox from '../../components/UI/Inputs/SelectBox'
 import CenteredModal from '../../components/UI/Modal/CenteredModal'
 import { VoicemailRounded } from '@mui/icons-material';
 import { isPrivateIdentifier } from 'typescript';
-import {Task} from '../../components/types/taskType'
 import {Project} from '../../components/types/projectTypes'
 import{Resource} from '../../components/types/resourceType';
 import {Task} from '../../components/types/taskType';
@@ -30,13 +29,12 @@ const AddTaskModal = (props: AddTicketModalProps) => {
     const [projectTasks, setProjectTasks] = useState<Task[]>([])
     const [newTask, setNewTask] = useState({
         projectCode: toProject.code,
-        name: "",
+        name: " ",
         priority: 0,
         effort: 0,
         resource: 1,
-        description: "",
+        description: " ",
     })
-
 
 
     const invalidFields = (!newTask?.name || newTask.resource==0 );
@@ -47,7 +45,7 @@ const AddTaskModal = (props: AddTicketModalProps) => {
         const response = await fetch('http://localhost:2000/tasks', {
             method: 'POST',
             headers: {
-               // 'Content-Type': 'application/json',
+               'Content-Type': 'application/json',
             },
             body: JSON.stringify(newTask)
         })
