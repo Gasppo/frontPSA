@@ -9,6 +9,7 @@ import LoadingIndicator from '../../../components/Loading/LoadingIndicator'
 import AddLicenceModal from '../../../components/UI/Licences/AddLicenceModel'
 import EnhancedTableHead from '../../../components/UI/Licences/EnahcedTableHeader'
 import { Client } from '../../../components/types/clientTypes'
+import EditLicenceModal from '../../../components/UI/Licences/EditLicenceModal'
 
 type Order = 'asc' | 'desc';
 interface Data {
@@ -30,20 +31,20 @@ interface HeadCell {
 
 const tableHeaders = [
     { id: "id", label: "Codigo de identificacion", numeric: false },
-    { id: "product", label: "Producto", numeric: false },
-    {id: "version", label: "Version", numeric: false },
-    {id: "cliente", label: "Cliente", numeric: false },
-    {id: "fechaDeExpiracion", label: "Fecha de Expiración", numeric: false },
-    {id: "estado", label: "Estado", numeric: false },
+    { id: "productName", label: "Producto", numeric: false },
+    {id: "versionName", label: "Version", numeric: false },
+    {id: "clientName", label: "Cliente", numeric: false },
+    {id: "expirationDate", label: "Fecha de Expiración", numeric: false },
+    {id: "state", label: "Estado", numeric: false },
 ] as HeadCell[]
 
 const headerLicence = [
     { headerId: "id", licenceId: "id" },
-    { headerId: "product", licenceId: "product" },
-    { headerId: "version", licenceId: "version" },
-    { headerId: "cliente", licenceId: "cliente" },
-    { headerId: "fechaDeExpiracion", licenceId: "fechaDeExpiracion" },
-    { headerId: "estado", licenceId: "estado" }
+    { headerId: "productName", licenceId: "productName" },
+    { headerId: "versionName", licenceId: "versionName" },
+    { headerId: "clientName", licenceId: "clientName" },
+    { headerId: "expirationDate", licenceId: "expirationDate" },
+    { headerId: "state", licenceId: "state" }
 ]
 
 const Licences = () => {
@@ -184,7 +185,7 @@ useEffect(() => {
                     <div className="m-4" > Crear Licencia</div>
                 </div>
                 <AddLicenceModal onSubmit={handleSubmit} onClose={handleClose} show={showAddModal} clients={loadedClients} products={loadedProducts}/>
-                <AddLicenceModal onSubmit={handleSubmit} onClose={handleClose} show={showEditModal} clients={loadedClients} products={loadedProducts}/>
+                <EditLicenceModal onSubmit={handleSubmit} onClose={handleClose} show={showEditModal} currentId={currentId}/>
                 <TableContainer component={Paper} className="mt-10"  >
                     <Table>
                         <EnhancedTableHead order={order} orderBy={orderBy} onRequestSort={handleRequestSort} headers={tableHeaders} />

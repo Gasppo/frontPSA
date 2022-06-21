@@ -29,14 +29,14 @@ interface HeadCell {
 
 const tableHeaders = [
     { id: "id", label: "Codigo de identificacion", numeric: false },
-    { id: "nombre", label: "Nombre", numeric: false },
-    { id: "estado", label: "Estado", numeric: false }
+    { id: "name", label: "Nombre", numeric: false },
+    { id: "state", label: "Estado", numeric: false }
 ] as HeadCell[]
 
 const headerVersion = [
     { headerId: "id", versionId: "id" },
-    { headerId: "nombre", versionId: "nombre" },
-    { headerId: "estado", versionId: "estado" }
+    { headerId: "name", versionId: "name" },
+    { headerId: "state", versionId: "state" }
 ]
 
 const Versions = () => {
@@ -163,7 +163,7 @@ const Versions = () => {
                                 <TablePagination
                                     rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
                                     colSpan={8}
-                                    count={loadedVersions.length}
+                                    count={loadedVersions?.length || 0}
                                     rowsPerPage={rowsPerPage}
                                     page={page}
                                     SelectProps={{
