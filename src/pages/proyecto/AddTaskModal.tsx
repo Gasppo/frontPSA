@@ -29,7 +29,7 @@ const AddTaskModal = (props: AddTicketModalProps) => {
     const [newTask, setNewTask] = useState({
         projectCode: toProject.code,
         name: " ",
-        priority: 0,
+        priority: 1,
         effort: 0,
         resource: 1,
         description: " ",
