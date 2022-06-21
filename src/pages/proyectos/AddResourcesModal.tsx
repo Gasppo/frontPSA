@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import{Resource} from '../../components/types/resourceType'
 import {Project} from '../../components/types/projectTypes'
 import AccountCircle from '@mui/icons-material/AccountCircle';
+import DeleteIcon from '@mui/icons-material/DeleteForeverOutlined'
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import { render } from "react-dom";
 import * as React from 'react';
@@ -130,6 +131,10 @@ const AddProjectModal = (props: AddProjectModalProps) => {
         return response;
     }
 
+    const handleResourceRemoval = async (resource : number) => {
+        setNewProject({resources: newProject.resources.filter((item:any)=> item!==resource)});
+    }
+
 
     return (
         <Modal onClose={onClose} open={show} >
@@ -159,7 +164,10 @@ const AddProjectModal = (props: AddProjectModalProps) => {
                     </div>
                     <div style = {{alignSelf: 'left', width: 700, marginLeft:'5vh'}}>
                                     {/* {(selectedResources).map( (resource) =>  <div key={resource.legajo} style={{display: 'flex', flexDirection: 'row', margin: 5, padding: 5, width: 180, height: 30, backgroundColor: "#E9EDEB", borderRadius: 5}}><AccountCircleIcon className= 'mr-1 h-5' style={{color: '#5C7067'}}/><Typography variant='caption' className='slate' >{resource.legajo} - {resource.Nombre} {resource.Apellido}</Typography></div>)} */}
-                                    {(newProject.resources).map( (resource) =>  <div key={resource} style={{display: 'flex', flexDirection: 'row', margin: 5, padding: 5, width: 180, height: 30, backgroundColor: "#E9EDEB", borderRadius: 5}}><AccountCircleIcon className= 'mr-1 h-5' style={{color: '#5C7067'}}/><Typography variant='caption' className='slate' >{resource}</Typography></div>)}
+                                    {(newProject.resources).map( (resource) =>  <div key={resource} style={{display: 'flex', flexDirection: 'row', margin: 5, padding: 5, width: 180, height: 30, backgroundColor: "#E9EDEB", borderRadius: 5}}><AccountCircleIcon className= 'mr-1 h-5' style={{color: '#5C7067'}}/><Typography variant='caption' className='slate' >{resource}</Typography>                    
+                                    <div style = {{alignSelf: 'right', marginLeft:'12vh', marginBottom:'1vh'}} className='hover:text-teal-600 text-slate-600 cursor-pointer' onClick={() => handleResourceRemoval(resource)}>
+                        <DeleteIcon />
+                    </div></div>)}
                          </div>
                     <div style = {{alignSelf: 'right', marginLeft: '55vh', marginTop: '40vh', verticalAlign: 'bottom', position: 'absolute'}} className="text-center mr-8 mb-6 w-52 bg-teal-600 rounded-xl shadow-lg font-bold text-slate-800 hover:bg-gray-400 transition-all duration-300 cursor-pointer" onClick={handleSubmit}>
                         <div className="m-4" >Siguiente</div>
