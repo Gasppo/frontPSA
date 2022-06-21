@@ -32,17 +32,38 @@ interface AddProjectModalProps {
     onClose: () => void
     onSubmit: () => void
     show: boolean
-    project: any
+    project: Project
 }
 
 const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
 const AddProjectModal = (props: AddProjectModalProps) => {
     const { onSubmit, onClose, show, project } = props;
+    const partsCurrentDate = (new Date().toLocaleDateString('es-AR')).split("/");
+    var currentDate: string ;
+    if(partsCurrentDate[1].length==1){
+        currentDate = partsCurrentDate[0] + "/0" + partsCurrentDate[1] + "/" + partsCurrentDate[2];
+    }else{
+        currentDate= partsCurrentDate[0] + "/" + partsCurrentDate[1] + "/" + partsCurrentDate[2];
+    }
     const [isLoading, setLoading] = useState<boolean>(false)
     const [resources, setLoadedResources] = useState<Resource []>([]);
     const [selectedResources, setSelectedResources] = useState<Resource []>([]);
     const [options, setOptions] = useState<number[]>([]);
+    const [resourcesNumbers,setResourcesNumbers] = useState<number[]>([]);
+    const [newProject, setNewProject] = useState({
+        name: project.name,
+        updatedDate: currentDate,
+        state: project.state,
+        description: project.description,
+        startDate: project.startDate,
+        endDate: project.endDate,
+        client: project.client,
+        clientType: project.clientType,
+        creationDate: project.creationDate,
+        productId: project.productId,
+        resources: resourcesNumbers
+    });
 
    /* const handleChangeText = (e: any) => {
         //cuando se selecciona una persona debera ser no onChangeText
@@ -96,12 +117,39 @@ const AddProjectModal = (props: AddProjectModalProps) => {
     }, []);
 
     const handleSubmit = async () => {
+        setResourcesNumbers(resources.map((resource) => resource.legajo));
+        setNewProject({
+            name: project.name,
+            updatedDate: currentDate,
+            state: project.state,
+            description: project.description,
+            startDate: project.startDate,
+            endDate: project.endDate,
+            client: project.client,
+            clientType: project.clientType,
+            creationDate: project.creationDate,
+            productId: project.productId,
+            resources: resourcesNumbers
+        })
+        updateProjectUsingAPI();
         onSubmit();
         /*const response = await addResourcesToProjectUsingAPI()
         if (response.status === 200) {
             onSubmit()
         }*/
 
+    }
+
+    const updateProjectUsingAPI = async () => {
+        const response = await fetch(`http://localhost:2000/projects/${project.code}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+
+            },
+            body: JSON.stringify(newProject)
+        })
+        return response
     }
 
 

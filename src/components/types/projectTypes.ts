@@ -14,10 +14,10 @@ export type Project = {
     clientType: string,
     productId: number;
     iteration: number;
-    phase: number;
+    fase: number;
     tasks: Task[];
     //resoursed debería de ser un set
-    resources: number[] ;
+    resources: number[];
     risk: Risk ;
     description: string ;
 }
