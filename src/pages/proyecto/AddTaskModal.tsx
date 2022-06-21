@@ -40,6 +40,50 @@ const AddTaskModal = (props: AddTicketModalProps) => {
     const invalidFields = (!newTask?.name || newTask.resource==0 );
     const prioridades = [{ id: 1, valor: "Baja" }, { id: 2, valor: "Media" }, { id: 3, valor: "Alta" }, { id: 4, valor: "Critica" }];
 
+    const generateTaskUsingAPI = async () => {
+        console.log("bienvenido")
+        //nose si funciona
+        console.log(newTask);
+        const response = await fetch('http://localhost:2000/tasks', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+
+            },
+            body: JSON.stringify(newTask)
+        })
+        return response
+    }
+    
+    const getTasksByProject = async () => {
+        fetch(`http://localhost:2000/tasks/getbyproject/${props.toProject}`,{
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        .then((response) => {
+            return response.json()})
+        .then((myJson) => {
+            //console.log(myJson);
+            setProjectTasks(JSON.parse(JSON.stringify(myJson)));
+        })
+        .catch(err => console.log(err))
+        //sleep(3000).then(res => setLoading(false));
+    }
+
+    const updateProject = async () => {
+        const response = await fetch(`http://localhost:2000/projects/${props.toProject}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+
+            },
+            body: JSON.stringify({tasks : projectTasks})
+        })
+        return response
+    }
+
     const handleChangeText = (e: any) => {
         setNewTask(({ ...newTask, [e.target.name]: e.target.value }))
     };
@@ -60,10 +104,8 @@ const AddTaskModal = (props: AddTicketModalProps) => {
         generateTaskUsingAPI();
         alert("confirmacion");
         getTasksByProject();
-        console.log("pts");
+        alert("espera");
         console.log(projectTasks);
-        setNewProject({tasks: projectTasks});
-        console.log(newProject);
         updateProject();
         setIsLoading(false);
         onSubmit();
@@ -85,49 +127,6 @@ const AddTaskModal = (props: AddTicketModalProps) => {
         setRunValidations(false)
     }, []);
 
-    const getTasksByProject = async () => {
-        fetch(`http://localhost:2000/tasks/getbyproject/${props.toProject}`,{
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        })
-        .then((response) => {
-            return response.json()})
-        .then((myJson) => {
-            //console.log(myJson);
-            setProjectTasks(JSON.parse(JSON.stringify(myJson)));
-        })
-        .catch(err => console.log(err))
-        //sleep(3000).then(res => setLoading(false));
-    }
-    
-    const generateTaskUsingAPI = async () => {
-        console.log("bienvenido")
-        //nose si funciona
-        console.log(newTask);
-        const response = await fetch('http://localhost:2000/tasks', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-
-            },
-            body: JSON.stringify(newTask)
-        })
-        return response
-    }
-
-    const updateProject = async () => {
-        const response = await fetch(`http://localhost:2000/projects/${props.toProject}`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-
-            },
-            body: JSON.stringify(projectTasks)
-        })
-        return response
-    }
 
     const isEmpty = (value: any) => !value ? "Este campo no puede estar vacio" : ""
     const validations = runValidations ? [isEmpty] : []

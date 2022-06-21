@@ -24,9 +24,7 @@ const  TaskTableRow = (props:  TaskTableRowProps) => {
     const [showCofirmationModal, setShowConfirmationModal] = useState(false);
     const [priorityValue, setPriorityValue] = useState('Baja');
     const [isTaskDetailsModalOpen, setIsOpenTaskDetailsModal]=useState(false);
-    const [newTasks, setNewTasks] = useState({
-        tasks: props.tasks
-    })
+    const [newTasks, setNewTasks] = useState<Task[]>([])
     const [showProjectModal, setshowProjectModal] = useState(false)
     const navigate = useNavigate();
 
@@ -55,16 +53,30 @@ const  TaskTableRow = (props:  TaskTableRowProps) => {
                 'Content-Type': 'application/json',
 
             },
-            body: JSON.stringify(newTasks)
+            body: JSON.stringify({tasks:newTasks})
         })
-        props.refresh();
         return response
     }
 
+    const removeTask = async () => {
+        const response = await fetch(`http://localhost:2000/tasks/${row.code}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+    
+            },
+        })
+        return response;   
+    }
+
     const deleteTask = () => {
+        console.log(props.tasks);
+        //deleteTask();
         const filteredTasks = props.tasks.filter(item => item.code !== row.code);
-        setNewTasks({tasks: filteredTasks});
+        setNewTasks(filteredTasks);
+        console.log(newTasks)
         updateProjectUsingAPI();
+        props.refresh();
     };
     
     /*const navigateToAPoject = () => {
