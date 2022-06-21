@@ -49,7 +49,6 @@ const Proyecto = () => {
     });
 
 
-    //const recursos = ["RS12345678", "RS87654321", "RS98765432", "RS67543245", "RS87657905"];
     const fetchProject = () => {
         fetch(`http://localhost:2000/projects/${projectData.code}`,{
             method: 'GET',
@@ -141,8 +140,6 @@ const Proyecto = () => {
 
     const changeexpandedRecursosSetUp = () =>{
         setexpandedRecursos(!expandedRecursos);
-        console.log(expandedDates);
-        console.log(expandedRecursos);
     }
 
     const changeexpandedDatesSetUp = () =>{
@@ -180,20 +177,21 @@ const Proyecto = () => {
 
     useEffect(() => {
         fetchProject();
-        //gatherTasks();
+        gatherTasks();
         determineRisk();
         determineStateTagColor();
         setexpandedRecursos(false);
         setexpandedDates(false);
         setexpandedDetails(false);
         checkIfItIsADevelopmentProject();
+        console.log(project.resources);
     }, []);
 
     return (
         <>
             <EditProjectModal onRefresh={fetchProject} onClose={handleAddProjectClose} show={showProjectModal} row={project} />
             <AddTaskModal onSubmit={handleAddTaskSubmit} onClose={handleNewTaskClose} show={isOpenNewTaskModal} toProject={project.code}/>
-            <AddResourcesModal onSubmit={handleAddResourcesSubmit} onClose={handleModalAddResourcesClose} show={showResourcesModal} project={project}/> 
+            <AddResourcesModal onSubmit={handleAddResourcesSubmit} onClose={handleModalAddResourcesClose} show={showResourcesModal} project={project} onRefresh={fetchProject}/> 
             <div style={{display: 'flex', flexDirection: 'row', margin: 25, paddingBottom: 20, paddingLeft: 80, borderBottomColor:'#C5D0CB', borderBottomWidth: '1px'}}> 
                 
                 <ArrowBackIosNewIcon  onClick={() => navigate(-1)} style={{color: 'slate', fontSize: 25, marginTop: -9, marginRight: 20}} className= 'hover:bg-gray-200 hover:text-teal-900 hover:rounded-3xl hover:shadow-lg transition-all duration-200  group  h-12'/>
@@ -278,7 +276,7 @@ const Proyecto = () => {
                             {expandedRecursos && 
                             <>
                                 <div style={{width: 400}}>
-                                    {project.resources.map(recurso =>  <div style={{display: 'flex', flexDirection: 'row', margin: 5, padding: 5, width: 120, height: 30, backgroundColor: "#E9EDEB", borderRadius: 5}}><AccountCircleIcon className= 'mr-1 h-5' style={{color: '#5C7067'}}/><Typography variant='caption' className='slate' >{recurso}</Typography></div>)}
+                                    {project.resources.map(recurso =>  <div style={{display: 'flex', flexDirection: 'row', margin: 5, padding: 5, width: 120, height: 30, backgroundColor: "#E9EDEB", borderRadius: 5}}><AccountCircleIcon className= 'mr-1 h-5' style={{color: '#5C7067'}}/><Typography variant='caption' className='slate' >ID {recurso}</Typography></div>)}
                                 </div>
                             </>}
                         </div>

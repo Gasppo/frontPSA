@@ -34,12 +34,13 @@ interface AddProjectModalProps {
     onSubmit: () => void
     show: boolean
     project: Project
+    onRefresh: () => void
 }
 
 const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
 const AddProjectModal = (props: AddProjectModalProps) => {
-    const { onSubmit, onClose, show, project } = props;
+    const { onSubmit, onClose, show, project, onRefresh } = props;
     const [newProject, setNewProject] = useState({
         resources: project.resources
     });
@@ -108,8 +109,9 @@ const AddProjectModal = (props: AddProjectModalProps) => {
 
     const handleSubmit = async () => {
         sleep(100);
-        updateProjectUsingAPI();
+        const res = await updateProjectUsingAPI();
         onSubmit();
+        props.onRefresh();
         /*const response = await addResourcesToProjectUsingAPI()
         if (response.status === 200) {
             onSubmit()
