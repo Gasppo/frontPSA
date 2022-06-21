@@ -14,6 +14,8 @@ import AddHoras from '../pages/recursos/addHoras'
 import CargaDeHoras from '../pages/recursos/cargaDeHoras'
 import LandingPageHR from '../pages/recursos/landingPageHR'
 import Calendario from '../pages/recursos/calendario'
+import ReportePorPersona from '../pages/recursos/reportePorPersona'
+import ReportePorProyecto from '../pages/recursos/reportePorProyecto'
 
 interface RouterProps {
     
@@ -24,6 +26,8 @@ const Router = (props: RouterProps) => {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path='recursos' element={<LandingPageHR/>} />
+            <Route path='recursos/reportePorPersona' element= {<ReportePorPersona/>}/>
+            <Route path='recursos/reportePorProyecto' element= {<ReportePorProyecto/>}/>
             <Route path='recursos/horasSemanales' element= {<Recursos/>}/>
             <Route path='recursos/horasSemanales/carga' element= {<AddHoras/>}/>
             <Route path='recursos/calendario' element= {<Calendario/>}/>
