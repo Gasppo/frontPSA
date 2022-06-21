@@ -1,8 +1,8 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Modal, TextField, Typography, MenuItem, InputAdornment } from '@mui/material';
-import React,{ useEffect, useState } from 'react'
 import{Client} from '../../components/types/clientTypes'
 import AccountCircle from '@mui/icons-material/AccountCircle';
+import {Project} from '../../components/types/projectTypes'
 import ValidatingInput from '../../components/UI/Inputs/ValidatingInput';
 import ValidatingInputDates from '../../components/UI/Inputs/ValidatingInputDates';
 import SelectBox from '../../components/UI/Inputs/SelectBox'
@@ -11,7 +11,7 @@ import { VoicemailRounded } from '@mui/icons-material';
 import { isPrivateIdentifier } from 'typescript';
 
 interface AddTicketModalProps {
-    onSubmit: () => void
+    onSubmit: (newProject: any) => void
     onClose: () => void
     show: boolean
 }
@@ -27,7 +27,7 @@ const AddProjectModal = (props: AddTicketModalProps) => {
     
 
     const [type, setType] = useState('Desarrollo');
-    const { onSubmit, onClose, show } = props
+    const { onSubmit, onClose, show} = props
     const [clientType, setClientType] = useState('');
     const [showProductModal, setProductModal] = useState(false);
     const [runValidations, setRunValidations] = useState(false)
@@ -45,6 +45,8 @@ const AddProjectModal = (props: AddTicketModalProps) => {
         client: 0,
         productId: 0,
         description: " ",
+        //iteration: 1,
+        //fase: 1,
     })
 
     const invalidFields = (!newProject?.name || newProject.startDate== "dd/mm/yyyy" || newProject.endDate == "dd/mm/yyyy" || !clientType || !newProject?.type )
@@ -89,7 +91,7 @@ const AddProjectModal = (props: AddTicketModalProps) => {
             newProject.endDate = partsE[2] + "/" + partsE[1] + "/" + partsE[0];
             generateProjectUsingAPI();
             setIsLoading(false);
-            onSubmit();
+            onSubmit(newProject);
         }
     
     };

@@ -2,6 +2,7 @@ import { Modal, TextField, Typography, MenuItem, InputAdornment } from '@mui/mat
 import { border } from '@mui/system';
 import { useEffect, useState } from 'react'
 import{Resource} from '../../components/types/resourceType'
+import {Project} from '../../components/types/projectTypes'
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import { render } from "react-dom";
@@ -31,12 +32,13 @@ interface AddProjectModalProps {
     onClose: () => void
     onSubmit: () => void
     show: boolean
+    project: any
 }
 
 const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
 const AddProjectModal = (props: AddProjectModalProps) => {
-    const { onSubmit, onClose, show } = props;
+    const { onSubmit, onClose, show, project } = props;
     const [isLoading, setLoading] = useState<boolean>(false)
     const [resources, setLoadedResources] = useState<Resource []>([]);
     const [selectedResources, setSelectedResources] = useState<Resource []>([]);
@@ -106,7 +108,7 @@ const AddProjectModal = (props: AddProjectModalProps) => {
     return (
         <Modal onClose={onClose} open={show} >
             <div style= {{padding: '15vh'}} className='p-15 absolute bg-gray-200  text-slate-800 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[120vh] h-[90vh] rounded-xl shadow-lg'>
-                <Typography variant='h5'>Asigne recursos que desee a su proyecto</Typography>
+                <Typography variant='h5'>Asigne recursos que desee al proyecto #{props.project.code}</Typography>
                 <div style= {{padding: '5vh', marginLeft: '15vh'}} className='flex flex-col items-center'>
                     <div className='flex mb-6 flex-row'>
                         {/* <TextField id="outlined-basic" name="resources" className='mr-8 w-80' label="Busque un recurso por legajo" InputLabelProps={{ shrink: true}} variant="outlined" onChange={handleChangeText} /> */}
