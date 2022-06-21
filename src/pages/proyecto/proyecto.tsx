@@ -181,7 +181,7 @@ const Proyecto = () => {
 
     useEffect(() => {
         fetchProject();
-        gatherTasks();
+        //gatherTasks();
         determineRisk();
         determineStateTagColor();
         setexpandedRecursos(false);

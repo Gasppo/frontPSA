@@ -8,6 +8,7 @@ import SelectBox from '../../components/UI/Inputs/SelectBox'
 import CenteredModal from '../../components/UI/Modal/CenteredModal'
 import { VoicemailRounded } from '@mui/icons-material';
 import { isPrivateIdentifier } from 'typescript';
+import {Task} from '../../components/types/taskType'
 
 interface AddTicketModalProps {
     onSubmit: () => void
@@ -21,14 +22,20 @@ const AddTaskModal = (props: AddTicketModalProps) => {
     const { onSubmit, onClose, show, toProject } = props;
     const [runValidations, setRunValidations] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
+    const [projectTasks, setProjectTasks] = useState<Task[]>([])
     const [newTask, setNewTask] = useState({
-        project_code: props.toProject,
+        projectCode: props.toProject,
         name: "",
         priority: 1,
         effort: 0,
         resource: 0,
         description: "",
     })
+    const [newProject, setNewProject] = useState({
+        tasks: [{}],
+    });
+
+
 
     const invalidFields = (!newTask?.name || newTask.resource==0 );
     const prioridades = [{ id: 1, valor: "Baja" }, { id: 2, valor: "Media" }, { id: 3, valor: "Alta" }, { id: 4, valor: "Critica" }];
@@ -46,10 +53,18 @@ const AddTaskModal = (props: AddTicketModalProps) => {
     const handleSubmit = async () => {
         if (invalidFields) {
             setRunValidations(true);
-            return
+            console.log("invalid");
+            //return
         }
         setIsLoading(true);
         generateTaskUsingAPI();
+        alert("confirmacion");
+        getTasksByProject();
+        console.log("pts");
+        console.log(projectTasks);
+        setNewProject({tasks: projectTasks});
+        console.log(newProject);
+        updateProject();
         setIsLoading(false);
         onSubmit();
     
@@ -70,8 +85,25 @@ const AddTaskModal = (props: AddTicketModalProps) => {
         setRunValidations(false)
     }, []);
 
-
+    const getTasksByProject = async () => {
+        fetch(`http://localhost:2000/tasks/getbyproject/${props.toProject}`,{
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        .then((response) => {
+            return response.json()})
+        .then((myJson) => {
+            //console.log(myJson);
+            setProjectTasks(JSON.parse(JSON.stringify(myJson)));
+        })
+        .catch(err => console.log(err))
+        //sleep(3000).then(res => setLoading(false));
+    }
+    
     const generateTaskUsingAPI = async () => {
+        console.log("bienvenido")
         //nose si funciona
         console.log(newTask);
         const response = await fetch('http://localhost:2000/tasks', {
@@ -81,6 +113,18 @@ const AddTaskModal = (props: AddTicketModalProps) => {
 
             },
             body: JSON.stringify(newTask)
+        })
+        return response
+    }
+
+    const updateProject = async () => {
+        const response = await fetch(`http://localhost:2000/projects/${props.toProject}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+
+            },
+            body: JSON.stringify(projectTasks)
         })
         return response
     }
@@ -105,7 +149,7 @@ const AddTaskModal = (props: AddTicketModalProps) => {
                 <div className='flex mb-6 flex-row'>
                     
 
-                    <ValidatingInput required validations={validations} name="effort" className='mr-8 w-80' label="Esfuerzo Estimado" value={newTask?.name} onChange={handleChangeInt} />
+                    <ValidatingInput required validations={validations} name="effort" className='mr-8 w-80' label="Esfuerzo Estimado" value={newTask?.effort} onChange={handleChangeInt} />
                 </div>
                 <div className='flex mb-6 flex-row' ></div>
                 <TextField id="outlined-basic" className='mb-6 w-[42rem] mr-8' name='description' label="Descripcion" multiline rows={3} InputLabelProps={{ shrink: true }} variant="outlined" onChange={handleChangeText} />
