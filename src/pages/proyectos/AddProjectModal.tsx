@@ -85,10 +85,8 @@ const AddProjectModal = (props: AddTicketModalProps) => {
         }
        
         if(isADevelopProjectAndHasNOTAProductAssign){
-            console.log("entor al else if");
             setProductModal(true);
         }else{
-            console.log("entro al else");
             setIsLoading(true);
             const partsS = newProject.startDate.split('-');
             newProject.startDate = partsS[2] + "/" + partsS[1] + "/" + partsS[0];
@@ -144,7 +142,6 @@ const AddProjectModal = (props: AddTicketModalProps) => {
                 return response.json()})
             .then((myJson) => {
                 setClients(Object.values(JSON.parse(JSON.stringify(myJson))));
-                console.log(clients[0]);
             })
             .catch(err => console.log(err))
             //sleep(3000).then(res => setLoading(false));

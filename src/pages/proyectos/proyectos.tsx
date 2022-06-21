@@ -46,12 +46,12 @@ const Proyectos = (props: ProyectosProps) => {
         client: 0,
         productId: 0,
         description: " ",
-       // iteration: 1,
-        //fase: 1,
+
     })
 
     const updateCurrentProjects = (filterProjects: Project[] ) =>{
         setFilteredProjects(filterProjects);
+    
     }
 
     const handleModalOpen = () => {
@@ -119,7 +119,7 @@ const Proyectos = (props: ProyectosProps) => {
 
     useEffect(() => {
         gatherProjects();
-    },);
+    },[]);
 
 
 
