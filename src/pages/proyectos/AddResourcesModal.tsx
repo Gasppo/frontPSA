@@ -39,32 +39,21 @@ const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
 const AddProjectModal = (props: AddProjectModalProps) => {
     const { onSubmit, onClose, show, project } = props;
-    const partsCurrentDate = (new Date().toLocaleDateString('es-AR')).split("/");
+    const [newProject, setNewProject] = useState({
+        resources: project.resources
+    });
+    /*const partsCurrentDate = (new Date().toLocaleDateString('es-AR')).split("/");
     var currentDate: string ;
     if(partsCurrentDate[1].length==1){
         currentDate = partsCurrentDate[0] + "/0" + partsCurrentDate[1] + "/" + partsCurrentDate[2];
     }else{
         currentDate= partsCurrentDate[0] + "/" + partsCurrentDate[1] + "/" + partsCurrentDate[2];
-    }
-    const [isLoading, setLoading] = useState<boolean>(false)
+    }*/
+    //const [isLoading, setLoading] = useState<boolean>(false)
     const [resources, setLoadedResources] = useState<Resource []>([]);
-    const [selectedResources, setSelectedResources] = useState<Resource []>([]);
-    const [options, setOptions] = useState<number[]>([]);
+    //const [selectedResources, setSelectedResources] = useState<Resource []>([]);
+    //const [options, setOptions] = useState<number[]>([]);
     const [resourcesNumbers,setResourcesNumbers] = useState<number[]>([]);
-    const [newProject, setNewProject] = useState({
-        name: project.name,
-        updatedDate: currentDate,
-        state: project.state,
-        description: project.description,
-        startDate: project.startDate,
-        endDate: project.endDate,
-        client: project.client,
-        clientType: project.clientType,
-        creationDate: project.creationDate,
-        productId: project.productId,
-        resources: resourcesNumbers
-    });
-
    /* const handleChangeText = (e: any) => {
         //cuando se selecciona una persona debera ser no onChangeText
         //el tema es que deberia de ser un field de tipo select, pero que no aparezcan las opciones
@@ -93,7 +82,7 @@ const AddProjectModal = (props: AddProjectModalProps) => {
             .catch(err => console.log(err))
             sleep(3000).then(res => setLoading(false));
     }*/
-    const getResources = () => {//no va aca, lo puse para pruebas
+    const getResources = () => {
         //setLoading(true)
         fetch('https://modulo-recursos-psa.herokuapp.com/employees',{
             method: 'GET',
@@ -110,27 +99,14 @@ const AddProjectModal = (props: AddProjectModalProps) => {
 
             })
             .catch(err => console.log(err))
-            sleep(3000).then(res => setLoading(false));
+            //sleep(3000).then(res => setLoading(false));
     }
     useEffect(() => {
         getResources();
-    }, [resourcesNumbers,selectedResources, newProject]);
+    }, [resources,resourcesNumbers, newProject]);
 
     const handleSubmit = async () => {
-        setNewProject({
-            name: project.name,
-            updatedDate: currentDate,
-            state: project.state,
-            description: project.description,
-            startDate: project.startDate,
-            endDate: project.endDate,
-            client: project.client,
-            clientType: project.clientType,
-            creationDate: project.creationDate,
-            productId: project.productId,
-            resources: resourcesNumbers
-        })
-        sleep(10);
+        sleep(100);
         updateProjectUsingAPI();
         onSubmit();
         /*const response = await addResourcesToProjectUsingAPI()
@@ -170,18 +146,20 @@ const AddProjectModal = (props: AddProjectModalProps) => {
                             sx={{ width: 300 }}
                             renderInput={(params) => <TextField {...params} label="Recurso" />}
                             onChange={(event: any, newValue: any) => {
-                                if (selectedResources.includes(newValue) === false) {
-                                
-                                setSelectedResources(prevSelection => [...prevSelection,newValue]);
-                                setResourcesNumbers(selectedResources.map((resource) => resource.legajo));
-                                
-                                }
-                            }}
+                                if (newProject.resources.includes(newValue.legajo) === false) {
+                                //setResourcesNumbers([...resourcesNumbers, newValue.legajo]);
+                                setNewProject({
+                                    resources: [...newProject.resources, newValue.legajo]
+                                })
+                                sleep(100)
+                                //setSelectedResources(prevSelection => [...prevSelection,newValue]);
+                            }}}
                         />
                        <div className='mr-8 w-80'></div>
                     </div>
                     <div style = {{alignSelf: 'left', width: 700, marginLeft:'5vh'}}>
-                                    {(selectedResources).map( (resource) =>  <div key={resource.legajo} style={{display: 'flex', flexDirection: 'row', margin: 5, padding: 5, width: 180, height: 30, backgroundColor: "#E9EDEB", borderRadius: 5}}><AccountCircleIcon className= 'mr-1 h-5' style={{color: '#5C7067'}}/><Typography variant='caption' className='slate' >{resource.legajo} - {resource.Nombre} {resource.Apellido}</Typography></div>)}
+                                    {/* {(selectedResources).map( (resource) =>  <div key={resource.legajo} style={{display: 'flex', flexDirection: 'row', margin: 5, padding: 5, width: 180, height: 30, backgroundColor: "#E9EDEB", borderRadius: 5}}><AccountCircleIcon className= 'mr-1 h-5' style={{color: '#5C7067'}}/><Typography variant='caption' className='slate' >{resource.legajo} - {resource.Nombre} {resource.Apellido}</Typography></div>)} */}
+                                    {(newProject.resources).map( (resource) =>  <div key={resource} style={{display: 'flex', flexDirection: 'row', margin: 5, padding: 5, width: 180, height: 30, backgroundColor: "#E9EDEB", borderRadius: 5}}><AccountCircleIcon className= 'mr-1 h-5' style={{color: '#5C7067'}}/><Typography variant='caption' className='slate' >{resource}</Typography></div>)}
                          </div>
                     <div style = {{alignSelf: 'right', marginLeft: '55vh', marginTop: '40vh', verticalAlign: 'bottom', position: 'absolute'}} className="text-center mr-8 mb-6 w-52 bg-teal-600 rounded-xl shadow-lg font-bold text-slate-800 hover:bg-gray-400 transition-all duration-300 cursor-pointer" onClick={handleSubmit}>
                         <div className="m-4" >Siguiente</div>
