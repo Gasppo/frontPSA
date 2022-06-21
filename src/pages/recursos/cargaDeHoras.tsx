@@ -90,6 +90,7 @@ const CargaDeHoras = (props: CargaDeHorasProps,) => {
             tasks[item.code] = "0"
         })
         setTasks(tasks)
+        console.log(state)
     }, [state]);
 
     const sendHoursToAPI = async () =>{
@@ -120,6 +121,7 @@ const CargaDeHoras = (props: CargaDeHorasProps,) => {
         setTasks(tasksCopy);
     }
 
+    console.log(state.date)
     return (
         <>
 
@@ -139,7 +141,7 @@ const CargaDeHoras = (props: CargaDeHorasProps,) => {
                 
             </CenteredModal>
     
-            <TextField disabled type='date' inputProps={{ max: new Date().toISOString().slice(0, 10) }} defaultValue='2022-06-16'></TextField>
+            <TextField disabled type='date' inputProps={{ max: new Date().toISOString().slice(0, 10) }} defaultValue={state.date}></TextField>
 
         <Typography variant='h5' className={'mb-10'}></Typography>
         <LoadingIndicator show={isLoading} className={`flex flex-col items-start  transition-all duration-200`} >
