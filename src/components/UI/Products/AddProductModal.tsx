@@ -10,9 +10,8 @@ interface AddVersionModalProps {
     show: boolean
 }
 const versionStates = [
-    {state: 'Active'},
-    {state: 'Deprecated'},
-    {state: 'On hold'}
+    {state: 'ACTIVE'},
+    {state: 'DEPRECATED'}
 ]
 
 const AddProductModal = (props: AddVersionModalProps) => {
@@ -23,7 +22,7 @@ const AddProductModal = (props: AddVersionModalProps) => {
         productName: "",
         versionId:0,
         versionName: "",
-        state: "Active"
+        state: "ACTIVE"
     }
 
     const validateVersion = () => {

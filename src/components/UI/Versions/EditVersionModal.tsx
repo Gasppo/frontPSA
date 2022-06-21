@@ -13,9 +13,8 @@ interface AddVersionModalProps {
     currentId: number | null
 }
 const versionStates = [
-    {state: 'Active'},
-    {state: 'Deprecated'},
-    {state: 'On hold'}
+    {state: 'ACTIVE'},
+    {state: 'DEPRECATED'}
 ]
 
 const EditVersionModal = (props: AddVersionModalProps) => {
@@ -24,7 +23,7 @@ const EditVersionModal = (props: AddVersionModalProps) => {
     const defaultVersionData = {
         versionId: currentId,
         versionName: "",
-        state: "Active"
+        state: "ACTIVE"
     }
     
     const [dirty, setDirty] = useState(false)

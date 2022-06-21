@@ -15,9 +15,9 @@ interface AddLicenceModalProps {
     products: any[]
 }
 const versionStates = [
-    {state: 'Active'},
-    {state: 'Deprecated'},
-    {state: 'On hold'}
+    {state: 'ACTIVE'},
+    {state: 'EXPIRED'},
+    {state: 'CANCELLED'}
 ]
 
 const AddLicenceModal = (props: AddLicenceModalProps) => {
@@ -32,7 +32,7 @@ const AddLicenceModal = (props: AddLicenceModalProps) => {
         versionId: 0,
         clientId: 0,
         expirationDate: defaultDate.toISOString().slice(0, 10),
-        state: "Active"
+        state: "ACTIVE"
     }
 
     const emptyAuthor = {
@@ -49,7 +49,7 @@ const AddLicenceModal = (props: AddLicenceModalProps) => {
     const emptyVersion = {
         id: 0, 
         name: "",
-        state: "Active"
+        state: "ACTIVE"
     }
 
     const [runValidations, setRunValidations] = useState(false)
