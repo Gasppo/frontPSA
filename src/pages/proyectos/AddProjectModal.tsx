@@ -41,6 +41,7 @@ const AddProjectModal = (props: AddTicketModalProps) => {
         endDate: "dd/mm/yyyy",
         type: type,
         state: "No Iniciado",
+        clientType: 'Interno',
         client: 0,
         productId: 0,
         description: " ",
@@ -67,6 +68,7 @@ const AddProjectModal = (props: AddTicketModalProps) => {
 
     const handleClientTypeSelection = (event: React.ChangeEvent<HTMLInputElement>) => {
         setClientType(event.target.value);
+        setNewProject(({ ...newProject, [event.target.name]: event.target.value }));
     };
 
     const handleSubmit = async () => {
@@ -115,6 +117,7 @@ const AddProjectModal = (props: AddTicketModalProps) => {
                         endDate: "dd/mm/yyyy",
                         type: type,
                         state: "No Iniciado",
+                        clientType: 'Externo',
                         client: 0,
                         productId: 0,
                         description: " ",});

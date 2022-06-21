@@ -11,6 +11,7 @@ export type Project = {
     type: string;
     state: string;
     client: number;
+    clientType: string,
     productId: number;
     iteration: number;
     phase: number;
