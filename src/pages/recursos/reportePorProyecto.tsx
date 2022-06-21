@@ -1,16 +1,10 @@
-import { useState, useEffect } from 'react'
-import { MultiSelect } from "react-multi-select-component";
-import Select, { SingleValue } from 'react-select'
-import { TableFooter, TablePagination, TextField } from '@mui/material';
-import { Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material'
-import { Link, useLocation } from 'react-router-dom'
-import { proyectsAPI } from "../../components/dev/URIs"
-import { SelectProyect, Proyect, ProjectReport } from '../../components/types/resourcesTypes'
-import TasksTableRow from '../../components/UI/Horas/TasksTableRow'
-import LoadHoursTableRow from '../../components/UI/Horas/LoadHoursTableRow';
-import ProyectReportTableRow from '../../components/UI/Reports/proyectReportTableRow';
-import { SettingsSystemDaydreamSharp } from '@mui/icons-material';
+import { Button, Paper, Table, TableBody, TableCell, TableContainer, TableFooter, TableHead, TablePagination, TableRow, Typography } from '@mui/material';
+import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
+import Select from 'react-select';
 import LoadingIndicator from '../../components/Loading/LoadingIndicator';
+import { ProjectReport, Proyect, SelectProyect } from '../../components/types/resourcesTypes';
+import ProyectReportTableRow from '../../components/UI/Reports/proyectReportTableRow';
 //import AddHourModal from '../../components/UI/Horas/AddHourModal';
 //import DatePicker from "react-datepicker"
 
