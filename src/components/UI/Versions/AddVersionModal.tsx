@@ -11,9 +11,8 @@ interface AddVersionModalProps {
     product: number
 }
 const versionStates = [
-    {state: 'Active'},
-    {state: 'Deprecated'},
-    {state: 'On hold'}
+    {state: 'ACTIVE'},
+    {state: 'DEPRECATED'}
 ]
 
 const AddVersionModal = (props: AddVersionModalProps) => {
@@ -22,50 +21,53 @@ const AddVersionModal = (props: AddVersionModalProps) => {
     const defaultVersionData = {
         versionId:0,
         versionName: "",
-        state: "Active",
+        state: "ACTIVE",
         productId: product
     }
 
-    const [runValidations, setRunValidations] = useState(false)
+    const [invalidVersion, setInvalidVersion] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
     const [input, setInput] = useState(defaultVersionData)
-    const invalidFields = (!input?.versionName || !input?.state)
-    const disabled = runValidations && invalidFields
+
+    const validateVersion = () => {
+        const regex = RegExp('^[a-zA-Z0-9. ..]{5,10}$')
+        return regex.test(input.versionName)
+    }
 
     const handleChangeText = (e: any) => {
         setInput(({ ...input, [e.target.name]: e.target.value }))
     };
 
     const handleSubmit = async () => {
-        if (invalidFields) {
-            setRunValidations(true)
-            return
+        if (validateVersion()) {
+            setIsLoading(true)
+            const randomId = Math.floor(Math.random() * 300) + 1
+            console.log(randomId)
+            setInput({ ...input, ['versionId']: randomId })
+            const response = await createVersion({ ...input, ['versionId']: randomId })
+            setIsLoading(false)
+            if (response.status >= 200 && response.status < 300) onSubmit()
         }
-        setIsLoading(true)
-        const randomId = Math.floor(Math.random() * 300) + 1
-        console.log(randomId)
-        setInput({ ...input, ['versionId']: randomId })
-        const response = await createVersion({ ...input, ['versionId']: randomId })
-        setIsLoading(false)
-        if (response.status === 200) onSubmit()
+        if(!validateVersion()) setInvalidVersion(true)
+        return
     }
 
     useEffect(() => {
         if (show) return
-        setRunValidations(false)
+        setInvalidVersion(false)
         setInput(defaultVersionData)
     }, [show]);
 
-    const isEmpty = (value: any) => !value ? "Este campo no puede estar vacio" : ""
-    const validations = runValidations ? [isEmpty] : []
+    const isInvalidVersion = (value: any) => invalidVersion ? "Debe tener un mínimo de 5 (cinco) caracteres y un máximo de 10 (diez) y solo puede contener letras, números, espacios y puntos" : ""
+    const versionValidations = invalidVersion ? [isInvalidVersion] : []
 
     return (
-        <CenteredModal isLoading={isLoading} onClose={onClose} show={show} onSubmit={handleSubmit} label="Crear Version" addbuttonLabel="Crear" disableSubmit={disabled}>
+        <CenteredModal isLoading={isLoading} onClose={onClose} show={show} onSubmit={handleSubmit} label="Crear Version" addbuttonLabel="Crear" disableSubmit={false}>
             <div className='flex mb-6 flex-row'>
-                <ValidatingInput required validations={validations} name="versionName" className='mr-8 w-[42rem]' label="Nombre de Versión" value={input?.versionName} onChange={handleChangeText} />
+                <ValidatingInput required validations={versionValidations} name="versionName" className='mr-8 w-[42rem]' label="Nombre de Versión" value={input?.versionName} onChange={handleChangeText} />
             </div>
             <div className='flex mb-6  flex-row'>
-                <SelectBox required name="state" validations={validations} className='mr-8 w-[42rem]' label="Estado" onChange={handleChangeText} valueKey="state" value={input.state} options={versionStates} text="state" />
+                <SelectBox name="state" validations={[]} className='mr-8 w-[42rem]' label="Estado" onChange={handleChangeText} valueKey="state" value={input.state} options={versionStates} text="state" />
             </div>
         </CenteredModal>
     )
