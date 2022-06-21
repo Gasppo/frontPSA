@@ -9,6 +9,7 @@ export type Task= {
     _v: number;
     proyectCode: number;
     proyectName: string;
+    totalHours:number;
 }
 
 export type Hours = {
@@ -72,3 +73,4 @@ export type Resource = {
     Nombre: string;
     Apellido: string;
 }
+
