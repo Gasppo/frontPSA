@@ -16,6 +16,7 @@ import LandingPageHR from '../pages/recursos/landingPageHR'
 import Calendario from '../pages/recursos/calendario'
 import ReportePorPersona from '../pages/recursos/reportePorPersona'
 import ReportePorProyecto from '../pages/recursos/reportePorProyecto'
+import CargaDeLicencias from '../pages/recursos/cargaDeLicencias'
 
 interface RouterProps {
     
@@ -31,6 +32,8 @@ const Router = (props: RouterProps) => {
             <Route path='recursos/horasSemanales' element= {<Recursos/>}/>
             <Route path='recursos/horasSemanales/carga' element= {<AddHoras/>}/>
             <Route path='recursos/calendario' element= {<Calendario/>}/>
+            <Route path='recursos/licencias' element= {<CargaDeLicencias/>}/>
+            <Route path="recursos/horasSemanales/carga/seleccion" element={<CargaDeHoras />} />
             <Route path="soporte" element={<Soporte />} />
             <Route path='soporte/tickets' element={<Tickets />} />
             <Route path='soporte/productsAndVersions' element={<ProductsAndVersions />} />
@@ -40,7 +43,7 @@ const Router = (props: RouterProps) => {
             <Route path='soporte/productsAndVersions/version' element={<Versions />} />
             <Route path="placeholder" element={<PlaceHolderSite />} />
             <Route path="contacts" element={<PlaceHolderSite />} />
-            <Route path="recursos/horasSemanales/carga/seleccion" element={<CargaDeHoras />} />
+            
           </Routes>
     )
 }

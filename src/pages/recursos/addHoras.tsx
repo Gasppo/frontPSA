@@ -128,10 +128,6 @@ const AddHoras = (props: AddHorasProps) => {
                 <TextField  type='date' inputProps={{ max: new Date().toISOString().slice(0, 10) }} defaultValue={new Date().toISOString().split('T')[0]} ></TextField>
                 </div>
                 
-                
-
-                
-
             </div>
             <div>
             <MultiSelect options={proyectos} value={selected} onChange={setSelected} labelledBy="Select" />

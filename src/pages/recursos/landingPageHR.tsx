@@ -14,7 +14,7 @@ interface LandingPageHRProps {
 const LandingPageHR = (props: LandingPageHRProps) => {
 
     const sections = [
-        { title: 'Gestion de Licencias', description: 'Acceso a portal de gestion de licencias', Icon: FileOpen },
+        { title: 'Gestion de Licencias', description: 'Acceso a portal de gestion de licencias', Icon: FileOpen, href:'/recursos/licencias' },
         { title: 'Carga de Horas', description: 'Acceso a portal de carga de horas', Icon: AccessAlarm, href:'/recursos/horasSemanales' },
         { title: 'Vista Calendario', description: 'Acceso a la vista calendario', Icon: Event, href:'/recursos/calendario' },
         { title: 'Reportes por persona', description: 'Registro de las horas trabajadas por persona', Icon: Assessment, href:'/recursos/reportePorPersona' },
