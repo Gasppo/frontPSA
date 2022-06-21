@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { MultiSelect } from "react-multi-select-component";
-import { TextField } from '@mui/material';
+import { TableFooter, TablePagination, TextField } from '@mui/material';
 import { Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { proyectsAPI } from "../../components/dev/URIs"
@@ -8,6 +8,8 @@ import { SelectProyect, Proyect, Task } from '../../components/types/resourcesTy
 import TasksTableRow from '../../components/UI/Horas/TasksTableRow'
 import LoadHoursTableRow from '../../components/UI/Horas/LoadHoursTableRow';
 import AddHourModal from '../../components/UI/Horas/AddHourModal';
+import LoadingIndicator from '../../components/Loading/LoadingIndicator';
+import CenteredModal from '../../components/UI/Modal/CenteredModal';
 //import AddHourModal from '../../components/UI/Horas/AddHourModal';
 //import DatePicker from "react-datepicker"
 
@@ -20,8 +22,11 @@ interface CargaDeHorasProps {
 
 
 const CargaDeHoras = (props: CargaDeHorasProps,) => {
+    const [isLoading, setLoading] = useState<boolean>(false)
     const [tasks, setTasks] = useState<{[id: string]:string}>({});
     const [showAddModal, setShowAddModal] = useState(false)
+    const [rowsPerPage, setRowsPerPage] = useState(9)
+    const [page, setPage] = useState(0)
 
     const { state }: any = useLocation()
 
@@ -29,7 +34,13 @@ const CargaDeHoras = (props: CargaDeHorasProps,) => {
         setShowAddModal(true)
     }
     const handleSubmit = () => {
+        
+        console.log('Mando a la api')
         sendHoursToAPI();
+        console.log('NO LLEGO')
+        return(<Link to={'/'}></Link>)
+
+        
 
     }
 
@@ -37,6 +48,14 @@ const CargaDeHoras = (props: CargaDeHorasProps,) => {
         setShowAddModal(false);
     }
 
+    const handleChangePage = (event: React.MouseEvent<HTMLButtonElement> | null, newPage: number) => {
+        setPage(newPage);
+    };
+  
+    const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        setRowsPerPage(parseInt(event.target.value, 10));
+        setPage(0);
+    };
 
 
     /*const fetchTasks = () => {
@@ -101,7 +120,6 @@ const CargaDeHoras = (props: CargaDeHorasProps,) => {
         setTasks(tasksCopy);
     }
 
-
     return (
         <>
 
@@ -111,13 +129,20 @@ const CargaDeHoras = (props: CargaDeHorasProps,) => {
                     <Button>Volver atras</Button>
                 </Link>
             </div>
+                
+            <div className="self-end mr-10 border-2 text-center  rounded-xl shadow-lg text-slate-800 hover:bg-gray-200 hover:text-teal-600 transition-all duration-300 cursor-pointer">
+                <Button onClick={handleAddOpen}>
+                    <div className="m-4"> Guardar</div>
+                </Button>
+            </div>
+            <CenteredModal isLoading={isLoading} onClose={handleClose} show={showAddModal} onSubmit={handleSubmit} label="¿Esta seguro que desea cargar las horas?" addbuttonLabel="Cargar Horas" >
+                
+            </CenteredModal>
+    
+            <TextField disabled type='date' inputProps={{ max: new Date().toISOString().slice(0, 10) }} defaultValue='2022-06-16'></TextField>
 
-            <div>
-
-
-
-                <TextField disabled type='date' inputProps={{ max: new Date().toISOString().slice(0, 10) }} defaultValue='2022-06-16'></TextField>
-
+        <Typography variant='h5' className={'mb-10'}></Typography>
+        <LoadingIndicator show={isLoading} className={`flex flex-col items-start  transition-all duration-200`} >
                 <TableContainer component={Paper} className="mt-10"  >
                     <Table>
                         <TableHead>
@@ -131,18 +156,38 @@ const CargaDeHoras = (props: CargaDeHorasProps,) => {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {state?.items.map((row: Task) => <LoadHoursTableRow row={row} key={row._id} onChange={onChange}/>) || []}
+
+                            {state?.items 
+                                &&
+                                state?.items
+                                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                                .map((row: Task) => <LoadHoursTableRow row={row} key={row._id} onChange={onChange}/>) || []}
                         </TableBody>
+                        <TableFooter>
+                          <TableRow>
+                              <TablePagination
+                                  rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
+                                  colSpan={8}
+                                  count={state.length}
+                                  rowsPerPage={rowsPerPage}
+                                  page={page}
+                                  SelectProps={{
+                                      inputProps: {
+                                          'aria-label': 'rows per page',
+                                      },
+                                      native: true,
+                                  }}
+                                  onPageChange={handleChangePage}
+                                  onRowsPerPageChange={handleChangeRowsPerPage}
+                              />
+                          </TableRow>
+                      </TableFooter>
                     </Table>
                 </TableContainer>
-            </div>
+            </LoadingIndicator>
+            
 
-            <div className="self-end mr-10 border-2 text-center  rounded-xl shadow-lg text-slate-800 hover:bg-gray-200 hover:text-teal-600 transition-all duration-300 cursor-pointer">
-                <Button onClick={handleAddOpen}>
-                    <div className="m-4"> Guardar</div>
-                </Button>
-            </div>
-            <AddHourModal onSubmit={handleSubmit} onClose={handleClose} show={showAddModal}></AddHourModal>
+
 
         </>
 
