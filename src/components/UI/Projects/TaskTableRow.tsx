@@ -8,6 +8,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import EditIcon from '@mui/icons-material/Edit';
 import ConfirmModal from './confirmationModal';
 import EditTaskModal from '../../../pages/proyecto/EditTaskModal';
+import VerTareaModal from '../../../pages/proyecto/VerTareaModal';
 
 interface  TaskTableRowProps {
     row: Task,
@@ -22,7 +23,7 @@ const  TaskTableRow = (props:  TaskTableRowProps) => {
     const [isOpenEditTaskModal, setIsOpenEditTaskModal] = useState(false);
     const [showCofirmationModal, setShowConfirmationModal] = useState(false);
     const [priorityValue, setPriorityValue] = useState('Baja');
-    
+    const [isTaskDetailsModalOpen, setIsOpenTaskDetailsModal]=useState(false);
     const [newTasks, setNewTasks] = useState({
         tasks: props.tasks
     })
@@ -96,6 +97,14 @@ const  TaskTableRow = (props:  TaskTableRowProps) => {
         setIsOpenEditTaskModal(false);
     };
 
+    const openTaskDetailsModal = ()=>{
+        setIsOpenTaskDetailsModal(true);
+    };
+
+    const handleTaskDetailsClose = () =>{
+        setIsOpenTaskDetailsModal(false);
+    };
+
     useEffect(() => {
         determinePriorityValue();
     }, []);
@@ -103,13 +112,14 @@ const  TaskTableRow = (props:  TaskTableRowProps) => {
 
     return (
         <>
+            <VerTareaModal onClose={handleTaskDetailsClose} show={isTaskDetailsModalOpen} currentTask={row}/>
             <EditTaskModal onSubmit={handleEditTaskSubmit} onClose={handleEditTaskClose} show={isOpenEditTaskModal} currentTask={row}/>
             <ConfirmModal onSubmit={handleDeleteConfirmation} onClose={handleNotConfirmation} show={showCofirmationModal} txt="Seguro que desea elimiar la tarea"/>
             <TableRow hover key={row.code}>
-                <TableCell align="left"><Link to='/proyecto' state={{ projectData: row }}>{row.code}</Link></TableCell>
-                <TableCell align="left"><Link to='/proyecto' state={{ projectData: row }}>{row.name}</Link></TableCell>
-                <TableCell align="left"><Link to='/proyecto' state={{ projectData: row }}>{priorityValue}</Link></TableCell>
-                <TableCell align="left"><Link to='/proyecto' state={{ projectData: row }}>{row.effort}</Link></TableCell>               
+                <TableCell align="left" onClick={openTaskDetailsModal}>{row.code}</TableCell>
+                <TableCell align="left" onClick={openTaskDetailsModal}>{row.name}</TableCell>
+                <TableCell align="left" onClick={openTaskDetailsModal}>{priorityValue}</TableCell>
+                <TableCell align="left" onClick={openTaskDetailsModal}>{row.effort}</TableCell>               
                 <TableCell align="right">
                     <div className='hover:text-teal-600 text-slate-600 cursor-pointer' onClick={openConfirmationDeleteModal}>
                         <DeleteIcon />
