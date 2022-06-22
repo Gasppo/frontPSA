@@ -5,7 +5,8 @@ import SelectBox from '../Inputs/SelectBox'
 import CenteredModal from '../Modal/CenteredModal'
 import {productAndVersionsURI} from '../../dev/URIs'
 import { Version } from '../../../components/types/productTypes'
-import { SelectResource } from '../../types/resourcesTypes';
+import { SelectResource, LicenseType } from '../../types/resourcesTypes';
+import { LunchDiningSharp } from '@mui/icons-material';
 
 interface AddResourceLicenceModalProps {
     onClose: () => void
@@ -44,6 +45,7 @@ const AddResourceLicenceModal = (props: AddResourceLicenceModalProps)=>{
         state: "Active"
     }
 
+    const tipos_de_licencia=[{label: "Maternidad"}, {label: "Salud"}, {label: "Vacaciones"}]
 
     const [runValidations, setRunValidations] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
@@ -82,19 +84,20 @@ const AddResourceLicenceModal = (props: AddResourceLicenceModalProps)=>{
 
 
     return (
-        <CenteredModal isLoading={isLoading} onClose={onClose} show={show} label="Crear Licencia" addbuttonLabel="Crear" disableSubmit={disabled}>
+        <CenteredModal isLoading={isLoading} onClose={onClose} show={show} label="Crear Licencia" addbuttonLabel="Crear" disableSubmit={disabled} onSubmit={function (): void { console.log('Function not implemented.');} }>
             <div className='flex mb-6 flex-row'>
-            <SelectBox required name="clientId" onSubmit={()=>{}}  className='mr-8 w-[42rem]' label="Seleccione un Empledo" valueKey="id" options={empleados} text="razonSocial" />
+            <SelectBox required name="clientId" className='mr-8 w-[42rem]' label="Seleccione un Empledo" valueKey="legajo" options={empleados} text="label" value={undefined} onChange={function (e: any): void {
+                    console.log('Function not implemented.');
+                } } />
             </div>
             <div className='flex mb-6 flex-row'>
-            <SelectBox required name="productId"  className='mr-8 w-[42rem]' label="Seleccione un Tipo de Licencia" valueKey="id" options={products} text="name" />
+            <SelectBox required name="productId" className='mr-8 w-[42rem]' label="Seleccione un Tipo de Licencia" valueKey="label" options={tipos_de_licencia} text="label" value={undefined} onChange={function (e: any): void {
+                    console.log('Function not implemented.');
+                } } />
             </div>
             <div className='flex mb-6  flex-row'>
-                <SelectBox disabledText='Primero ingrese un producto...'  required  name="versionId" className='mr-8 w-[42rem]' disabled={input?.productId <= 0} label="Seleccione una Version" valueKey="id" value={version?.id} options={[]} text="name" />
-            </div>
-            <div className='flex mb-6  flex-row'>
-                <SelectBox required name="state" className='mr-8 w-80' label="Estado" valueKey="state" value={input.state} options={versionStates} text="state" />
-                <TextField type='date' className='mr-8 w-80' inputProps={{min: new Date().toISOString().slice(0, 10)}} defaultValue={new Date().toISOString().slice(0, 10)} label='Fecha de Expiración' name='expirationDate'></TextField>
+            <TextField type='date' className='mr-8 w-80' inputProps={{min: new Date().toISOString().slice(0, 10)}} defaultValue={new Date().toISOString().slice(0, 10)} label='Fecha de Expiración' name='expirationDate'></TextField>
+            <TextField type='number' className='mr-8 w-80' defaultValue={0} label='Dias de duracion' name='expirationDate'></TextField>
             </div>
         </CenteredModal>
     )

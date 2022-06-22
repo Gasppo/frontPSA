@@ -63,6 +63,10 @@ export type License = {
     created: Date;
 }
 
+export type LicenseType = {
+    label:string
+}
+
 export type SelectResource = {
     value: number,
     label:string
