@@ -287,7 +287,10 @@ const Proyecto = () => {
                             {expandedDetails && 
                             <>
                             <div style={{marginBottom:10, display: 'flex', flexDirection: 'row', color: '#5C7067'}}><Typography variant='body2' className='w-[27vh]  ml-5'>Tipo de proyecto: </Typography><Typography variant='body2' className={'slate'}>{project.type}</Typography></div>
-                            <div style={{marginBottom:10, display: 'flex', flexDirection: 'row', color: '#5C7067'}}><Typography variant='body2' className='w-[27vh]  ml-5'>Cliente: </Typography><Typography variant='body2' className={'slate'}>{project.client}</Typography></div>
+                            {(project.clientType=="Interno") &&
+                                <div style={{marginBottom:10, display: 'flex', flexDirection: 'row', color: '#5C7067'}}><Typography variant='body2' className='w-[27vh]  ml-5'>Cliente Interno: </Typography><Typography variant='body2' className={'slate'}>ID-{project.client}</Typography></div>}
+                            {!(project.clientType=="Interno") &&
+                                <div style={{marginBottom:10, display: 'flex', flexDirection: 'row', color: '#5C7067'}}><Typography variant='body2' className='w-[27vh]  ml-5'>Cliente Externo: </Typography><Typography variant='body2' className={'slate'}>ID-{project.client}</Typography></div>}
                             <div style={{marginBottom:10, display: 'flex', flexDirection: 'row',color: '#5C7067'}}><Typography variant='body2' className='w-[27vh]  ml-5'>Fecha de inicio: </Typography><Typography variant='body2' className={'slate'}>{project.startDate}</Typography></div>
                             <div style={{marginBottom:10,display: 'flex', flexDirection: 'row',color: '#5C7067'}}><Typography variant='body2' className='w-[27vh]  ml-5'>Fecha de cierre: </Typography><Typography variant='body2' className={'slate'}>{project.endDate}</Typography></div>
                             {isADevelopmentProject && <div style={{display: 'flex', flexDirection: 'row', color: '#5C7067'}}><Typography variant='body2' className='w-[27vh]  ml-5'>Producto: </Typography><Typography variant='body2' className={'slate'}>{project.productId}</Typography></div>}
@@ -303,6 +306,7 @@ const Proyecto = () => {
                             <>
                                 <div style={{width: 400}}>
                                     {project.resources.map(recurso =>  <div style={{display: 'flex', flexDirection: 'row', margin: 5, padding: 5, width: 120, height: 30, backgroundColor: "#E9EDEB", borderRadius: 5}}><AccountCircleIcon className= 'mr-1 h-5' style={{color: '#5C7067'}}/><Typography variant='caption' className='slate' >Legajo {recurso}</Typography></div>)}
+                                    <div style={{display: 'flex', flexDirection: 'row', margin: 5, padding: 5, width: 120, height: 30}}></div>
                                 </div>
                             </>}
                         </div>
