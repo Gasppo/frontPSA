@@ -19,7 +19,7 @@ const SideBar = (props: Props) => {
     <>
       <div className={`fixed top-0 left-0 h-screen ${sidebarExpanded ? 'w-56' : 'w-16'} flex flex-col bg-slate-800 text-white shadow-md transition-all duration-200  z-10`}>
         <SideBarIcon expanded={sidebarExpanded} href='/' text="Inicio" Icon={HomeIcon} />
-        {sections.map(section => section.title !== "Ajustes" && <SideBarIcon expanded={sidebarExpanded} href={section?.href} text={section.title} Icon={section.Icon} />)}
+        {sections.map(section => section.title !== "Ajustes" && section?.href && <SideBarIcon expanded={sidebarExpanded} href={section?.href} text={section.title} Icon={section.Icon} />)}
         <Divider variant="middle" className="my-4" color="#B5B5B5" />
         <SideBarIcon expanded={sidebarExpanded} text="Ajustes" Icon={SettingsIcon} />
         <Expand expanded={sidebarExpanded} onClick={handleExpand} />
