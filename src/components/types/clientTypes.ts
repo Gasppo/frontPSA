@@ -1,5 +1,5 @@
 export type Client = {
-    id: number
-    razonSocial: string;
-    CUIT: string;
+    id: number;
+    razon_social: string;
+    cuit: string;
 }
