@@ -17,10 +17,11 @@ interface EditTaskModalProps {
     onClose: () => void
     show: boolean
     currentTask: Task
+    projectResources: number[]
 }
 
 const EditTaskModal = (props: EditTaskModalProps) => {
-    const { onSubmit, onClose, show, currentTask } = props;
+    const { onSubmit, onClose, show, currentTask, projectResources} = props;
     const [isLoading, setIsLoading] = useState(false);
     const [priorityValue, setPriorityValue] = useState("Baja");
     const [resources, setLoadedResources] = useState<Resource []>([]);
@@ -57,7 +58,7 @@ const EditTaskModal = (props: EditTaskModalProps) => {
             .then((response) => {
                 return response.json()})
             .then((myJson) => {
-                console.log(myJson);
+                //console.log(myJson);
                 setLoadedResources(Object.values(JSON.parse(JSON.stringify(myJson))));
                 //setOptions( resources.map( resource => {resource.legajo }));
 
@@ -76,7 +77,6 @@ const EditTaskModal = (props: EditTaskModalProps) => {
     const handleChangeInt = (e: any) => {
         setNewTask(({ ...newTask, [e.target.name]: Number(e.target.value) }))
     };
-
 
     const handleSubmit = async () => {
         if (invalidFields) {
@@ -160,7 +160,7 @@ const EditTaskModal = (props: EditTaskModalProps) => {
                             disablePortal
                             className='mr-8 w-80'
                             id="combo-box-demo"
-                            options={resources}
+                            options={resources.filter(resource => props.projectResources.includes(resource.legajo))}
                             getOptionLabel={(option: { Nombre: any; }) => (option.Nombre) ? option.Nombre : ""}
                             sx={{ width: 300 }}
                             renderInput={(params: JSX.IntrinsicAttributes & TextFieldProps) => <TextField {...params} name= 'resource' label="Recurso" variant="outlined" color='primary' required/>}
