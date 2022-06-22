@@ -60,7 +60,6 @@ const EditTaskModal = (props: EditTaskModalProps) => {
                 console.log(myJson);
                 setLoadedResources(Object.values(JSON.parse(JSON.stringify(myJson))));
                 //setOptions( resources.map( resource => {resource.legajo }));
-
             })
             .catch(err => console.log(err))
             //sleep(3000).then(res => setLoading(false));
