@@ -3,6 +3,7 @@ import React from 'react'
 
 interface TicketTableFooterProps {
     count: number
+    colSpan: number
     page: number
     rowsPerPage: number
     onPageChange: (event: React.MouseEvent<HTMLButtonElement> | null, newPage: number) => void
@@ -11,13 +12,13 @@ interface TicketTableFooterProps {
 
 const TicketTableFooter = (props: TicketTableFooterProps) => {
 
-    const { count, onPageChange, onRowsPerPageChange, page, rowsPerPage } = props
+    const { colSpan, count, onPageChange, onRowsPerPageChange, page, rowsPerPage } = props
 
     return (
         <TableRow>
             <TablePagination
                 rowsPerPageOptions={[5, 10, 25, 50]}
-                colSpan={8}
+                colSpan={colSpan}
                 count={count}
                 rowsPerPage={rowsPerPage}
                 page={page}
