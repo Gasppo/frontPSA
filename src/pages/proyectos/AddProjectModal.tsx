@@ -46,16 +46,13 @@ const AddProjectModal = (props: AddTicketModalProps) => {
         type: type,
         state: "No Iniciado",
         clientType: 'Interno',
-        client: 0,
+        client: 1,
         productId: 0,
         description: " ",
 
         //iteration: 1,
         //fase: 1,
     })
-
-    const invalidFields = (!newProject?.name || newProject.startDate== "dd/mm/yyyy" || newProject.endDate < newProject.startDate  || newProject.endDate == "dd/mm/yyyy" || !clientType || !newProject?.type )
-    const disabled = runValidations && invalidFields
 
 
     const clientTypes = [{ id: 'Externo', valor: 'Externo'}, {id:'Interno', valor: 'Interno'} ];
@@ -101,6 +98,7 @@ const AddProjectModal = (props: AddTicketModalProps) => {
 
     const handleSubmitProductModal = async () =>{
         setProductModal(false);
+        setNewProject(({ ...newProject, productId: 110 }));
     }
 
     const onCloseProductoModal =async () => {
@@ -123,7 +121,7 @@ const AddProjectModal = (props: AddTicketModalProps) => {
                         type: type,
                         state: "No Iniciado",
                         clientType: 'Externo',
-                        client: 0,
+                        client: 1,
                         productId: 0,
                         description: " ",});
         
@@ -189,6 +187,9 @@ const AddProjectModal = (props: AddTicketModalProps) => {
         return response
     }
 
+    const invalidFields = (!newProject?.name || newProject.startDate== "dd/mm/yyyy" || newProject.endDate < newProject.startDate  || newProject.endDate == "dd/mm/yyyy" || !clientType || newProject.client==0 || !newProject?.type )
+    const disabled = runValidations && invalidFields
+
     const isEmpty = (value: any) => !value ? "Este campo no puede estar vacio" : ""
     const validations = runValidations ? [isEmpty] : []
 
@@ -197,6 +198,7 @@ const AddProjectModal = (props: AddTicketModalProps) => {
     
     const isValidEndDate = (value: any) => (value < newProject.startDate || value == "dd/mm/yyyy") ? "Ingrese una fecha valida" : "";
     const validationEndDate = runValidations ? [isValidEndDate] : []
+
 
     return (
         <Modal onClose={onClose} open={show} >
@@ -213,6 +215,7 @@ const AddProjectModal = (props: AddTicketModalProps) => {
                                 options={products[1]}
                                 getOptionLabel={(option) => (option.name) ? option.name : ""}
                                 sx={{ width: 300 }}
+                                value={{"_id":"62adcf659de8aa00167c57d3","id":110,"name":"PSA Spring CRM","createdAt":"2022-06-18T13:13:09.505Z","updatedAt":"2022-06-21T21:58:52.486Z","__v":0}}
                                 renderInput={(params) => <TextField {...params} name= 'productId' label="Producto" variant="outlined" color='primary' required/>}
                                 onChange={(event: any, newValue: any) => {
                                     setNewProject(({ ...newProject, productId: newValue.id }))
@@ -249,7 +252,8 @@ const AddProjectModal = (props: AddTicketModalProps) => {
                             options={clients[0]}
                             getOptionLabel={(option) => option.CUIT ? option.CUIT : ""}
                             sx={{ width: 300 }}
-                            renderInput={(params) => <TextField {...params} name= 'client' label="Seleccione un Cliente" required/>}
+                            value={{"id":1,"CUIT":"20-12345678-2","razonSocial":"FIUBA"}}
+                            renderInput={(params) => <TextField {...params} name= 'client' label="Seleccione un Cliente por su CUIT" required/>}
                             onChange={(event: any, newValue: any) => {
                                 setNewProject(({ ...newProject, client: newValue.id }))
                             }}
