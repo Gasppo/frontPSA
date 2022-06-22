@@ -175,6 +175,7 @@ const AddTaskModal = (props: AddTicketModalProps) => {
                             disablePortal
                             className='mr-8 w-80'
                             id="combo-box-demo"
+                            defaultValue={resources.filter(resource => props.projectResources.includes(resource.legajo))[0]}
                             options={resources.filter(resource => props.projectResources.includes(resource.legajo))}
                             getOptionLabel={(option: { Nombre: any; }) => (option.Nombre) ? option.Nombre : ""}
                             sx={{ width: 300 }}
