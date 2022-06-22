@@ -89,13 +89,13 @@ const Proyectos = (props: ProyectosProps) => {
         setshowProjectModal(false);
         //setshowResourcesModal(true);
         setProject(projectCreated);
-        window.location.reload();
+        //window.location.reload();
     
     };
 
     const gatherProjects = () => {
             //setLoading(true)
-            fetch('http://localhost:2000/projects',{
+            fetch('https://modulo-proyectos-psa-2022.herokuapp.com/projects',{
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json'

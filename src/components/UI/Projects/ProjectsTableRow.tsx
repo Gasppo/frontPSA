@@ -23,7 +23,7 @@ const  ProjectTableRow = (props:  ProjectTableRowProps) => {
     const [showCofirmationModal, setShowConfirmationModal] = useState(false);
     const navigate = useNavigate();
     const deleteItems = async () => {
-        const response = await fetch(`http://localhost:2000/projects/${row.code}`, {
+        const response = await fetch(`https://modulo-proyectos-psa-2022.herokuapp.com/projects/${row.code}`, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',

@@ -63,7 +63,7 @@ const EditProjectModal = (props: EditProjectModalProps) => {
 
 
     const updateProjectUsingAPI = async () => {
-        const response = await fetch(`http://localhost:2000/projects/${props.row.code}`, {
+        const response = await fetch(`https://modulo-proyectos-psa-2022.herokuapp.com/projects/${props.row.code}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

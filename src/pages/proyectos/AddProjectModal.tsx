@@ -198,7 +198,7 @@ const AddProjectModal = (props: AddTicketModalProps) => {
 
     const generateProjectUsingAPI = async () => {
         console.log(newProject);
-        const response = await fetch('http://localhost:2000/projects', {
+        const response = await fetch('https://modulo-proyectos-psa-2022.herokuapp.com/projects', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -207,6 +207,7 @@ const AddProjectModal = (props: AddTicketModalProps) => {
             body: JSON.stringify(newProject)
         })
         console.log(response);
+        window.location.reload();
         return response
     }
 
