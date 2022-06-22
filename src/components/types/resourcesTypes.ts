@@ -56,6 +56,7 @@ export type Event = {
 }
 
 export type License = {
+    _id:string;
     licensedPersonCode: number;
     startingDate: string;
     durationDays: number;

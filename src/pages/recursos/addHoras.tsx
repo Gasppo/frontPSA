@@ -128,7 +128,7 @@ const AddHoras = (props: AddHorasProps) => {
                 </div>
 
                 <div className='w-80 my-8'>
-                    <MultiSelect options={proyectos} value={selected} onChange={setSelected} labelledBy="Select" />
+                    <MultiSelect options={proyectos} value={selected} onChange={setSelected} labelledBy="Seleccionar Proyectos" />
                 </div>
                 <TableContainer component={Paper} className="mt-10"  >
                     <Table>

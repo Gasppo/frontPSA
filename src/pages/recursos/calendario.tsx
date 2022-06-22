@@ -3,6 +3,8 @@ import dayGridPlugin from '@fullcalendar/daygrid' // a plugin!
 import { useCallback, useEffect, useState } from 'react'
 import { Hours, Event, License } from '../../components/types/resourcesTypes'
 import { isTypeNode } from 'typescript'
+import { Link } from 'react-router-dom'
+import { Button } from '@mui/material'
 
 
 interface CalendarioProps {
@@ -72,6 +74,11 @@ const Calendario = (props: CalendarioProps) => {
 
     return (
         <>
+         <div className="flex flex-row" >
+            <Link to={'/recursos/'} >
+                <Button>Volver atras</Button>
+            </Link>
+        </div>
             <FullCalendar
                 plugins={[dayGridPlugin]}
                 initialView="dayGridMonth"

@@ -33,7 +33,7 @@ const CargaDeHoras = (props: CargaDeHorasProps,) => {
         console.log('Mando a la api')
         sendHoursToAPI();
         console.log('NO LLEGO')
-        return(<Link to={'/'}></Link>)
+        return(<Link to={'/recursos/'}></Link>)
 
         
 
@@ -127,19 +127,35 @@ const CargaDeHoras = (props: CargaDeHorasProps,) => {
                 </Link>
             </div>
                 
-            <div className="self-end mr-10 border-2 text-center  rounded-xl shadow-lg text-slate-800 hover:bg-gray-200 hover:text-teal-600 transition-all duration-300 cursor-pointer">
-                <Button onClick={handleAddOpen}>
-                    <div className="m-4"> Guardar</div>
-                </Button>
-            </div>
-            <CenteredModal isLoading={isLoading} onClose={handleClose} show={showAddModal} onSubmit={handleSubmit} label="¿Esta seguro que desea cargar las horas?" addbuttonLabel="Cargar Horas" >
-                
-            </CenteredModal>
+            {/* <div className="self-end mr-10 border-2 text-center  rounded-xl shadow-lg text-slate-800 hover:bg-gray-200 hover:text-teal-600 transition-all duration-300 cursor-pointer">
+
+            </div> */}
+
+
+
+
+
+
+
+ 
     
-            <TextField disabled type='date' inputProps={{ max: new Date().toISOString().slice(0, 10) }} defaultValue={state.date}></TextField>
+            
 
         <Typography variant='h5' className={'mb-10'}></Typography>
         <LoadingIndicator show={isLoading} className={`flex flex-col items-start  transition-all duration-200`} >
+            <div className="flex justify-between w-full" >
+                <div  >
+                <TextField disabled type='date' inputProps={{ max: new Date().toISOString().slice(0, 10) }} defaultValue={state.date}></TextField>
+                </div>
+                <div className="mr-10 border-2 text-center  rounded-xl shadow-lg text-slate-800 hover:bg-gray-200 hover:text-teal-600 transition-all duration-300 cursor-pointer">
+                    <Button onClick={handleAddOpen}>
+                        <div className="m-4"> Guardar</div>
+                    </Button>
+                </div>
+            </div>
+            <CenteredModal isLoading={isLoading} onClose={handleClose} show={showAddModal} onSubmit={handleSubmit} label="¿Esta seguro que desea cargar las horas?" addbuttonLabel="Cargar Horas" >
+                
+                </CenteredModal>
                 <TableContainer component={Paper} className="mt-10"  >
                     <Table>
                         <TableHead>

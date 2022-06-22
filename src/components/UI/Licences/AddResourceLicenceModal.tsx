@@ -79,7 +79,7 @@ const AddResourceLicenceModal = (props: AddResourceLicenceModalProps)=>{
     useEffect(() => {
         fetchEmployees();
 
-    }, [empleados]);
+    }, []);
 
 
 
