@@ -11,6 +11,7 @@ import Autocomplete from '@mui/material/Autocomplete';
 import CenteredModal from '../../components/UI/Modal/CenteredModal'
 import { VoicemailRounded } from '@mui/icons-material';
 import { isPrivateIdentifier } from 'typescript';
+import{Resource} from '../../components/types/resourceType';
 
 interface AddTicketModalProps {
     onSubmit: (newProject: any) => void
@@ -35,6 +36,7 @@ const AddProjectModal = (props: AddTicketModalProps) => {
     const [showProductModal, setProductModal] = useState(false);
     const [runValidations, setRunValidations] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
+    const [resources, setLoadedResources] = useState<Resource []>([]);
     const [products, setProducts] = useState<any[]>([]);
     const [newProject, setNewProject] = useState({
         name: "",
@@ -108,10 +110,11 @@ const AddProjectModal = (props: AddTicketModalProps) => {
     const handleTypeSelection = (event: React.ChangeEvent<HTMLInputElement>) => {
         setType(event.target.value);
         setNewProject(({ ...newProject, [event.target.name]: event.target.value }))
+        console.log(newProject)
     };
 
     const onCloseCreateProjectModal = () =>{
-        setClientType('');
+        setClientType('Externo');
         setType('');
         setNewProject({ name: "",
                         creationDate: currentDate,
@@ -144,6 +147,25 @@ const AddProjectModal = (props: AddTicketModalProps) => {
             .catch(err => console.log(err))
             //sleep(3000).then(res => setLoading(false));
     }
+
+    const getResources = () => {
+        //setLoading(true)
+        fetch('https://modulo-recursos-psa.herokuapp.com/employees',{
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+            .then((response) => {
+                return response.json()})
+            .then((myJson) => {
+                //console.log(myJson);
+                setLoadedResources(Object.values(JSON.parse(JSON.stringify(myJson))));
+                //setOptions( resources.map( resource => {resource.legajo }));
+            })
+            .catch(err => console.log(err))
+            //sleep(3000).then(res => setLoading(false));
+    };
 
     const getProducts = () => {
         //setLoading(true)
@@ -245,6 +267,21 @@ const AddProjectModal = (props: AddTicketModalProps) => {
                 </div>
                 <div className='flex mb-6 flex-row'>
                     <SelectBox required validations={validations} name="clientType" className='mr-8 w-80' label="Seleccione el tipo de cliente" onChange={handleClientTypeSelection} valueKey="id" value={clientType} options={clientTypes} text="valor" />
+                    {(clientType==="Interno") && 
+                    <Autocomplete
+                            disablePortal
+                            className='mr-8 w-80'
+                            id="combo-box-demo"
+                            options={resources}
+                            getOptionLabel={(option) => option.legajo.toString() ? option.legajo.toString() : ""}
+                            sx={{ width: 300 }}
+                            renderInput={(params) => <TextField {...params} name= 'client' label="Seleccione un Cliente" required/>}
+                            onChange={(event: any, newValue: any) => {
+                                console.log(newValue)
+                                setNewProject(({ ...newProject, client: newValue.legajo }))
+                            }}
+                        />}
+                     {!(clientType==="Interno") && 
                     <Autocomplete
                             disablePortal
                             className='mr-8 w-80'
@@ -255,9 +292,11 @@ const AddProjectModal = (props: AddTicketModalProps) => {
                             value={{"id":1,"CUIT":"20-12345678-2","razonSocial":"FIUBA"}}
                             renderInput={(params) => <TextField {...params} name= 'client' label="Seleccione un Cliente por su CUIT" required/>}
                             onChange={(event: any, newValue: any) => {
+                                console.log(newValue)
                                 setNewProject(({ ...newProject, client: newValue.id }))
+                                setNewProject(({ ...newProject, clientType: "Externo" }))
                             }}
-                        />
+                        />}
                 </div>
                 <div className='flex mb-6 flex-row' >
                     <ValidatingInputDates required validations={validationStartDate} name="startDate" className='mr-8 w-80' label="Fecha de inicio del Proyecto" value={newProject?.startDate} onChange={handleChangeText} />
