@@ -37,7 +37,7 @@ const SelectBox = (props: SelectProps) => {
             <InputLabel>{label}</InputLabel>
             <Select
                 name={name}
-                value={value}
+                defaultValue={value}
                 label={label}
                 onChange={onChange}
                 className={className || ''}

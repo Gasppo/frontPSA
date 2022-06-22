@@ -152,8 +152,8 @@ const EditTaskModal = (props: EditTaskModalProps) => {
                 <div className='ml-10 flex flex-col items-center'>
 
                 <div className='flex mb-6  flex-row' style={{marginTop: 10}}>
-                    <ValidatingInput required validations={validations} name="name" className='mr-8 w-80' label="Nombre de la tarea" value={newTask?.name} onChange={handleChangeText} />
-                    <SelectBox required validations={validations} name="priority" className='mr-8 w-80' label="Seleccione la prioridad" onChange={handlePrioridadSelection} valueKey="id" value={priorityValue} options={prioridades} text="valor" />
+                    <ValidatingInput required validations={validations} name="name" className='mr-8 w-80' label="Nombre de la tarea" value={newTask.name} onChange={handleChangeText} />
+                    <SelectBox required validations={validations} name="priority" className='mr-8 w-80' label="Seleccione la prioridad" onChange={handlePrioridadSelection} valueKey="id" value={newTask?.priority} options={prioridades} text="valor" />
                 </div>
                 <div className='flex mb-6 flex-row'>
                     <Autocomplete
@@ -171,7 +171,7 @@ const EditTaskModal = (props: EditTaskModalProps) => {
                     <ValidatingInput required validations={validations} name="effort" className='mr-8 w-80' label="Esfuerzo Estimado" value={newTask?.effort} onChange={handleChangeInt} />
                 </div>
                 <div className='flex mb-6 flex-row' ></div>
-                <TextField id="outlined-basic" className='mb-6 w-[42rem] mr-8' name='description' label="Descripcion" multiline rows={3} InputLabelProps={{ shrink: true }} variant="outlined" onChange={handleChangeText} />
+                <TextField id="outlined-basic" className='mb-6 w-[42rem] mr-8' name='description' label="Descripcion" value={newTask?.description} multiline rows={3} InputLabelProps={{ shrink: true }} variant="outlined" onChange={handleChangeText} />
                 <div className="flex flex-row" >
                     <div className="text-center mr-8 mb-6 w-52 border-2 border-slate-400  rounded-xl shadow-lg font-bold text-slate-800 hover:border-teal-600 hover:border-1 hover:bg-gray-200 hover:text-teal-600 transition-all duration-300 cursor-pointer" onClick={onCloseCreateProjectModal} >
                         <div className="m-4" > Cancelar</div>
