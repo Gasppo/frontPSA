@@ -22,20 +22,27 @@ const CargaDeHoras = (props: CargaDeHorasProps,) => {
     const [showAddModal, setShowAddModal] = useState(false)
     const [rowsPerPage, setRowsPerPage] = useState(9)
     const [page, setPage] = useState(0)
+    const [total, setTotal] = useState(1)
 
     const { state }: any = useLocation()
 
     const handleAddOpen = () => {
-        setShowAddModal(true)
+        if (total<=8){
+            setShowAddModal(true)
+        }else{
+                alert("La cantidad total de horas del dia no puede superar las 8 horas")
+        }
+        
     }
     const handleSubmit = () => {
-        
-        console.log('Mando a la api')
+        if (total<=8){
         sendHoursToAPI();
-        console.log('NO LLEGO')
-        return(<Link to={'/recursos/'}></Link>)
+        window.location.href="/recursos/horasSemanales"
+        alert("Las horas han sido cargadas con exito")
 
-        
+        }else{
+            alert("La cantidad total de horas del dia no puede superar las 8 horas")
+        }
 
     }
 
@@ -52,37 +59,10 @@ const CargaDeHoras = (props: CargaDeHorasProps,) => {
         setPage(0);
     };
 
-
-    /*const fetchTasks = () => {
-        fetch('https://modulo-proyectos-psa-2022.herokuapp.com/projects')
-            .then(res => res.json())
-            .then(res => {
-                setTasks([])
-                let tasks: Task[] = []
-                res.forEach((element: Proyect) => {
-                    element.tasks.forEach((item: Task) => {
-                        let proyectTask = {
-                            ...item,
-                            proyectName: element.name,
-                            proyectCode: element.code,
-                        }
-                        tasks.push(proyectTask)
-                    });
-                    setTasks(tasks)
-                });
-
-
-            })
-            .catch(err => {
-                console.log(JSON.stringify(err))
-            })
-
-    }*/
-
     useEffect(() => {
         let tasks:{[id: number]:string} = {}
         state.items.forEach((item:Task)=>{
-            tasks[item.code] = "0"
+            tasks[item.code] = "0.5"
         })
         setTasks(tasks)
         console.log(state)
@@ -112,7 +92,12 @@ const CargaDeHoras = (props: CargaDeHorasProps,) => {
     const onChange = (event:React.KeyboardEvent<HTMLInputElement>, task:Task) => {
         let tasksCopy = tasks
         tasksCopy[task.code] = event.currentTarget.value
-        
+        let suma = 0
+        Object.keys(tasksCopy).forEach((key:string)=>{
+            suma += (parseFloat(tasksCopy[key]))
+            setTotal(suma)
+        })
+
         setTasks(tasksCopy);
     }
 
