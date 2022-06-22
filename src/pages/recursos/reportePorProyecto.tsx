@@ -36,6 +36,7 @@ const ReportePorProyecto = (props: ReportePorProyectoProps,) => {
                         resources.push(proj)
                 })
                 setProyectos(resources)
+                console.log(proyectos)
             })
             .catch(err => {
                 console.log(JSON.stringify(err))
@@ -60,12 +61,13 @@ const ReportePorProyecto = (props: ReportePorProyectoProps,) => {
                     description: item.description,
                     resource:item.resource,
                     code:item.code,
-                    totalHours:item.totalHours,
+                    hours_worked:typeof item.hours_worked == "undefined" ? 0: item.hours_worked ,
                 }
                 tareasDeProyecto.push(tareaAMostrar)
             });
             console.log(tareasDeProyecto)
             setTareas(tareasDeProyecto)
+            setLoading(false)
         })
         .catch(err => {
             console.log(JSON.stringify(err))
@@ -82,18 +84,15 @@ const ReportePorProyecto = (props: ReportePorProyectoProps,) => {
     };
   
 
+    useEffect(()=>{
+        fetchEmployees();
+    },[])
 
     useEffect(() => {
-        fetchEmployees();
-
+        setLoading(false);
+        fetchHours();
     }, [selected]);
 
-    const handleSubmit=()=>{
-        setLoading(true);
-        fetchHours();
-    setLoading(false)
-
-    }
 
     return (
         <>

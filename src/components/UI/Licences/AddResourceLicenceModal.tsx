@@ -50,6 +50,7 @@ const AddResourceLicenceModal = (props: AddResourceLicenceModalProps)=>{
     const [runValidations, setRunValidations] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
     const [input, setInput] = useState(defaultLicenceData)
+    const [empleadoSeleccionado, setEmpleadoSeleccionado] = useState()
     const [empleados, setEmpleados] = useState<SelectResource[]>([])
     const [version, setVersion] = useState(emptyVersion)
     const invalidFields = (!input?.productId || !input?.versionId || !input?.clientId || !input?.expirationDate ||  !input?.state)
@@ -81,14 +82,21 @@ const AddResourceLicenceModal = (props: AddResourceLicenceModalProps)=>{
 
     }, []);
 
+    const handleChangeInt = (e: any) => {
+        setInput(({ ...input, [e.target.name]: Number(e.target.value) }))
+    };
+
+    const handleSeleccionDeEmpleado = (e:any) =>{
+        const empleado = empleados.find(element => element.value === e.target.value)
+        setEmpleadoSeleccionado(e)
+    }
+
 
 
     return (
         <CenteredModal isLoading={isLoading} onClose={onClose} show={show} label="Crear Licencia" addbuttonLabel="Crear" disableSubmit={disabled} onSubmit={function (): void { console.log('Function not implemented.');} }>
             <div className='flex mb-6 flex-row'>
-            <SelectBox required name="clientId" className='mr-8 w-[42rem]' label="Seleccione un Empledo" valueKey="legajo" options={empleados} text="label" value={undefined} onChange={function (e: any): void {
-                    console.log('Function not implemented.');
-                } } />
+            <SelectBox disabled={false} required name="clientId" className='mr-8 w-[42rem]' label="Seleccione un Empledo" valueKey="legajo" options={empleados} text="label" value={empleadoSeleccionado} onChange={handleSeleccionDeEmpleado} />
             </div>
             <div className='flex mb-6 flex-row'>
             <SelectBox required name="productId" className='mr-8 w-[42rem]' label="Seleccione un Tipo de Licencia" valueKey="label" options={tipos_de_licencia} text="label" value={undefined} onChange={function (e: any): void {

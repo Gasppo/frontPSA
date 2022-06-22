@@ -3,7 +3,7 @@ import { TableCell, TableRow } from '@mui/material';
 import { License } from '../../types/resourcesTypes';
 
 interface LicenseResourceTableRowProps {
-    row: License
+    row: any
 }
 
 const LicenseResourceTableRow = (props: LicenseResourceTableRowProps) => {
@@ -11,28 +11,22 @@ const LicenseResourceTableRow = (props: LicenseResourceTableRowProps) => {
 
     const addDays = (date:Date, days:number) => {
         var result = new Date(date);
-        result.setDate(result.getDate() + days);
+        console.log(days)
+        console.log(result.setDate(result.getDate() + days))
+
         return result;
     }
 
-    const getCountdownDays = () => {
-
-        let fechaInicio = (new Date(row.startingDate))
-        let fechaFinal = addDays(fechaInicio, row.durationDays)
-        console.log(row.durationDays)
-        console.log(fechaFinal)
-        return fechaFinal.toDateString()
-
-    }
-
+    let fechaInicio = (new Date(row.startingDate))
+    let fechaFinal = addDays(fechaInicio, row.durationDays)
     return (
         <TableRow hover key={row._id}>
-            <TableCell align="left">{row.licenseType}</TableCell>
-            <TableCell align='left'>{'Messi'}</TableCell>
             <TableCell align="left">{row.licensedPersonCode}</TableCell>
-            <TableCell align="left">{row.startingDate}</TableCell>
-            <TableCell align="left">{0}</TableCell>
-            <TableCell align="left">{getCountdownDays()}</TableCell>
+            <TableCell align='left'>{row.employeeName}</TableCell>
+            <TableCell align="left">{row.licenseType}</TableCell>
+            <TableCell align="left">{fechaInicio.toLocaleDateString('es-AR')}</TableCell>
+            <TableCell align="left">{fechaFinal.toLocaleDateString('es-AR')}</TableCell>
+            <TableCell align="left">{row.durationDays}</TableCell>
         </TableRow>
     )
 }

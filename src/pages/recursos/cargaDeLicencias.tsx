@@ -16,13 +16,14 @@ interface CargaDeLicenciasProps {
 
 const CargaDeLicencias = (props: CargaDeLicenciasProps,) => {
 
-    const [isLoading, setLoading] = useState<boolean>(false)
+    const [isLoading, setLoading] = useState<boolean>(true)
     const [showAddModal, setShowAddModal] = useState(false)
     const [showEditModal, setShowEditModal] = useState(false)
     const [currentId, setCurrentID] = useState<number | null>(null)
     const [rowsPerPage, setRowsPerPage] = useState(5)
     const [page, setPage] = useState(0)
     const [licenses, setLicenses] = useState<any>([])
+    const [employees, setEmployees] = useState<any>([])
 
     
     const handleAddOpen = () => {
@@ -54,49 +55,41 @@ const CargaDeLicencias = (props: CargaDeLicenciasProps,) => {
         setPage(0);
     };
     const  getLicenses = ()=>{
-        let licencias: License [] = [       {
 
-            _id:"62b1041fad7779110976cb33",
-            licensedPersonCode:2,
-            startingDate:"2022-09-20T00:00:00.000Z",
-            durationDays:2,
-            licenseType:"Maternidad",
-            created:new Date("2022-06-20T23:34:55.191Z"),
-        
-        }] 
-        
- 
-        setLicenses(licencias)
-        console.log(licencias)
-        console.log(licenses)
-
-        /* fetch('https://modulo-recursos-psa.herokuapp.com/licenses')
+        fetch('https://modulo-recursos-psa.herokuapp.com/employees')
             .then(res => res.json())
             .then(res => {
-                let licenciasAMostrar:any[] = []
-                console.log(res)
-                res.forEach((item:any)=>{
-                    let licenciaACargar:any =
-                    {
-                        ...item
+                setEmployees(res)
 
+                fetch('https://modulo-recursos-psa.herokuapp.com/licenses')
+            .then(res => res.json())
+            .then(res => {
+                let licencias:any[] = []
+                res.forEach((item:any) =>{
+                    let empleado = employees.filter((itemE:any) => itemE.legajo === item.licensedPersonCode)
+                    let licencia = {
+                        ...item,
+                        employeeName: empleado[0].Apellido + ', ' + empleado[0].Nombre
                     }
-                    licenciasAMostrar.push(licenciaACargar)
-
+                    licencias.push(licencia)
                 })
-                setLicenses(licenciasAMostrar)
-                //console.log(licenses)
-
-                
+                console.log(licencias)
+                setLicenses(licencias)
             }) 
             .catch(err => {
                 console.log(JSON.stringify(err))
-            })*/
+            })
+            }) 
+            .catch(err => {
+                console.log(JSON.stringify(err))
+            })
+            setLoading(false)
 
     }
     useEffect(() => {
         getLicenses()
-    }, []);
+        setLoading(false)
+    }, [isLoading]);
 
     
     return (
@@ -125,12 +118,12 @@ const CargaDeLicencias = (props: CargaDeLicenciasProps,) => {
                     <Table>
                         <TableHead>
                             <TableRow>
-                            <TableCell align="left">Tipo de Licencia</TableCell>
-                                <TableCell align="left">Empleado</TableCell>
                                 <TableCell align="left">Codigo de Empleado</TableCell>
+                                <TableCell align="left">Nombre de Empleado</TableCell>
+                                <TableCell align="left">Tipo de Licencia</TableCell>
                                 <TableCell align="left">Fecha de inicio</TableCell>
-                                <TableCell align='left'>Estado</TableCell>
-                                <TableCell align="left">Dias restantes</TableCell>
+                                <TableCell align="left">Fecha de fin</TableCell>
+                                <TableCell align="left">Duracion</TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>

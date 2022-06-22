@@ -85,6 +85,6 @@ export type ProjectReport={
     description: string;
     resource:number;
     code:number;
-    totalHours:number | 0;
+    hours_worked:number | 0;
 
 }
