@@ -168,7 +168,7 @@ const AddTaskModal = (props: AddTicketModalProps) => {
 
                 <div className='flex mb-6  flex-row' style={{marginTop: 10}}>
                     <ValidatingInput required validations={validations} name="name" className='mr-8 w-80' label="Nombre de la tarea" value={newTask?.name} onChange={handleChangeText} />
-                    <SelectBox required validations={validations} name="priority" className='mr-8 w-80' label="Seleccione la prioridad" onChange={handlePrioridadSelection} valueKey="id" value={prioridad} options={prioridades} text="valor" />
+                    <SelectBox required validations={validations} name="priority" className='mr-8 w-80' label="Seleccione la prioridad" onChange={handlePrioridadSelection} valueKey="id" value={newTask?.priority} options={prioridades} text="valor" />
                 </div>
                 <div className='flex mb-6 flex-row'>
                     <Autocomplete
