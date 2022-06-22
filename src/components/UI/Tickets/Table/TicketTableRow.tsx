@@ -32,13 +32,13 @@ const TicketTableRow = (props: TicketTableRowProps) => {
 
     return (
         <TableRow hover key={row.id} >
-            <TableCell align="left" onClick={handleOpenDetails} >{row.id}</TableCell>
-            <TableCell align="left" onClick={handleOpenDetails}>{row.title}</TableCell>
-            <TableCell align="left" onClick={handleOpenDetails}>{client?.razonSocial || 'N/A'}</TableCell>
-            <TableCell align="left" onClick={handleOpenDetails}>{product?.name || 'N/A'}</TableCell>
-            <TableCell align="left" onClick={handleOpenDetails}>{new Date(row.createdAt).toLocaleDateString('es-AR')}</TableCell>
-            <TableCell align="left" onClick={handleOpenDetails}>{new Date(row.updatedAt).toLocaleDateString('es-AR')}</TableCell>
-            <TableCell align="left" onClick={handleOpenDetails}>{row.status}</TableCell>
+            <TableCell align="left" onClick={handleOpenDetails} className="cursor-pointer" >{row.id}</TableCell>
+            <TableCell align="left" onClick={handleOpenDetails} className="cursor-pointer">{row.title}</TableCell>
+            <TableCell align="left" onClick={handleOpenDetails} className="cursor-pointer">{client?.razonSocial || 'N/A'}</TableCell>
+            <TableCell align="left" onClick={handleOpenDetails} className="cursor-pointer">{product?.name || 'N/A'}</TableCell>
+            <TableCell align="left" onClick={handleOpenDetails} className="cursor-pointer">{new Date(row.createdAt).toLocaleDateString('es-AR')}</TableCell>
+            <TableCell align="left" onClick={handleOpenDetails} className="cursor-pointer">{new Date(row.updatedAt).toLocaleDateString('es-AR')}</TableCell>
+            <TableCell align="left" onClick={handleOpenDetails} className="cursor-pointer">{row.status}</TableCell>
             <TableCell align="right">
                 <div className="flex flex-row justify-end">
                     <div className='hover:text-teal-600 text-slate-600 cursor-pointer' onClick={handleEdit}>

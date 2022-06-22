@@ -85,31 +85,33 @@ const TicketTasks = (props: TicketTasksProps) => {
     }
 
     return (
-        <TableContainer component={Paper} className="mt-10 w-[95%]"  >
-            <Table>
-                <EnhancedTaskTableHead order={order} orderBy={orderBy} onRequestSort={handleRequestSort} headers={tableHeaders} />
-                <TableBody>
-                    {loadedTasks &&
-                        loadedTasks
-                            .sort(sortFunction)
-                            .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                            .map(row => (
-                                <TaskTableRow row={row} />
-                            ))}
-                </TableBody>
-                <TableFooter>
-                    <DefaultTableFooter
-                        disableRowsPerPage
-                        colSpan={3}
-                        count={loadedTasks.length || 0}
-                        onPageChange={handleChangePage}
-                        onRowsPerPageChange={handleChangeRowsPerPage}
-                        page={page}
-                        rowsPerPage={rowsPerPage}
-                    />
-                </TableFooter>
-            </Table>
-        </TableContainer>
+        <div className="w-[95%] mb-10">
+            <TableContainer component={Paper} className="mt-10">
+                <Table>
+                    <EnhancedTaskTableHead order={order} orderBy={orderBy} onRequestSort={handleRequestSort} headers={tableHeaders} />
+                    <TableBody>
+                        {loadedTasks &&
+                            loadedTasks
+                                .sort(sortFunction)
+                                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                                .map(row => (
+                                    <TaskTableRow row={row} />
+                                ))}
+                    </TableBody>
+                    <TableFooter>
+                        <DefaultTableFooter
+                            disableRowsPerPage
+                            colSpan={3}
+                            count={loadedTasks.length || 0}
+                            onPageChange={handleChangePage}
+                            onRowsPerPageChange={handleChangeRowsPerPage}
+                            page={page}
+                            rowsPerPage={rowsPerPage}
+                        />
+                    </TableFooter>
+                </Table>
+            </TableContainer>
+        </div>
     )
 }
 
