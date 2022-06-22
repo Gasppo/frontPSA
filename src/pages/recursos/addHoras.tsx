@@ -1,3 +1,4 @@
+import { DateComponent } from '@fullcalendar/react';
 import { Paper, Table, TableBody, TableCell, TableContainer, TableFooter, TableHead, TablePagination, TableRow, TextField, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { MultiSelect } from "react-multi-select-component";
@@ -23,7 +24,7 @@ const AddHoras = (props: AddHorasProps) => {
     const [proyectos, setProyectos] = useState<SelectProyect[]>([]);
     const [tasks, setTasks] = useState<Task[]>([]);
     const [selectedItems, setSelectedItems] = useState<any[]>([]);
-    const [date, setDate] = useState<any>();
+    const [date,setDate]= useState<any>(new Date().toISOString().split('T')[0]);
     const [rowsPerPage, setRowsPerPage] = useState(9);
     const [page, setPage] = useState(0);
 
@@ -119,10 +120,10 @@ const AddHoras = (props: AddHorasProps) => {
             <LoadingIndicator show={isLoading} className={`flex flex-col items-start  transition-all duration-200`} >
                 <div className="flex justify-between w-full" >
                     <div  >
-                        <TextField type='date' inputProps={{ max: new Date().toISOString().slice(0, 10) }} defaultValue={new Date().toISOString().split('T')[0]} ></TextField>
+                        <TextField type='date' onChange={(value)=>{setDate(value.currentTarget.value)}} inputProps={{ max: new Date().toISOString().slice(0, 10) }} defaultValue={new Date().toISOString().split('T')[0]} ></TextField>
                     </div>
                     <div className="mr-10 border-2 text-center  rounded-xl shadow-lg text-slate-800 hover:bg-gray-200 hover:text-teal-600 transition-all duration-300 cursor-pointer">
-                        <Link to={'/recursos/horasSemanales/carga/seleccion'} state={{ items: selectedItems }} >
+                        <Link to={'/recursos/horasSemanales/carga/seleccion'} state={{ items: selectedItems, date: date }} >
                             <div className="m-4">Siguiente</div>
                         </Link>
                     </div>
