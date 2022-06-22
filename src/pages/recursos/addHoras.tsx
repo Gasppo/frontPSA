@@ -94,8 +94,6 @@ const AddHoras = (props: AddHorasProps) => {
         setPage(0);
     };
 
-
-
     useEffect(() => {
         fetchProyects();
         fetchTasks();
