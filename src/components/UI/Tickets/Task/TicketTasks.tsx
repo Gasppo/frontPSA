@@ -1,9 +1,11 @@
-import { Paper, Table, TableBody, TableContainer, TableFooter } from '@mui/material'
-import { useState } from 'react'
+import { Paper, Table, TableBody, TableContainer, TableFooter, Typography } from '@mui/material';
+import { useCallback, useEffect, useState } from 'react';
+import { proyectsAPI } from '../../../dev/URIs';
+import LoadingIndicator from '../../../Loading/LoadingIndicator';
 import { Order } from '../../../types/ticketTypes';
 import DefaultTableFooter from '../../Table/DefaultTableFooter';
-import EnhancedTaskTableHead from './EnhancedTaskTableHead'
-import TaskTableRow from './TaskTableRow'
+import EnhancedTaskTableHead from './EnhancedTaskTableHead';
+import TaskTableRow from './TaskTableRow';
 
 interface Data {
     code: number;
@@ -28,6 +30,7 @@ type Task = {
     projectCode?: number;
     code: number;
     __v: number;
+    ticket: number;
 }
 
 interface TicketTasksProps {
@@ -49,13 +52,12 @@ const headerTask = [
 
 const TicketTasks = (props: TicketTasksProps) => {
 
-    const { loadedTasks } = props
-
     const [order, setOrder] = useState<Order>('asc');
     const [orderBy, setOrderBy] = useState<keyof Data>('name');
     const [rowsPerPage, setRowsPerPage] = useState(5)
     const [page, setPage] = useState(0)
-
+    const [loading, setLoading] = useState(false)
+    const [loadedTask, setLoadedTask] = useState<Task[]>([])
 
     const handleRequestSort = (event: React.MouseEvent<unknown>, property: keyof Data,) => {
         const isAsc = orderBy === property && order === 'asc';
@@ -84,14 +86,39 @@ const TicketTasks = (props: TicketTasksProps) => {
         return 0
     }
 
+    const gatherTasks = useCallback((ticketId: number) => {
+        setLoading(true)
+        fetch(`${proyectsAPI}/tasks`)
+            .then(response => response.json())
+            .then(json => { return json?.filter((task: Task) => { return task.ticket === ticketId }) || [] })
+            .then(tasks => { setLoading(false); setLoadedTask(tasks) })
+            .catch(err => { setLoading(false); console.log(err) })
+    }, [])
+
+
+    useEffect(() => {
+        gatherTasks(1)
+    }, [gatherTasks]);
+
+    useEffect(() => {
+        console.log(loadedTask)
+    }, [loadedTask]);
+
     return (
-        <div className="w-[95%] mb-10">
+        <LoadingIndicator show={loading} className="w-[95%] mb-10">
+            {loadedTask.length === 0 && (
+                <div className='flex justify-center mb-20'>
+                    <Typography variant="h6" className="text-center">
+                        No hay tareas creadas sobre este ticket para mostrar
+                    </Typography>
+                </div>
+            )}
             <TableContainer component={Paper} className="mt-10">
                 <Table>
                     <EnhancedTaskTableHead order={order} orderBy={orderBy} onRequestSort={handleRequestSort} headers={tableHeaders} />
                     <TableBody>
-                        {loadedTasks &&
-                            loadedTasks
+                        {loadedTask &&
+                            loadedTask
                                 .sort(sortFunction)
                                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                                 .map(row => (
@@ -102,7 +129,7 @@ const TicketTasks = (props: TicketTasksProps) => {
                         <DefaultTableFooter
                             disableRowsPerPage
                             colSpan={3}
-                            count={loadedTasks.length || 0}
+                            count={loadedTask.length || 0}
                             onPageChange={handleChangePage}
                             onRowsPerPageChange={handleChangeRowsPerPage}
                             page={page}
@@ -111,7 +138,7 @@ const TicketTasks = (props: TicketTasksProps) => {
                     </TableFooter>
                 </Table>
             </TableContainer>
-        </div>
+        </LoadingIndicator>
     )
 }
 
