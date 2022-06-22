@@ -54,7 +54,7 @@ const AddProjectModal = (props: AddTicketModalProps) => {
         //fase: 1,
     })
 
-    const invalidFields = (!newProject?.name || newProject.startDate== "dd/mm/yyyy" || newProject.endDate == "dd/mm/yyyy" || !clientType || !newProject?.type )
+    const invalidFields = (!newProject?.name || newProject.startDate== "dd/mm/yyyy" || newProject.endDate < newProject.startDate  || newProject.endDate == "dd/mm/yyyy" || !clientType || !newProject?.type )
     const disabled = runValidations && invalidFields
 
 
@@ -192,9 +192,11 @@ const AddProjectModal = (props: AddTicketModalProps) => {
     const isEmpty = (value: any) => !value ? "Este campo no puede estar vacio" : ""
     const validations = runValidations ? [isEmpty] : []
 
-    const isEmptyDate = (value: any) => (value == "dd/mm/yyyy") ? "Debe seleccionar una fecha valida" : ""
-    const isValidDate = (value: any) => (value.toString()<currentDate.toString()) ? "La fecha no puede ser anterior a la del día" : ""
-    const validationsDates = runValidations ? [isEmptyDate] : []
+    const isValidStartDate = (value: any) => (value == "dd/mm/yyyy") ? "Ingrese una fecha valida" : "";
+    const validationStartDate = runValidations ? [isValidStartDate] : []
+    
+    const isValidEndDate = (value: any) => (value < newProject.startDate || value == "dd/mm/yyyy") ? "Ingrese una fecha valida" : "";
+    const validationEndDate = runValidations ? [isValidEndDate] : []
 
     return (
         <Modal onClose={onClose} open={show} >
@@ -254,8 +256,8 @@ const AddProjectModal = (props: AddTicketModalProps) => {
                         />
                 </div>
                 <div className='flex mb-6 flex-row' >
-                    <ValidatingInputDates required validations={validationsDates} name="startDate" className='mr-8 w-80' label="Fecha de inicio del Proyecto" value={newProject?.startDate} onChange={handleChangeText} />
-                    <ValidatingInputDates required validations={validationsDates} name="endDate" className='mr-8 w-80' label="Fecha de fin del Proyecto" value={newProject?.endDate} onChange={handleChangeText} />
+                    <ValidatingInputDates required validations={validationStartDate} name="startDate" className='mr-8 w-80' label="Fecha de inicio del Proyecto" value={newProject?.startDate} onChange={handleChangeText} />
+                    <ValidatingInputDates required validations={validationEndDate} name="endDate" className='mr-8 w-80' label="Fecha de fin del Proyecto" value={newProject?.endDate} onChange={handleChangeText} />
                 </div>
                 <TextField id="outlined-basic" className='mb-6 w-[42rem] mr-8' name='description' label="Descripcion" multiline rows={3} InputLabelProps={{ shrink: true }} variant="outlined" onChange={handleChangeText} />
                 <div className="flex flex-row" >
