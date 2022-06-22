@@ -7,5 +7,6 @@ export type Task = {
     //resoursed debería de ser un set
     effort: number;
     resource: number;
+    isCompleted: number,
     description: string | null;
 }
