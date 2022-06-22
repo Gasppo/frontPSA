@@ -58,7 +58,6 @@ const EditTaskModal = (props: EditTaskModalProps) => {
             .then((response) => {
                 return response.json()})
             .then((myJson) => {
-                //console.log(myJson);
                 setLoadedResources(Object.values(JSON.parse(JSON.stringify(myJson))));
                 //setOptions( resources.map( resource => {resource.legajo }));
             })
@@ -78,6 +77,7 @@ const EditTaskModal = (props: EditTaskModalProps) => {
     };
 
     const handleSubmit = async () => {
+        window.location.reload();
         if (invalidFields) {
             setRunValidations(true);
         }
@@ -102,13 +102,10 @@ const EditTaskModal = (props: EditTaskModalProps) => {
 
     useEffect(() => {
         setRunValidations(false)
-    }, []);
-
-
-    useEffect(() => {
         getResources();
         determinePrioriryValue();
     }, []);
+
 
     const isEmpty = (value: any) => !value ? "Este campo no puede estar vacio" : ""
     const validations = runValidations ? [isEmpty] : []

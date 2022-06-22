@@ -171,7 +171,8 @@ const AddProjectModal = (props: AddTicketModalProps) => {
     useEffect(()=>{
         getClients();
         getProducts();
-    }, [clients, products]);
+    }, []);
+    // }, [clients, products]);
 
 
     const generateProjectUsingAPI = async () => {

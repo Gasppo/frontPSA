@@ -1,7 +1,5 @@
 import { Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material'
 import { useEffect, useState} from 'react'
-import AccountBalanceIcon from '@mui/icons-material/AccountBalance'
-import SupportAgentIcon from '@mui/icons-material/SupportAgent'
 import FilterAltIcon from '@mui/icons-material/FilterAlt';
 import { Link } from 'react-router-dom'
 import PageTitle from '../../components/UI/Dashboard/PageTitle'
@@ -9,14 +7,12 @@ import LoadingIndicator from '../../components/Loading/LoadingIndicator'
 import{Project} from '../../components/types/projectTypes'
 import ProjectTableRow from '../../components/UI/Projects/ProjectsTableRow'
 import AddProjectModal from '../proyectos/AddProjectModal'
-import AddResourcesModal from '../proyectos/AddResourcesModal';
 import FilterProjectsModal from '../proyectos/FilterProjectsModal';
+ 
 
 interface ProyectosProps {
     
 }
-
-const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
 const Proyectos = (props: ProyectosProps) => {
     const [loadedProjects, setLoadedProjects] = useState<Project[]>([])
@@ -89,12 +85,12 @@ const Proyectos = (props: ProyectosProps) => {
     };
 
     const handleAddProjectSubmit = (projectCreated : Project) => {
+        gatherProjects();
         setshowProjectModal(false);
         //setshowResourcesModal(true);
         setProject(projectCreated);
-        console.log("created project")
-        console.log(projectCreated);
-        gatherProjects();
+        window.location.reload();
+    
     };
 
     const gatherProjects = () => {
@@ -108,8 +104,8 @@ const Proyectos = (props: ProyectosProps) => {
                 .then((response) => {
                     return response.json()})
                 .then((myJson) => {
-                    setLoadedProjects(JSON.parse(JSON.stringify(myJson)));
-                    setFilteredProjects(JSON.parse(JSON.stringify(myJson)));
+                    setLoadedProjects(state => JSON.parse(JSON.stringify(myJson)));
+                    setFilteredProjects(state => JSON.parse(JSON.stringify(myJson)));
                 })
                 .catch(err => console.log(err))
     }
@@ -138,7 +134,7 @@ const Proyectos = (props: ProyectosProps) => {
             </div>
             <LoadingIndicator show={isLoading} className={`flex flex-col items-start  transition-all duration-200`} >
                 {!isLoading && (<> 
-                    <AddProjectModal onSubmit={handleAddProjectSubmit} onClose={handleAddProjectClose} show={showProjectModal} />
+                    <AddProjectModal onSubmit={handleAddProjectSubmit} onClose={handleAddProjectClose} show={showProjectModal}  />
                     {/* <AddResourcesModal onSubmit={handleAddResourcesSubmit} onClose={handleModalAddResourcesClose} show={showResourcesModal} project={newProject}/>  */}
 
                     <TableContainer component={Paper} className="mt-10"  >

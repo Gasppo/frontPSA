@@ -41,13 +41,9 @@ const AddProjectModal = (props: AddProjectModalProps) => {
             .then((response) => {
                 return response.json()})
             .then((myJson) => {
-                //console.log(myJson);
                 setLoadedResources(Object.values(JSON.parse(JSON.stringify(myJson))));
-                //setOptions( resources.map( resource => {resource.legajo }));
-
             })
             .catch(err => console.log(err))
-            //sleep(3000).then(res => setLoading(false));
     }
     useEffect(() => {
         getResources();

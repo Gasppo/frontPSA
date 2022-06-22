@@ -87,6 +87,7 @@ const  TaskTableRow = (props:  TaskTableRowProps) => {
     
     const handleEditTaskSubmit = () =>{
         //updateDelaTarea
+
         setIsOpenEditTaskModal(false);
     };
 

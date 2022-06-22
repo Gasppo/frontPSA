@@ -22,7 +22,7 @@ interface AddTicketModalProps {
 }
 
 const AddTaskModal = (props: AddTicketModalProps) => {
-    const [prioridad, setPrioridad] = useState("Baja");
+    const [prioridad, setPrioridad] = useState("1");
     const { onSubmit, onClose, show, toProject } = props;
     const [projectTasks, setProjectTasks] = useState<Task[]>([])
     //const [isLoading, setIsLoading] = useState(false)
@@ -125,7 +125,6 @@ const AddTaskModal = (props: AddTicketModalProps) => {
             .then((response) => {
                 return response.json()})
             .then((myJson) => {
-                console.log(myJson);
                 setLoadedResources(Object.values(JSON.parse(JSON.stringify(myJson))));
                 //setOptions( resources.map( resource => {resource.legajo }));
 
@@ -135,7 +134,7 @@ const AddTaskModal = (props: AddTicketModalProps) => {
     };
 
     const onCloseCreateProjectModal = () =>{
-        setPrioridad('');
+        setPrioridad('1');
         setNewTask(({ ...newTask, name: "", effort: 0, resource: 0, description: "",}));   
         onClose();
     };

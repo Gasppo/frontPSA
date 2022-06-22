@@ -18,6 +18,7 @@ import EditProjectModal from '../../components/UI/Projects/editProjectModal';
 import { Task } from '../../components/types/taskType'
 import AddResourcesModal from '../proyectos/AddResourcesModal'
 import AddCircleIcon from '@mui/icons-material/AddCircle';
+import { render } from 'react-dom';
 
 interface ProyectProps {
     projectData: Project,
@@ -193,14 +194,19 @@ const Proyecto = () => {
         //sleep(3000).then(res => setLoading(false));
     }
 
+    const updatePage = () => {
+        fetchProject();
+        determineStateTagColor();
+    };
+
     useEffect(() => {
         fetchProject();
         getTasksByProject();
-    }, [projectTasks]);
+        determineStateTagColor();
+    }, [projectTasks, stateTagColor]);
 
     useEffect(() => {
         determineRisk();
-        determineStateTagColor();
         setexpandedRecursos(false);
         setexpandedDates(false);
         setexpandedDetails(false);
@@ -209,7 +215,7 @@ const Proyecto = () => {
 
     return (
         <>
-            <EditProjectModal onRefresh={fetchProject} onClose={handleAddProjectClose} show={showProjectModal} row={project} />
+            <EditProjectModal onRefresh={updatePage} onClose={handleAddProjectClose} show={showProjectModal} row={project} />
             <AddTaskModal onSubmit={handleAddTaskSubmit} onClose={handleNewTaskClose} show={isOpenNewTaskModal} toProject={project} projectResources={project.resources}/>
             <AddResourcesModal onSubmit={handleAddResourcesSubmit} onClose={handleModalAddResourcesClose} show={showResourcesModal} project={project} onRefresh={fetchProject}/> 
             <div style={{display: 'flex', flexDirection: 'row', margin: 25, paddingBottom: 20, paddingLeft: 80, borderBottomColor:'#C5D0CB', borderBottomWidth: '1px'}}> 
