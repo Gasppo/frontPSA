@@ -276,6 +276,7 @@ const AddProjectModal = (props: AddTicketModalProps) => {
                             options={resources}
                             getOptionLabel={(option) => option.legajo.toString() ? option.legajo.toString() : ""}
                             sx={{ width: 300 }}
+                            value = {{"legajo":1,"Nombre":"Mario","Apellido":"Mendoza"}}
                             renderInput={(params) => <TextField {...params} name= 'client' label="Seleccione un Cliente" required/>}
                             onChange={(event: any, newValue: any) => {
                                 console.log(newValue)
