@@ -238,7 +238,7 @@ const AddProjectModal = (props: AddTicketModalProps) => {
                                 options={products[1]}
                                 getOptionLabel={(option) => (option.name) ? option.name : ""}
                                 sx={{ width: 300 }}
-                                value={{"_id":"62adcf659de8aa00167c57d3","id":110,"name":"PSA Spring CRM","createdAt":"2022-06-18T13:13:09.505Z","updatedAt":"2022-06-21T21:58:52.486Z","__v":0}}
+                                defaultValue={{"_id":"62adcf659de8aa00167c57d3","id":110,"name":"PSA Spring CRM","createdAt":"2022-06-18T13:13:09.505Z","updatedAt":"2022-06-21T21:58:52.486Z","__v":0}}
                                 renderInput={(params) => <TextField {...params} name= 'productId' label="Producto" variant="outlined" color='primary' required/>}
                                 onChange={(event: any, newValue: any) => {
                                     setNewProject(({ ...newProject, productId: newValue.id }))
@@ -276,7 +276,7 @@ const AddProjectModal = (props: AddTicketModalProps) => {
                             options={resources}
                             getOptionLabel={(option) => option.legajo.toString() ? option.legajo.toString() : ""}
                             sx={{ width: 300 }}
-                            value = {{"legajo":1,"Nombre":"Mario","Apellido":"Mendoza"}}
+                            defaultValue = {{"legajo":1,"Nombre":"Mario","Apellido":"Mendoza"}}
                             renderInput={(params) => <TextField {...params} name= 'client' label="Seleccione un Cliente" required/>}
                             onChange={(event: any, newValue: any) => {
                                 console.log(newValue)
@@ -291,7 +291,7 @@ const AddProjectModal = (props: AddTicketModalProps) => {
                             options={clients[0]}
                             getOptionLabel={(option) => option.CUIT ? option.CUIT : ""}
                             sx={{ width: 300 }}
-                            value={{"id":1,"CUIT":"20-12345678-2","razonSocial":"FIUBA"}}
+                            defaultValue={{"id":1,"CUIT":"20-12345678-2","razonSocial":"FIUBA"}}
                             renderInput={(params) => <TextField {...params} name= 'client' label="Seleccione un Cliente por su CUIT" required/>}
                             onChange={(event: any, newValue: any) => {
                                 console.log(newValue)
