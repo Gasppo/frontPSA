@@ -191,6 +191,7 @@ const AddProjectModal = (props: AddTicketModalProps) => {
     useEffect(()=>{
         getClients();
         getProducts();
+        getResources();
     }, []);
     // }, [clients, products]);
 
