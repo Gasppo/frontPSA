@@ -15,11 +15,12 @@ interface  TaskTableRowProps {
     code: number,
     tasks: Task[],
     refresh: () => void,
+    projectResources: number[]
 }
 
 
 const  TaskTableRow = (props:  TaskTableRowProps) => {
-    const { row, refresh, code,tasks} = props;
+    const { row, refresh, code,tasks,projectResources } = props;
     const [isOpenEditTaskModal, setIsOpenEditTaskModal] = useState(false);
     const [showCofirmationModal, setShowConfirmationModal] = useState(false);
     const [priorityValue, setPriorityValue] = useState('Baja');
@@ -109,7 +110,7 @@ const  TaskTableRow = (props:  TaskTableRowProps) => {
     return (
         <>
             <VerTareaModal onClose={handleTaskDetailsClose} show={isTaskDetailsModalOpen} currentTask={row}/>
-            <EditTaskModal onSubmit={handleEditTaskSubmit} onClose={handleEditTaskClose} show={isOpenEditTaskModal} currentTask={row}  />
+            <EditTaskModal onSubmit={handleEditTaskSubmit} onClose={handleEditTaskClose} show={isOpenEditTaskModal} currentTask={row} projectResources={props.projectResources}/>
             <ConfirmModal onSubmit={handleDeleteConfirmation} onClose={handleNotConfirmation} show={showCofirmationModal} txt="Seguro que desea elimiar la tarea"/>
             <TableRow hover key={row.code}>
                 <TableCell align="left" onClick={openTaskDetailsModal}>{row.code}</TableCell>

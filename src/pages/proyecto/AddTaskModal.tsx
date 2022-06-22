@@ -18,6 +18,7 @@ interface AddTicketModalProps {
     onClose: () => void
     show: boolean
     toProject: Project
+    projectResources: number[]
 }
 
 const AddTaskModal = (props: AddTicketModalProps) => {
@@ -174,7 +175,7 @@ const AddTaskModal = (props: AddTicketModalProps) => {
                             disablePortal
                             className='mr-8 w-80'
                             id="combo-box-demo"
-                            options={resources}
+                            options={resources.filter(resource => props.projectResources.includes(resource.legajo))}
                             getOptionLabel={(option: { Nombre: any; }) => (option.Nombre) ? option.Nombre : ""}
                             sx={{ width: 300 }}
                             renderInput={(params: JSX.IntrinsicAttributes & TextFieldProps) => <TextField {...params} name= 'resource' label="Recurso" variant="outlined" color='primary' required/>}
