@@ -1,6 +1,7 @@
 import EditIcon from '@mui/icons-material/Edit';
 import { TableCell, TableRow } from '@mui/material';
-import { Ticket, TicketProduct } from '../../types/ticketTypes';
+import { Ticket, TicketProduct } from '../../../types/ticketTypes';
+
 interface TicketTableRowProps {
     row: Ticket,
     refresh: () => void

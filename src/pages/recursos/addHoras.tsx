@@ -7,7 +7,7 @@ import LoadingIndicator from '../../components/Loading/LoadingIndicator';
 import { Proyect, SelectProyect, Task } from '../../components/types/resourcesTypes';
 import PageTitle from '../../components/UI/Dashboard/PageTitle';
 import TasksTableRow from '../../components/UI/Horas/TasksTableRow';
-import PageLinker from '../../components/UI/Tickets/PageLinker';
+import PageLinker from '../../components/UI/Inputs/PageLinker';
 //import DatePicker from "react-datepicker"
 
 

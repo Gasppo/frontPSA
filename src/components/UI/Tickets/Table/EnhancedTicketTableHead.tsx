@@ -5,18 +5,19 @@ import TableRow from '@mui/material/TableRow';
 import TableSortLabel from '@mui/material/TableSortLabel';
 import { visuallyHidden } from '@mui/utils';
 import * as React from 'react';
-import { Data, HeadCell, Order } from '../../types/ticketTypes';
+import { Data, HeadCell, Order } from '../../../types/ticketTypes';
 
 
 
-interface EnhancedTableHeadProps {
+interface EnhancedTicketTableHeadProps {
     onRequestSort: (event: React.MouseEvent<unknown>, property: keyof Data) => void;
     order: Order;
     orderBy: string;
     headers: HeadCell[]
+    
 }
 
-const EnhancedTableHead = (props: EnhancedTableHeadProps) => {
+const EnhancedTicketTableHead = (props: EnhancedTicketTableHeadProps) => {
     const { order, orderBy, onRequestSort, headers } = props;
 
     const createSortHandler = (property: keyof Data) => (event: React.MouseEvent<unknown>) => {
@@ -44,4 +45,4 @@ const EnhancedTableHead = (props: EnhancedTableHeadProps) => {
     );
 }
 
-export default EnhancedTableHead
+export default EnhancedTicketTableHead
