@@ -42,7 +42,7 @@ const AddTaskModal = (props: AddTicketModalProps) => {
     const prioridades = [{ id: 1, valor: "Baja" }, { id: 2, valor: "Media" }, { id: 3, valor: "Alta" }, { id: 4, valor: "Critica" }];
 
     const generateTaskUsingAPI = async () => {
-        const response = await fetch('http://localhost:2000/tasks', {
+        const response = await fetch('https://modulo-proyectos-psa-2022.herokuapp.com/tasks', {
             method: 'POST',
             headers: {
                'Content-Type': 'application/json',
@@ -54,7 +54,7 @@ const AddTaskModal = (props: AddTicketModalProps) => {
     }
     
     const getTasksByProject = async () => {
-        fetch(`http://localhost:2000/tasks/getbyproject/${toProject.code}`,{
+        fetch(`https://modulo-proyectos-psa-2022.herokuapp.com/tasks/${toProject.code}`,{
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json'
@@ -73,7 +73,7 @@ const AddTaskModal = (props: AddTicketModalProps) => {
     const updateProject = async () => {
         console.log("project tasks");
         console.log(projectTasks);
-        const response = await fetch(`http://localhost:2000/projects/${toProject.code}`, {
+        const response = await fetch(`https://modulo-proyectos-psa-2022.herokuapp.com/projects/${toProject.code}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -104,6 +104,7 @@ const AddTaskModal = (props: AddTicketModalProps) => {
         generateTaskUsingAPI();
         getTasksByProject();
         updateProject();
+        window.location.reload();
         //setIsLoading(false);
         onSubmit();
     
