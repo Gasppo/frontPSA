@@ -20,10 +20,22 @@ const Recursos = (props: RecursosProps) => {
 
 
     const fetchHours = () => {
+        // monday =date of this weeks monday at 23:59:59
+        const monday = new Date(new Date().setDate(new Date().getDate() - new Date().getDay() + 1))
+        const friday = new Date(new Date().setDate(new Date().getDate() - new Date().getDay() + 5))
+        monday.setHours(0, 0, 0)
+        friday.setHours(23, 59, 59)
+
+        // slice monday and friday to keep only the date
+        const mondayDate = monday.toISOString().slice(0, 10)
+        const fridayDate = friday.toISOString().slice(0, 10)
+
+        console.log('Monday is ', mondayDate)
+        console.log('Friday is ', fridayDate)
         let body = JSON.stringify({
-            startDate:'2022-06-14',
-            finalDate: '2022-06-21',
-            hourAssignee: 2})
+            startDate:mondayDate,
+            finalDate: fridayDate,
+            hourAssignee: 3})
 
 
         fetch('https://modulo-recursos-psa.herokuapp.com/hours/filterByDate',{
