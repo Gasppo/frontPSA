@@ -95,7 +95,6 @@ const EditTaskModal = (props: EditTaskModalProps) => {
             setRunValidations(true);
         }
         setIsLoading(true);
-        window.location.reload();
         updateTaskUsingAPI();
         setIsLoading(false);
         onSubmit();
@@ -134,7 +133,7 @@ const EditTaskModal = (props: EditTaskModalProps) => {
     const generateTaskUsingAPI = async () => {
         //nose si funciona
         console.log(newTask);
-        const response = await fetch('http://localhost:2000/tasks', {
+        const response = await fetch('https://modulo-proyectos-psa-2022.herokuapp.com/tasks', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -146,7 +145,7 @@ const EditTaskModal = (props: EditTaskModalProps) => {
     }
 
     const updateTaskUsingAPI = async () => {
-        const response = await fetch(`http://localhost:2000/tasks/${newTask.code}`, {
+        const response = await fetch(`https://modulo-proyectos-psa-2022.herokuapp.com/tasks/${newTask.code}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -154,6 +153,7 @@ const EditTaskModal = (props: EditTaskModalProps) => {
             },
             body: JSON.stringify(newTask)
         })
+        window.location.reload();
         return response
     }
 

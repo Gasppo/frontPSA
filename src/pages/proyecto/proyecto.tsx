@@ -52,7 +52,7 @@ const Proyecto = () => {
 
 
     const fetchProject = () => {
-        fetch(`http://localhost:2000/projects/${projectData.code}`,{
+        fetch(`https://modulo-proyectos-psa-2022.herokuapp.com/projects/${projectData.code}`,{
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json'
@@ -178,7 +178,7 @@ const Proyecto = () => {
     };
 
     const getTasksByProject = async () => {
-        fetch(`http://localhost:2000/tasks/getbyproject/${project.code}`,{
+        fetch(`https://modulo-proyectos-psa-2022.herokuapp.com/tasks/getbyproject/${project.code}`,{
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json'

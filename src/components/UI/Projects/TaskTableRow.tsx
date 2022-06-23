@@ -64,7 +64,7 @@ const  TaskTableRow = (props:  TaskTableRowProps) => {
 
 
     const removeTask = async () => {
-        const response = await fetch(`http://localhost:2000/tasks/${row.code}`, {
+        const response = await fetch(`https://modulo-proyectos-psa-2022.herokuapp.com/tasks/${row.code}`, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',
