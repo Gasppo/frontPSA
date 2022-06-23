@@ -61,6 +61,7 @@ const EditProjectModal = (props: EditProjectModalProps) => {
             },
             body: JSON.stringify(newProject)
         })
+        //props.onRefresh();
         window.location.reload();
         return response
     }
@@ -75,7 +76,6 @@ const EditProjectModal = (props: EditProjectModalProps) => {
 
     const submit = () => {
         updateProjectUsingAPI();
-        props.onRefresh();
         onClose();
 
     }
