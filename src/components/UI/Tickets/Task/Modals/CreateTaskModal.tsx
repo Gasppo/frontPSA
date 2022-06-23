@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { prioridades } from '../../../../dev/dummyData'
 import { Project } from '../../../../types/projectTypes'
 import { Resource } from '../../../../types/resourcesTypes'
@@ -27,6 +27,7 @@ interface CreateTaskModalProps {
     loading: boolean
 }
 
+
 const CreateTaskModal = (props: CreateTaskModalProps) => {
 
     const { onClose, onSubmit, show, ticketId, resources, projects, loading } = props
@@ -43,7 +44,7 @@ const CreateTaskModal = (props: CreateTaskModalProps) => {
         name: proj.name
     })), [projects])
 
-    const [input, setInput] = useState<createTaskData>({
+    const defaultTaskData = useMemo(() => ({
         description: '',
         name: '',
         priority: 0,
@@ -51,7 +52,9 @@ const CreateTaskModal = (props: CreateTaskModalProps) => {
         ticket: ticketId,
         projectCode: 0,
         effort: 0,
-    })
+    }), [ticketId])
+
+    const [input, setInput] = useState<createTaskData>(defaultTaskData)
 
     const handleChangeText = (e: any) => {
         setInput(prev => ({ ...prev, [e.target.name]: e.target.value }))
@@ -70,12 +73,21 @@ const CreateTaskModal = (props: CreateTaskModalProps) => {
         onSubmit(input)
     }
 
+
+    useEffect(() => {
+        setRunValidations(false)
+        setInput(defaultTaskData)
+    }, [show, defaultTaskData]);
+
+
     const invalidFields = (!input?.description || !input?.name || !input.priority || !input.projectCode || !input.resource)
     const disabled = runValidations && invalidFields
 
 
     const isEmpty = (value: any) => !value ? "Este campo no puede estar vacio" : ""
     const validations = runValidations ? [isEmpty] : []
+
+
 
     return (
         <CenteredModal isLoading={loading} onClose={onClose} onSubmit={handleSubmit} show={show} label="Crear tarea" addbuttonLabel="Crear" width='w-[80vh]' disableSubmit={disabled}>
