@@ -108,6 +108,7 @@ const TicketTasks = (props: TicketTasksProps) => {
         setLoading(true)
         const response = await createTask(taskData)
         console.log(response)
+        gatherTasks(ticket?.id || 0)
         setLoading(false)
         handleClose()
     }
@@ -170,7 +171,7 @@ const TicketTasks = (props: TicketTasksProps) => {
     }, [gatherEmployees]);
 
     useEffect(() => {
-        gatherTasks(ticket?.id || 0)
+       gatherTasks(ticket?.id || 0)
     }, [gatherTasks, ticket?.id]);
 
     return (
