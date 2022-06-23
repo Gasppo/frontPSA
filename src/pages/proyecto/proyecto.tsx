@@ -138,7 +138,6 @@ const Proyecto = () => {
     };
     
     const handleAddTaskSubmit = () =>{
-        //agregar la tarea
         setIsOpenNewTaskModal(false);
     };
 
@@ -156,7 +155,6 @@ const Proyecto = () => {
         .then((response) => {
             return response.json()})
         .then((myJson) => {
-            //console.log(JSON.parse(JSON.stringify(myJson)));
             setProjectTasks(JSON.parse(JSON.stringify(myJson)));
         })
         .catch(err => console.log(err))
