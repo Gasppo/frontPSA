@@ -1,4 +1,4 @@
-import { Table, TableBody, TableCell, TableContainer,Paper, TableHead, TableRow, Typography, getInitColorSchemeScript } from '@mui/material'
+import { Table, TableBody, TableCell, TableContainer,Paper, TableHead, TableRow, Typography, getInitColorSchemeScript, TableFooter, TablePagination } from '@mui/material'
 import { useLocation } from 'react-router-dom'
 import {Project} from '../../components/types/projectTypes'
 import LoadingIndicator from '../../components/Loading/LoadingIndicator'
@@ -40,6 +40,8 @@ const Proyecto = () => {
     const [riskImpact, setRiskImpact] = useState('None');
     const [showResourcesModal, setshowResourcesModal] = useState(false);
     const [stateTagColor, setStateTagColor] = useState(' ');
+    const [rowsPerPage, setRowsPerPage] = useState(5)
+    const [page, setPage] = useState(0)
     const [expandedRecursos, setexpandedRecursos] = useState(false);
     const [expandedDates, setexpandedDates] = useState(false);
     const [expandedDetails, setexpandedDetails] = useState(false);
@@ -163,6 +165,15 @@ const Proyecto = () => {
         fetchProject();
     };
 
+    const handleChangePage = (event: React.MouseEvent<HTMLButtonElement> | null, newPage: number) => {
+        setPage(newPage);
+    };
+  
+    const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        setRowsPerPage(parseInt(event.target.value, 10));
+        setPage(0);
+    };
+
     useEffect(() => {
         fetchProject();
         getTasksByProject();
@@ -240,8 +251,30 @@ const Proyecto = () => {
                                             </TableRow>
                                         </TableHead>
                                         <TableBody>
-                                            {(projectTasks.sort((a, b) => b.priority - a.priority)).map(row => <TaskTableRow refresh={getTasksByProject} row={row} code= {project.code} tasks = {projectTasks} key={row.code} projectResources={project.resources} />)}
+                                            {(projectTasks.sort((a, b) => b.priority - a.priority))
+                                            .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                                            .map(row => <TaskTableRow refresh={getTasksByProject} row={row} code= {project.code} tasks = {projectTasks} key={row.code} projectResources={project.resources} />)}
+                                        
                                         </TableBody>
+                                        <TableFooter>
+                                            <TableRow>
+                                                <TablePagination
+                                                    rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
+                                                    colSpan={8}
+                                                    count={projectTasks.length}
+                                                    rowsPerPage={rowsPerPage}
+                                                    page={page}
+                                                    SelectProps={{
+                                                        inputProps: {
+                                                            'aria-label': 'rows per page',
+                                                        },
+                                                        native: true,
+                                                    }}
+                                                    onPageChange={handleChangePage}
+                                                    onRowsPerPageChange={handleChangeRowsPerPage}
+                                                />
+                                            </TableRow>
+                                        </TableFooter>
                                     </Table>
                                 </TableContainer>
                             </>
