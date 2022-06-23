@@ -1,4 +1,4 @@
-import { Table, TableBody, TableCell, TableContainer,Paper, TableHead, TableRow, Typography } from '@mui/material'
+import { Table, TableBody, TableCell, TableContainer,Paper, TableHead, TableRow, Typography, getInitColorSchemeScript } from '@mui/material'
 import { useLocation } from 'react-router-dom'
 import {Project} from '../../components/types/projectTypes'
 import LoadingIndicator from '../../components/Loading/LoadingIndicator'
@@ -39,13 +39,12 @@ const Proyecto = () => {
     const [riskColor, setRiskColor] = useState('#9297A0');
     const [riskImpact, setRiskImpact] = useState('None');
     const [showResourcesModal, setshowResourcesModal] = useState(false);
-    const [stateTagColor, setStateTagColor] = useState('#9297A0');
+    const [stateTagColor, setStateTagColor] = useState(' ');
     const [expandedRecursos, setexpandedRecursos] = useState(false);
     const [expandedDates, setexpandedDates] = useState(false);
     const [expandedDetails, setexpandedDetails] = useState(false);
     const navigate = useNavigate();
     const [isADevelopmentProject, setIfItIsADevelomentProject]= useState(false);
-
 
     const fetchProject = () => {
         fetch(`https://modulo-proyectos-psa-2022.herokuapp.com/projects/${projectData.code}`,{
@@ -61,6 +60,7 @@ const Proyecto = () => {
             })
             .catch(err => console.log(err));
             sleep(3000).then(res => setLoading(false));
+            console.log(project.state)
     }
 
 
@@ -93,15 +93,18 @@ const Proyecto = () => {
         }
     }
 
-    const determineStateTagColor = () => {
+    const getColor = () => {
         if(project.state === 'No Iniciado' || project.state === 'no iniciado' ){
-            setStateTagColor(state => ('#FC7A1E'));
+            return ('#FC7A1E');
         }else if (project.state === 'Iniciado' || project.state === 'iniciado'){
-            setStateTagColor(state => ('#329F5B'));
+            return ('#329F5B');
         }else if (project.state === 'Finalizado' || project.state === 'finalizado'){
-            setStateTagColor(state => ('#4D7298'));
+            return('#4D7298');
         }else if (project.state === 'Cancelado' || project.state === 'cancelado'){
-            setStateTagColor(state => ('#A54657'));
+            return ('#A54657');
+        }
+        else{
+            return '#'
         }
     }
 
@@ -158,7 +161,6 @@ const Proyecto = () => {
 
     const updatePage = () => {
         fetchProject();
-        determineStateTagColor();
     };
 
     useEffect(() => {
@@ -166,9 +168,9 @@ const Proyecto = () => {
         getTasksByProject();
     }, []);
 
-    useEffect(() => {
+    /*useEffect(() => {
         determineStateTagColor();
-    }, [stateTagColor]);
+    }, [stateTagColor]);*/
 
     useEffect(() => {
         determineRisk();
@@ -216,7 +218,7 @@ const Proyecto = () => {
             </div>
             <div style={{display: 'flex', flexDirection: 'row', marginLeft: 100}}> 
                 <div style={{display: 'flex', flexDirection: 'column', marginTop: -10, width:'90vh'}}>
-                    <div style={{padding: 5, width: 110, height: 30, display: 'flex', flexDirection: 'row', backgroundColor: stateTagColor, borderRadius: 5}}><Typography variant='body2' style= {{color: '#F4F6F5', fontWeight: 'bold'}}>{project.state.toUpperCase()}</Typography></div>
+                    <div style={{padding: 5, width: 110, height: 30, display: 'flex', flexDirection: 'row', backgroundColor: getColor(), borderRadius: 5}}><Typography variant='body2' style= {{color: '#F4F6F5', fontWeight: 'bold'}}>{project.state.toUpperCase()}</Typography></div>
                     <div style={{alignSelf:'left', marginTop: 25}}>
                         <Typography variant='body2' className='w-[27vh]' style={{fontWeight: 'bold', color: '#5C7067'}}>Descripción: </Typography>
                         <div style= {{ marginTop: 10, backgroundColor: "#E9EDEB", borderRadius: 15, padding: 10, paddingLeft: 30, paddingRight: 30, minHeight:110}}>
