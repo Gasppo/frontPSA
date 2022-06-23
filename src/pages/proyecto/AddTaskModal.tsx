@@ -134,9 +134,6 @@ const AddTaskModal = (props: AddTicketModalProps) => {
 
     useEffect(() => {
         getResources();
-        //console.log(resources);
-        //console.log(toProject.resources);
-        //console.log(resources);
         getTasksByProject();
     }, [newTask, projectTasks]);
 

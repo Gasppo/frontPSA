@@ -277,7 +277,7 @@ const AddProjectModal = (props: AddTicketModalProps) => {
                             defaultValue={{"id":1,"CUIT":"20-12345678-2","razonSocial":"FIUBA"}}
                             renderInput={(params) => <TextField {...params} name= 'client' label="Seleccione un Cliente por su CUIT" required/>}
                             onChange={(event: any, newValue: any) => {
-                                setNewProject(({ ...newProject, client: newValue.id , clientType: "Externo" }))
+                                setNewProject(({ ...newProject, client: newValue.id, clientType: "Externo" }))
                             }}
                         />}
                 </div>

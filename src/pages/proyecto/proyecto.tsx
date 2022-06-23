@@ -1,4 +1,4 @@
-import { Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material'
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material'
 import { useLocation } from 'react-router-dom'
 import {Project} from '../../components/types/projectTypes'
 import LoadingIndicator from '../../components/Loading/LoadingIndicator'
@@ -9,16 +9,14 @@ import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import TaskTableRow from '../../components/UI/Projects/TaskTableRow';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
-import { Link, useNavigate} from 'react-router-dom';
+import {useNavigate} from 'react-router-dom';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import Popup from 'reactjs-popup';
 import AddTaskModal from './AddTaskModal';
-import{Resource} from '../../components/types/resourceType';
 import EditProjectModal from '../../components/UI/Projects/editProjectModal';
 import { Task } from '../../components/types/taskType'
 import AddResourcesModal from '../proyectos/AddResourcesModal'
 import AddCircleIcon from '@mui/icons-material/AddCircle';
-import { render } from 'react-dom';
 
 interface ProyectProps {
     projectData: Project,
@@ -45,8 +43,6 @@ const Proyecto = () => {
     const [expandedRecursos, setexpandedRecursos] = useState(false);
     const [expandedDates, setexpandedDates] = useState(false);
     const [expandedDetails, setexpandedDetails] = useState(false);
-    const [resources, setLoadedResources] = useState<Resource []>([]);
-    const [clients, setClients] = useState<any[]>([]);
     const navigate = useNavigate();
     const [isADevelopmentProject, setIfItIsADevelomentProject]= useState(false);
 

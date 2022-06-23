@@ -5,7 +5,6 @@ import {Project} from '../../components/types/projectTypes'
 import DeleteIcon from '@mui/icons-material/DeleteForeverOutlined'
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import Autocomplete from '@mui/material/Autocomplete';
-//import * as Collections from 'typescript-collections';
 
 interface AddProjectModalProps {
     onClose: () => void

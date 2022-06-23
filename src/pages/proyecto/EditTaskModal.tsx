@@ -1,13 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
-import { Modal, TextField, Typography, MenuItem, InputAdornment, TextFieldProps } from '@mui/material';
-import{Client} from '../../components/types/clientTypes'
-import AccountCircle from '@mui/icons-material/AccountCircle';
+import { Modal, TextField, Typography, TextFieldProps } from '@mui/material';
 import ValidatingInput from '../../components/UI/Inputs/ValidatingInput';
-import ValidatingInputDates from '../../components/UI/Inputs/ValidatingInputDates';
 import SelectBox from '../../components/UI/Inputs/SelectBox'
-import CenteredModal from '../../components/UI/Modal/CenteredModal'
-import { VoicemailRounded } from '@mui/icons-material';
-import { isPrivateIdentifier } from 'typescript';
 import {Task} from '../../components/types/taskType'
 import{Resource} from '../../components/types/resourceType';
 import Autocomplete from '@mui/material/Autocomplete';

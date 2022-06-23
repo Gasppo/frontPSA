@@ -4,7 +4,7 @@ import FilterAltIcon from '@mui/icons-material/FilterAlt';
 import { Link } from 'react-router-dom'
 import PageTitle from '../../components/UI/Dashboard/PageTitle'
 import LoadingIndicator from '../../components/Loading/LoadingIndicator'
-import{Project} from '../../components/types/projectTypes'
+import {Project} from '../../components/types/projectTypes'
 import ProjectTableRow from '../../components/UI/Projects/ProjectsTableRow'
 import AddProjectModal from '../proyectos/AddProjectModal'
 import FilterProjectsModal from '../proyectos/FilterProjectsModal';
