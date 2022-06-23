@@ -20,6 +20,7 @@ const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
 const AddProjectModal = (props: AddProjectModalProps) => {
     const { onSubmit, onClose, show, project, onRefresh, projectTasks} = props;
+    const [flag, setFlag] = useState(true);
     const [newProject, setNewProject] = useState({
         resources: project.resources
     });
@@ -43,8 +44,12 @@ const AddProjectModal = (props: AddProjectModalProps) => {
             .catch(err => console.log(err))
     }
     useEffect(() => {
-        getResources();
-    }, [ newProject]);
+        if (flag) {
+            getResources();
+            setFlag(false)
+        }
+    }, []);
+    //resources,resourcesNumbers, newProject
 
     const handleSubmit = async () => {
         sleep(100);
@@ -69,7 +74,7 @@ const AddProjectModal = (props: AddProjectModalProps) => {
     }
 
     const hasTasksAssign = (resource: any) =>{
-        return (projectTasks.some(element=> {
+        return (projectTasks.some((element : any)=> {
             if (element.resource == resource){return true}
             else {return false}
         

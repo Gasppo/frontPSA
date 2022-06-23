@@ -17,6 +17,7 @@ interface AddTicketModalProps {
 
 const AddTaskModal = (props: AddTicketModalProps) => {
     const { onSubmit, onClose, show, toProject } = props;
+    const [flag, setFlag] = useState(true);
     const [projectTasks, setProjectTasks] = useState<Task[]>([])
     const [resources, setLoadedResources] = useState<Resource []>([]);
     const [newTask, setNewTask] = useState({
@@ -41,6 +42,7 @@ const AddTaskModal = (props: AddTicketModalProps) => {
             body: JSON.stringify(newTask)
         })
         console.log(response)
+        window.location.reload();
         return response;
     }
     
@@ -123,9 +125,12 @@ const AddTaskModal = (props: AddTicketModalProps) => {
     }, []);
 
     useEffect(() => {
-        getResources();
-        getTasksByProject();
-    }, [newTask, projectTasks]);
+        if (flag) {
+            getResources();
+            getTasksByProject();
+            setFlag(false)
+        }
+    }, []);
 
 
     const isEmpty = (value: any) => !value ? "Este campo no puede estar vacio" : ""
