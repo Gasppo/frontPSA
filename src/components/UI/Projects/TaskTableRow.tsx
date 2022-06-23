@@ -1,10 +1,9 @@
 import { TableCell, TableRow } from '@mui/material'
-import React from 'react'
 import { useEffect, useState } from 'react'
 import { Task } from '../../types/taskType'
 import DeleteIcon from '@mui/icons-material/Delete';
 import { Circle } from '@mui/icons-material';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import EditIcon from '@mui/icons-material/Edit';
 import ConfirmModal from './confirmationModal';
 import EditTaskModal from '../../../pages/proyecto/EditTaskModal';
@@ -25,11 +24,8 @@ const  TaskTableRow = (props:  TaskTableRowProps) => {
     const [showCofirmationModal, setShowConfirmationModal] = useState(false);
     const [priorityValue, setPriorityValue] = useState('Baja');
     const [isTaskDetailsModalOpen, setIsOpenTaskDetailsModal]=useState(false);
-    const [newTasks, setNewTasks] = useState<Task[]>([]);
     const [stateTagColor, setStateTagColor] = useState('#F9A620');
     const [stateValue, setStateValue] = useState('Pendiente');
-    const [showProjectModal, setshowProjectModal] = useState(false);
-    const navigate = useNavigate();
 
     
     const handleDeleteConfirmation = () =>{

@@ -56,10 +56,6 @@ const Proyectos = (props: ProyectosProps) => {
         setshowFiltersModal(false);
     };
 
-    const showAlert = () =>{
-        alert("modified");
-    }
-
     const handleModalFiltersClose = () =>{
         setshowFiltersModal(false);
     };
@@ -102,8 +98,6 @@ const Proyectos = (props: ProyectosProps) => {
     useEffect(() => {
         gatherProjects();
     },[]);
-
-
 
     return (
         <>

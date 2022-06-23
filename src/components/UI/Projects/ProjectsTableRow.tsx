@@ -1,5 +1,4 @@
 import { TableCell, TableRow } from '@mui/material'
-import React from 'react'
 import { useEffect, useState } from 'react'
 import { Project } from '../../types/projectTypes'
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -19,7 +18,6 @@ const  ProjectTableRow = (props:  ProjectTableRowProps) => {
     const { row, refresh } = props;
     const [showProjectModal, setshowProjectModal] = useState(false);
     const [showCofirmationModal, setShowConfirmationModal] = useState(false);
-    const navigate = useNavigate();
     const deleteItems = async () => {
         const response = await fetch(`https://modulo-proyectos-psa-2022.herokuapp.com/projects/${row.code}`, {
             method: 'DELETE',
