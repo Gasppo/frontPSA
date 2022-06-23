@@ -26,7 +26,6 @@ const AddProjectModal = (props: AddProjectModalProps) => {
     });
 
     const [resources, setLoadedResources] = useState<Resource []>([]);
-    const [resourcesNumbers,setResourcesNumbers] = useState<number[]>([]);
     const [isErrorModalOpen, setIsErrorModalOpen] = useState(false);
 
     const getResources = () => {
@@ -49,14 +48,12 @@ const AddProjectModal = (props: AddProjectModalProps) => {
             setFlag(false)
         }
     }, []);
-    //resources,resourcesNumbers, newProject
 
     const handleSubmit = async () => {
         sleep(100);
         const res = await updateProjectUsingAPI();
         onSubmit();
         props.onRefresh();
-
     }
 
     const updateProjectUsingAPI = async () => {
@@ -77,21 +74,18 @@ const AddProjectModal = (props: AddProjectModalProps) => {
         return (projectTasks.some((element : any)=> {
             if (element.resource == resource){return true}
             else {return false}
-        
         }));
     }
 
     const handleResourceRemoval = async (resource : number) => {
-        if(!hasTasksAssign(resource))
-            setNewProject({resources: newProject.resources.filter((item:any)=> item!==resource)});
-        else
+        setNewProject({resources: newProject.resources.filter((item:any)=> item!==resource)});
+        if(hasTasksAssign(resource))
             setIsErrorModalOpen(true);
     }
 
     const closeErrorModal= () =>{
         setIsErrorModalOpen(false);
     }
-
 
     return (
         <Modal onClose={onClose} open={show} > 
