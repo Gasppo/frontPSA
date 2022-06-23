@@ -23,7 +23,7 @@ const VerTareaModal = (props: VerTareaModalProps) => {
     const { onClose, show, currentTask } = props;
     const [isLoading, setIsLoading] = useState(false);
     const [priorityValue, setPriorityValue] = useState('');
-    const [stateTagColor, setStateTagColor] = useState('#F45B69');
+    const [stateTagColor, setStateTagColor] = useState('#F9A620');
     const [stateValue, setStateValue] = useState('Pendiente');
 
     const determinePrioriryValue = () => {
@@ -40,13 +40,13 @@ const VerTareaModal = (props: VerTareaModalProps) => {
 
     const determineStateTagColor = () => {
         if(props.currentTask.isCompleted == 0 ){
-            setStateTagColor(state => ('#F45B69'));
+            setStateTagColor(state => ('#F9A620'));
             setStateValue(state => ('Pendiente'));
         }else if (props.currentTask.isCompleted == 1){
-            setStateTagColor(state => ('#FFE066'));
+            setStateTagColor(state => ('#91AEC1'));
             setStateValue(state => ('En Progreso'));
         }else{
-            setStateTagColor(state => ('#1C7C54'));
+            setStateTagColor(state => ('#7BCC7E'));
             setStateValue(state => ('Completa'));
         }
     }
@@ -72,7 +72,7 @@ const VerTareaModal = (props: VerTareaModalProps) => {
                     
             <div style={{display: 'flex', flexDirection: 'row', marginLeft: 80, marginTop: 50, marginRight:70}}> 
                 <div style={{display: 'flex', flexDirection: 'column', marginTop: -35, width:'150vh'}}>
-                <div style={{padding: 5, width: 90, height: 30, display: 'flex', flexDirection: 'row', backgroundColor: stateTagColor, borderRadius: 5}}><Typography variant='body2' style= {{color: '#F4F6F5', fontWeight: 'bold'}}>{stateValue.toUpperCase()}</Typography></div>
+                <div style={{padding: 5, width: 120, height: 30, display: 'flex', flexDirection: 'row', backgroundColor: stateTagColor, borderRadius: 5}}><Typography variant='body2' style= {{color: '#F4F6F5', fontWeight: 'bold'}}>{stateValue.toUpperCase()}</Typography></div>
                     <div style={{alignSelf:'left', marginTop: 25}}>
                         <Typography variant='body2' className='w-[27vh]' style={{fontWeight: 'bold', color: '#5C7067'}}>Descripción: </Typography>
                         <div style= {{ width:'40vh', marginTop: 10, backgroundColor: "#E9EDEB", borderRadius: 15, padding: 10, paddingLeft: 30, paddingRight: 30, minHeight:110}}>

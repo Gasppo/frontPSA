@@ -25,8 +25,10 @@ const  TaskTableRow = (props:  TaskTableRowProps) => {
     const [showCofirmationModal, setShowConfirmationModal] = useState(false);
     const [priorityValue, setPriorityValue] = useState('Baja');
     const [isTaskDetailsModalOpen, setIsOpenTaskDetailsModal]=useState(false);
-    const [newTasks, setNewTasks] = useState<Task[]>([])
-    const [showProjectModal, setshowProjectModal] = useState(false)
+    const [newTasks, setNewTasks] = useState<Task[]>([]);
+    const [stateTagColor, setStateTagColor] = useState('#F9A620');
+    const [stateValue, setStateValue] = useState('Pendiente');
+    const [showProjectModal, setshowProjectModal] = useState(false);
     const navigate = useNavigate();
 
     
@@ -46,6 +48,19 @@ const  TaskTableRow = (props:  TaskTableRowProps) => {
     const handleModalOpen = () => {
         setshowProjectModal(true)
     };
+
+    const determineStateTagColor = () => {
+        if(row.isCompleted == 0 ){
+            setStateTagColor(state => ('#F9A620'));
+            setStateValue(state => ('Pendiente'));
+        }else if (row.isCompleted == 1){
+            setStateTagColor(state => ('#91AEC1'));
+            setStateValue(state => ('En Progreso'));
+        }else{
+            setStateTagColor(state => ('#7BCC7E'));
+            setStateValue(state => ('Completa'));
+        }
+    }
 
 
     const removeTask = async () => {
@@ -105,9 +120,9 @@ const  TaskTableRow = (props:  TaskTableRowProps) => {
     };
 
     useEffect(() => {
+        determineStateTagColor();
         determinePriorityValue();
-    }, []);
-
+    }, [stateTagColor, priorityValue]);
 
     return (
         <>
@@ -118,7 +133,13 @@ const  TaskTableRow = (props:  TaskTableRowProps) => {
                 <TableCell align="left" onClick={openTaskDetailsModal}>{row.code}</TableCell>
                 <TableCell align="left" onClick={openTaskDetailsModal}>{row.name}</TableCell>
                 <TableCell align="left" onClick={openTaskDetailsModal}>{priorityValue}</TableCell>
-                <TableCell align="left" onClick={openTaskDetailsModal}>{row.effort}</TableCell>               
+                <TableCell align="left" onClick={openTaskDetailsModal}>{row.effort}</TableCell>
+                <TableCell className = 'group'>
+                    <Circle style={{ alignSelf: 'left', color: stateTagColor, height: '4vh' }}></Circle>
+                    <span className="task-state-tooltip group-hover:scale-100" >
+                        {stateValue.toUpperCase()}
+                    </span>
+                </TableCell>                   
                 <TableCell align="right">
                     <div className='hover:text-teal-600 text-slate-600 cursor-pointer' onClick={openConfirmationDeleteModal}>
                         <DeleteIcon />

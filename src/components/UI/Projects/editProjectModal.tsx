@@ -169,19 +169,19 @@ const EditProjectModal = (props: EditProjectModalProps) => {
                 <Typography variant='h5' className={'m-10'}>Modifique el proyecto</Typography>
                 <div className='ml-10 flex flex-col items-center'>
                     <div className='flex mb-6 flex-row'>
-                        <TextField required id="outlined-basic" defaultValue= {props.row.name} name="name" className='mr-8 w-80' style={{backgroundColor: isNameValid ? 'transparent' : '#F3909C'}} label="Nombre del Proyecto" InputLabelProps={{ shrink: true}} variant="outlined" onChange={handleChangeText} />
-                        <TextField required type="date" name="startDate" defaultValue = {startDate} className='mr-8 w-80' style={{backgroundColor: isStartDateValid ? 'transparent' : '#F3909C'}}  label="Fecha de inicio" InputLabelProps={{ shrink: true}} variant="outlined" onChange={handleChangeDate} 
+                        <TextField  id="outlined-basic" defaultValue= {props.row.name} name="name" className='mr-8 w-80' style={{backgroundColor: isNameValid ? 'transparent' : '#F3909C'}} label="Nombre del Proyecto" InputLabelProps={{ shrink: true}} variant="outlined" onChange={handleChangeText} />
+                        <TextField  type="date" name="startDate" defaultValue = {startDate} className='mr-8 w-80' style={{backgroundColor: isStartDateValid ? 'transparent' : '#F3909C'}}  label="Fecha de inicio" InputLabelProps={{ shrink: true}} variant="outlined" onChange={handleChangeDate} 
                         />
                     </div>
                     <div className='flex mb-6 flex-row'>
-                        <TextField select required name="state" value={projectState} id="outlined-basic" className='mr-8 w-80' style={{backgroundColor: isProjectStateValid ? 'transparent' : '#F3909C'}} label="Estado del proyecto" variant="outlined" onChange={handleProjectStateSelection}>
+                        <TextField select  name="state" value={projectState} id="outlined-basic" className='mr-8 w-80' style={{backgroundColor: isProjectStateValid ? 'transparent' : '#F3909C'}} label="Estado del proyecto" variant="outlined" onChange={handleProjectStateSelection}>
                             {states.map((option) => (
                                 <MenuItem key={option.value} value={option.value}>
                                 {option.label}
                                 </MenuItem>
                             ))}
                         </TextField>
-                        <TextField required type="date" name="endDate" defaultValue= {endDate} className='mr-8 w-80' style={{backgroundColor: isEndDateValid ? 'transparent' : '#F3909C'}} label="Fecha de finalizacion" InputLabelProps={{ shrink: true}} variant="outlined" onChange={handleChangeDate} 
+                        <TextField  type="date" name="endDate" defaultValue= {endDate} className='mr-8 w-80' style={{backgroundColor: isEndDateValid ? 'transparent' : '#F3909C'}} label="Fecha de finalizacion" InputLabelProps={{ shrink: true}} variant="outlined" onChange={handleChangeDate} 
                             InputProps={{
                                 startAdornment: (
                                 <InputAdornment position="start">

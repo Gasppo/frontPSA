@@ -149,6 +149,7 @@ const Proyectos = (props: ProyectosProps) => {
                                     <TableCell align="left">Fecha de Fin</TableCell>
                                     <TableCell align="left">Riesgo</TableCell>
                                     <TableCell align="left"></TableCell>
+                                    <TableCell align="left" style={{color: '#5C7067' }}></TableCell>
                                 </TableRow>
                             </TableHead>
                             <TableBody>

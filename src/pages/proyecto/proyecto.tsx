@@ -247,7 +247,7 @@ const Proyecto = () => {
             </div>
             <div style={{display: 'flex', flexDirection: 'row', marginLeft: 100}}> 
                 <div style={{display: 'flex', flexDirection: 'column', marginTop: -10, width:'90vh'}}>
-                    <div style={{padding: 5, width: 90, height: 30, display: 'flex', flexDirection: 'row', backgroundColor: stateTagColor, borderRadius: 5}}><Typography variant='body2' style= {{color: '#F4F6F5', fontWeight: 'bold'}}>{project.state.toUpperCase()}</Typography></div>
+                    <div style={{padding: 5, width: 110, height: 30, display: 'flex', flexDirection: 'row', backgroundColor: stateTagColor, borderRadius: 5}}><Typography variant='body2' style= {{color: '#F4F6F5', fontWeight: 'bold'}}>{project.state.toUpperCase()}</Typography></div>
                     <div style={{alignSelf:'left', marginTop: 25}}>
                         <Typography variant='body2' className='w-[27vh]' style={{fontWeight: 'bold', color: '#5C7067'}}>Descripción: </Typography>
                         <div style= {{ marginTop: 10, backgroundColor: "#E9EDEB", borderRadius: 15, padding: 10, paddingLeft: 30, paddingRight: 30, minHeight:110}}>
@@ -258,7 +258,7 @@ const Proyecto = () => {
                     <Typography variant='body2' className='w-[27vh]' style={{fontWeight: 'bold', color: '#5C7067'}}>Tareas: </Typography>
                         <LoadingIndicator show={isLoading} className={`flex flex-col items-start  transition-all duration-200`} >
                             {!isLoading && (<> 
-                                <TableContainer component={Paper} className="mt-5 ml-100 mr-100" style = {{width: 640, borderColor: "#B0BFB8", borderRadius: 15, borderWidth: '0.5px'}}  >
+                                <TableContainer component={Paper} className="mt-5 ml-100 mr-100" style = {{width: 700, borderColor: "#B0BFB8", borderRadius: 15, borderWidth: '0.5px'}}  >
                                     <Table className='ml-100 mr-100'>
                                         <TableHead >
                                             <TableRow>
@@ -266,6 +266,9 @@ const Proyecto = () => {
                                                 <TableCell align="left" style={{color: '#5C7067' }}>Nombre</TableCell>
                                                 <TableCell align="left" style={{color: '#5C7067' }}>Prioridad</TableCell>
                                                 <TableCell align="left" style={{color: '#5C7067' }}>Esfuerzo Estimado</TableCell>
+                                                <TableCell align="left" style={{color: '#5C7067' }}></TableCell>
+                                                <TableCell align="left" style={{color: '#5C7067' }}></TableCell>
+                                                <TableCell align="left" style={{color: '#5C7067' }}></TableCell>
                                             </TableRow>
                                         </TableHead>
                                         <TableBody>
