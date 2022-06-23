@@ -34,7 +34,6 @@ type Task = {
 }
 
 interface TicketTasksProps {
-    loadedTasks: Task[]
 }
 
 const tableHeaders = [
