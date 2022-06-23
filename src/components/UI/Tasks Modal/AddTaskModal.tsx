@@ -16,7 +16,7 @@ interface AddTicketModalProps {
 }
 
 const AddTaskModal = (props: AddTicketModalProps) => {
-    const { onSubmit, onClose, show, toProject } = props;
+    const { onSubmit, onClose, show, toProject, projectResources } = props;
     const [flag, setFlag] = useState(true);
     const [projectTasks, setProjectTasks] = useState<Task[]>([])
     const [resources, setLoadedResources] = useState<Resource []>([]);
@@ -151,13 +151,12 @@ const AddTaskModal = (props: AddTicketModalProps) => {
                             disablePortal
                             className='mr-8 w-80'
                             id="combo-box-demo"
-                            defaultValue={resources.filter(resource => props.projectResources.includes(resource.legajo))[0]}
-                            options={resources.filter(resource => props.projectResources.includes(resource.legajo))}
-                            getOptionLabel={(option: { Nombre: any; }) => (option.Nombre) ? option.Nombre : ""}
+                            defaultValue={projectResources[0]}
+                            options={projectResources}
                             sx={{ width: 300 }}
                             renderInput={(params: JSX.IntrinsicAttributes & TextFieldProps) => <TextField {...params} name= 'resource' label="Recurso" variant="outlined" color='primary' required/>}
                             onChange={(event: any, newValue: any) => {
-                                setNewTask(({ ...newTask, resource: newValue.legajo }))
+                                setNewTask(({ ...newTask, resource: newValue }))
                             }}
                     />
                     <ValidatingInput required validations={validations} name="effort" className='mr-8 w-80' label="Esfuerzo Estimado" value={newTask?.effort} onChange={handleChangeInt} />

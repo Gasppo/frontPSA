@@ -16,7 +16,6 @@ interface EditTaskModalProps {
 
 const EditTaskModal = (props: EditTaskModalProps) => {
     const { onSubmit, onClose, show, currentTask, projectResources} = props;
-    const [resources, setLoadedResources] = useState<Resource []>([]);
 
     const [newTask, setNewTask] = useState({
         code: props.currentTask.code,
@@ -30,20 +29,6 @@ const EditTaskModal = (props: EditTaskModalProps) => {
     
     const [runValidations, setRunValidations] = useState(false)
 
-    const getResources = () => {
-        fetch('https://modulo-recursos-psa.herokuapp.com/employees',{
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        })
-            .then((response) => {
-                return response.json()})
-            .then((myJson) => {
-                setLoadedResources(Object.values(JSON.parse(JSON.stringify(myJson))));
-            })
-            .catch(err => console.log(err))
-    };
     const invalidFields = (!newTask?.name || newTask.resource==0 );
  
     const prioridades = [{ id: 1, valor: "Baja" }, { id: 2, valor: "Media" }, { id: 3, valor: "Alta" }, { id: 4, valor: "Critica" }];
@@ -80,7 +65,6 @@ const EditTaskModal = (props: EditTaskModalProps) => {
 
     useEffect(() => {
         setRunValidations(false)
-        getResources();
     }, []);
 
     const isEmpty = (value: any) => !value ? "Este campo no puede estar vacio" : ""
@@ -137,13 +121,12 @@ const EditTaskModal = (props: EditTaskModalProps) => {
                             disablePortal
                             className='mr-8 w-80'
                             id="combo-box-demo"
-                            defaultValue={resources.filter(resource => props.projectResources.includes(resource.legajo))[0]}
-                            options={resources.filter(resource => props.projectResources.includes(resource.legajo))}
-                            getOptionLabel={(option: { Nombre: any; }) => (option.Nombre) ? option.Nombre : ""}
+                            defaultValue={newTask.resource}
+                            options={projectResources}
                             sx={{ width: 300 }}
                             renderInput={(params: JSX.IntrinsicAttributes & TextFieldProps) => <TextField {...params} name= 'resource' label="Modifique el responsable" variant="outlined" color='primary' />}
                             onChange={(event: any, newValue: any) => {
-                                setNewTask(({ ...newTask, resource: newValue.legajo }))
+                                setNewTask(({ ...newTask, resource: newValue }))
                             }}
                     />
                     <ValidatingInput  validations={validations} name="effort" className='mr-8 w-80' label="Modifique el Esfuerzo Estimado" value={newTask?.effort} onChange={handleChangeInt} />
