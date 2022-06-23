@@ -4,7 +4,7 @@ import LoadingIndicator from '../../components/Loading/LoadingIndicator'
 import PageTitle from '../../components/UI/Dashboard/PageTitle'
 //import AddHourModal from '../../components/UI/Horas/AddHourModal'
 import { useEffect, useState } from 'react'
-import { Hours } from '../../components/types/resourcesTypes'
+import { Hours, Proyect } from '../../components/types/resourcesTypes'
 import HoursTableRow from '../../components/UI/Horas/HoursTableRow'
 interface RecursosProps {
 
@@ -13,11 +13,26 @@ interface RecursosProps {
 
 const Recursos = (props: RecursosProps) => {
 
-    const [isLoading, setLoading] = useState<boolean>(false)
+    const [isLoading, setLoading] = useState<boolean>(true)
+    const [proyects, setProyects] = useState<Proyect[]>([])
     const [horas, setHoras] = useState<Hours[]>([])
     const [rowsPerPage, setRowsPerPage] = useState(9)
     const [page, setPage] = useState(0)
+    const [initialDay, setInitialDay] = useState("")
+    const [endDay, setEndDay] = useState("")
 
+    const fetchProyects = () => {
+            fetch('https://modulo-proyectos-psa-2022.herokuapp.com/projects/')
+            .then(res => res.json())
+            .then(res => {
+                setProyects(res)
+                console.log(proyects)
+            })
+    }
+
+    const getProyectID = (id:number) => {
+        return proyects.find((item) => item.code === id)
+    }
 
     const fetchHours = () => {
         // monday =date of this weeks monday at 23:59:59
@@ -30,8 +45,9 @@ const Recursos = (props: RecursosProps) => {
         const mondayDate = monday.toISOString().slice(0, 10)
         const fridayDate = friday.toISOString().slice(0, 10)
 
-        console.log('Monday is ', mondayDate)
-        console.log('Friday is ', fridayDate)
+        setInitialDay(mondayDate)
+        setEndDay(fridayDate)
+
         let body = JSON.stringify({
             startDate:mondayDate,
             finalDate: fridayDate,
@@ -47,8 +63,13 @@ const Recursos = (props: RecursosProps) => {
         .then(res => {
 
             //let horasId = res.filter((element:Hours) => {return element.hourAssignee==4})
-            let horasAgrupadasPorTask:{[id: string]:Hours[]} = {}
-            res.forEach((item:Hours) => {
+            let horasAgrupadasPorTask:{[id: string]:any[]} = {}
+            
+            res.forEach((item:any) => {
+                let hora = {
+                    ...item,
+                    proyectName: typeof getProyectID(item.code)?.name === "undefined" ? "null" : getProyectID(item.code)?.name
+                }
                if(!Object.keys(horasAgrupadasPorTask).includes(item.task.code.toString())){
                     horasAgrupadasPorTask[item.task.code]=[item] 
                 }else{
@@ -78,13 +99,14 @@ const Recursos = (props: RecursosProps) => {
 
             })
 
-            console.log(horas);
+
             setHoras(horas);
+            setLoading(false)
 
 
         })
         .catch(err => {
-            console.log(JSON.stringify(err))
+            console.log("Error")
         })
         
 
@@ -99,6 +121,7 @@ const Recursos = (props: RecursosProps) => {
     };
 
     useEffect(() => {
+        fetchProyects()
         fetchHours()
     }, []);
 
@@ -113,7 +136,6 @@ const Recursos = (props: RecursosProps) => {
                 </Link>
                 </div>
             </PageTitle>
-            <Typography variant='h5' className={'mb-10'}>Recursos</Typography>
             <LoadingIndicator show={isLoading} className={`flex flex-col items-start  transition-all duration-200`} >
 
                 <div className="self-end mr-10 border-2 text-center  rounded-xl shadow-lg text-slate-800 hover:bg-gray-200 hover:text-teal-600 transition-all duration-300 cursor-pointer">
@@ -122,9 +144,9 @@ const Recursos = (props: RecursosProps) => {
                     </Link>
                 </div>
                     
-                
+                <Typography variant='h5' className={'mb-0'}>{"Horas de la semana " + initialDay + " - " + endDay}</Typography>
 
-                <TableContainer component={Paper} className="mt-10"  >
+                <TableContainer component={Paper} className="mt-5"  >
                     <Table>
                         <TableHead>
                             <TableRow>

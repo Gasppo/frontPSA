@@ -49,35 +49,6 @@ const AddHoras = (props: AddHorasProps) => {
             })
     }
 
-/*    const fetchTasks = () => {
-        fetch('https://modulo-proyectos-psa-2022.herokuapp.com/projects')
-            .then(res => res.json())
-            .then(res => {
-                setTasks([])
-                let proyectsId: any[] = []
-                selected.forEach(item => proyectsId.push(item.value))
-                let selectedProyects = res.filter((item: Proyect) => proyectsId.includes(item.code))
-                let tasks: Task[] = []
-                selectedProyects.forEach((element: Proyect) => {
-                    element.tasks.forEach((item: Task) => {
-                        let proyectTask = {
-                            ...item,
-                            proyectName: element.name,
-                            proyectCode: element.code,
-                        }
-                        tasks.push(proyectTask)
-                    });
-                    setTasks(tasks)
-                });
-
-
-            })
-            .catch(err => {
-                console.log(JSON.stringify(err))
-            })
-
-    }*/
-
     const fetchAllTasks = () => {
         fetch('https://modulo-proyectos-psa-2022.herokuapp.com/tasks/')
         .then(res => res.json())
@@ -89,6 +60,7 @@ const AddHoras = (props: AddHorasProps) => {
     const fetchTasks = (selected:any) => {
         let tasksSelected:any[] = []
         selected.forEach((item:any) => {
+            setLoading(true)
             let selectedTasks = allTasks.filter((element)=> element.projectCode === item.value)
             selectedTasks.forEach((element)=>{
                 let taskSelected = {
@@ -105,6 +77,7 @@ const AddHoras = (props: AddHorasProps) => {
                 }
                 tasksSelected.push(taskSelected)
             })
+            setLoading(false)
             
         })
 
