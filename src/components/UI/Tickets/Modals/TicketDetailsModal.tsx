@@ -29,7 +29,7 @@ const TicketDetailsModal = (props: TicketDetailsModalProps) => {
     const cliente = resources.find(el => el.id === currTicket?.authorId)
 
     return (
-        <CenteredModal isLoading={false} onClose={onClose} show={show} onSubmit={() => { console.log('hi') }} label={`Ticket #${currTicket?.id}`} hideButtons itemPosition='items-start' minHeight='min-h-[70vh]'>
+        <CenteredModal closeButton isLoading={false} onClose={onClose} show={show} onSubmit={() => { console.log('hi') }} label={`Ticket #${currTicket?.id}`} hideButtons itemPosition='items-start' minHeight='min-h-[70vh]'>
             <Box sx={{ borderBottom: 1, borderColor: 'divider', width: '95%', marginBottom: 6 }}>
                 <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
                     <Tab label="Detalles" />
