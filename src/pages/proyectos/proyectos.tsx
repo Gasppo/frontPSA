@@ -1,4 +1,4 @@
-import { Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material'
+import { Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material'
 import { useEffect, useState} from 'react'
 import FilterAltIcon from '@mui/icons-material/FilterAlt';
 import { Link } from 'react-router-dom'
@@ -26,7 +26,6 @@ const Proyectos = (props: ProyectosProps) => {
     const [filteredProjects, setFilteredProjects] = useState<Project[]>([])
     const [isLoading, setLoading] = useState<boolean>(false)
     const [showProjectModal, setshowProjectModal] = useState(false)
-    const [showResourcesModal, setshowResourcesModal] = useState(false)
     const [showFiltersModal, setshowFiltersModal] = useState(false)
     const [newProject, setProject] = useState({
         name: "",
@@ -54,7 +53,6 @@ const Proyectos = (props: ProyectosProps) => {
     };
 
     const handleFiltersSubmit = () => {
-        //aplicar los filtros
         setshowFiltersModal(false);
     };
 
@@ -68,15 +66,6 @@ const Proyectos = (props: ProyectosProps) => {
 
     const handleFiltersModalOpen = () =>{
         setshowFiltersModal(true);
-    };
-
-    const handleModalAddResourcesClose = () => {
-        setshowResourcesModal(false);
-    };
-
-    const handleAddResourcesSubmit = () => {
-        //asociar los recursos
-        setshowResourcesModal(false);
     };
 
     const handleAddProjectClose = () => {
@@ -134,8 +123,6 @@ const Proyectos = (props: ProyectosProps) => {
             <LoadingIndicator show={isLoading} className={`flex flex-col items-start  transition-all duration-200`} >
                 {!isLoading && (<> 
                     <AddProjectModal onSubmit={handleAddProjectSubmit} onClose={handleAddProjectClose} show={showProjectModal}  />
-                    {/* <AddResourcesModal onSubmit={handleAddResourcesSubmit} onClose={handleModalAddResourcesClose} show={showResourcesModal} project={newProject}/>  */}
-
                     <TableContainer component={Paper} className="mt-10"  >
                         <Table>
                             <TableHead>

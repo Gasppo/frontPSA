@@ -45,10 +45,6 @@ const  TaskTableRow = (props:  TaskTableRowProps) => {
         setShowConfirmationModal(true);
     }
 
-    const handleModalOpen = () => {
-        setshowProjectModal(true)
-    };
-
     const determineStateTagColor = () => {
         if(row.isCompleted == 0 ){
             setStateTagColor(state => ('#F9A620'));
@@ -78,11 +74,6 @@ const  TaskTableRow = (props:  TaskTableRowProps) => {
         removeTask();
         props.refresh();
     };
-    
-    /*const navigateToAPoject = () => {
-        navigate('/project');
- 
-      };*/
 
     const determinePriorityValue = () => {
         if(row.priority == 1 ){
@@ -101,8 +92,6 @@ const  TaskTableRow = (props:  TaskTableRowProps) => {
     };
     
     const handleEditTaskSubmit = () =>{
-        //updateDelaTarea
-
         setIsOpenEditTaskModal(false);
         props.refresh()
     };

@@ -1,13 +1,9 @@
-import { Modal, TextField, Typography, MenuItem, InputAdornment } from '@mui/material';
-import { border } from '@mui/system';
+import { Modal, TextField, Typography, } from '@mui/material';
 import { useEffect, useState } from 'react'
 import{Resource} from '../../components/types/resourceType'
 import {Project} from '../../components/types/projectTypes'
-import AccountCircle from '@mui/icons-material/AccountCircle';
 import DeleteIcon from '@mui/icons-material/DeleteForeverOutlined'
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import { render } from "react-dom";
-import * as React from 'react';
 import Autocomplete from '@mui/material/Autocomplete';
 //import * as Collections from 'typescript-collections';
 
@@ -54,10 +50,6 @@ const AddProjectModal = (props: AddProjectModalProps) => {
         const res = await updateProjectUsingAPI();
         onSubmit();
         props.onRefresh();
-        /*const response = await addResourcesToProjectUsingAPI()
-        if (response.status === 200) {
-            onSubmit()
-        }*/
 
     }
 
@@ -86,7 +78,6 @@ const AddProjectModal = (props: AddProjectModalProps) => {
                 <Typography variant='h5'>Asigne recursos que desee al proyecto #{project.code}</Typography>
                 <div style= {{padding: '5vh'}} className='flex flex-col items-center'>
                     <div className='flex mb-6 flex-row'>
-                        {/* <TextField id="outlined-basic" name="resources" className='mr-8 w-80' label="Busque un recurso por legajo" InputLabelProps={{ shrink: true}} variant="outlined" onChange={handleChangeText} /> */}
                         <Autocomplete
                             disablePortal
                             id="combo-box-demo"
@@ -96,19 +87,16 @@ const AddProjectModal = (props: AddProjectModalProps) => {
                             renderInput={(params) => <TextField {...params} label="Recurso" />}
                             onChange={(event: any, newValue: any) => {
                                 if (newProject.resources.includes(newValue.legajo) === false) {
-                                //setResourcesNumbers([...resourcesNumbers, newValue.legajo]);
                                 setNewProject({
                                     resources: [...newProject.resources, newValue.legajo]
                                 })
                                 sleep(100)
-                                //setSelectedResources(prevSelection => [...prevSelection,newValue]);
                             }}}
                         />
                        <div className='mr-8 w-80'></div>
                     </div>
                     <div style = {{alignSelf: 'left', width: 700, marginLeft:'5vh'}}>
-                                    {/* {(selectedResources).map( (resource) =>  <div key={resource.legajo} style={{display: 'flex', flexDirection: 'row', margin: 5, padding: 5, width: 180, height: 30, backgroundColor: "#E9EDEB", borderRadius: 5}}><AccountCircleIcon className= 'mr-1 h-5' style={{color: '#5C7067'}}/><Typography variant='caption' className='slate' >{resource.legajo} - {resource.Nombre} {resource.Apellido}</Typography></div>)} */}
-                                    {(newProject.resources).map( (resource) =>  <div key={resource} style={{display: 'flex', flexDirection: 'row', margin: 5, padding: 5, width: 180, height: 33, backgroundColor: "#E9EDEB", borderRadius: 5}}><AccountCircleIcon className= 'mr-1 h-5' style={{color: '#5C7067'}}/><Typography variant='caption' className='slate' >{resource}</Typography>                    
+                                 {(newProject.resources).map( (resource) =>  <div key={resource} style={{display: 'flex', flexDirection: 'row', margin: 5, padding: 5, width: 180, height: 33, backgroundColor: "#E9EDEB", borderRadius: 5}}><AccountCircleIcon className= 'mr-1 h-5' style={{color: '#5C7067'}}/><Typography variant='caption' className='slate' >{resource}</Typography>                    
                                     <div style = {{alignSelf: 'right', marginLeft:'12vh', marginBottom:'1vh'}} className='hover:text-teal-600 text-slate-600 cursor-pointer' onClick={() => handleResourceRemoval(resource)}>
                         <DeleteIcon/>
                     </div></div>)}
@@ -125,4 +113,3 @@ const AddProjectModal = (props: AddProjectModalProps) => {
 }
 
 export default AddProjectModal
-/*onChangeText={(text) => this.setState({description:text})} */

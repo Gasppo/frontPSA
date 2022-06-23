@@ -1,13 +1,7 @@
-import { useEffect, useMemo, useState } from 'react'
-import { Modal, TextField, Typography, MenuItem, InputAdornment, TextFieldProps, StyledEngineProvider } from '@mui/material';
-import{Client} from '../../components/types/clientTypes'
-import AccountCircle from '@mui/icons-material/AccountCircle';
+import { useEffect, useState } from 'react'
+import { Modal, TextField, Typography, TextFieldProps} from '@mui/material';
 import ValidatingInput from '../../components/UI/Inputs/ValidatingInput';
-import ValidatingInputDates from '../../components/UI/Inputs/ValidatingInputDates';
 import SelectBox from '../../components/UI/Inputs/SelectBox'
-import CenteredModal from '../../components/UI/Modal/CenteredModal'
-import { VoicemailRounded } from '@mui/icons-material';
-import { isPrivateIdentifier } from 'typescript';
 import {Project} from '../../components/types/projectTypes'
 import{Resource} from '../../components/types/resourceType';
 import {Task} from '../../components/types/taskType';
@@ -37,7 +31,6 @@ const AddTaskModal = (props: AddTicketModalProps) => {
     })
     const [runValidations, setRunValidations] = useState(false)
 
-
     const invalidFields = (!newTask?.name || newTask.resource==0 );
     const prioridades = [{ id: 1, valor: "Baja" }, { id: 2, valor: "Media" }, { id: 3, valor: "Alta" }, { id: 4, valor: "Critica" }];
 
@@ -63,7 +56,6 @@ const AddTaskModal = (props: AddTicketModalProps) => {
         .then((response) => {
             return response.json()})
         .then((myJson) => {
-            //console.log(JSON.parse(JSON.stringify(myJson)));
             setProjectTasks(JSON.parse(JSON.stringify(myJson)));
         })
         .catch(err => console.log(err))
@@ -81,7 +73,6 @@ const AddTaskModal = (props: AddTicketModalProps) => {
             },
             body: JSON.stringify({tasks : projectTasks})
         })
-        console.log("proyecto actualizado")
         console.log(response);
         return response
     }
@@ -90,11 +81,9 @@ const AddTaskModal = (props: AddTicketModalProps) => {
         setNewTask(({ ...newTask, [e.target.name]: e.target.value }))
     };
 
-
     const handleChangeInt = (e: any) => {
         setNewTask(({ ...newTask, [e.target.name]: Number(e.target.value) }))
     };
-
 
     const handleSubmit = async () => {
         if (invalidFields) {
@@ -127,7 +116,6 @@ const AddTaskModal = (props: AddTicketModalProps) => {
                 return response.json()})
             .then((myJson) => {
                 setLoadedResources(Object.values(JSON.parse(JSON.stringify(myJson))));
-                //setOptions( resources.map( resource => {resource.legajo }));
 
             })
             .catch(err => console.log(err))
@@ -157,7 +145,6 @@ const AddTaskModal = (props: AddTicketModalProps) => {
     const validations = runValidations ? [isEmpty] : []
 
     const isEmptyResource = (value: any) => !value ? "Debe seleccionar un recurso para la tarea" : ""
-    const validationsResources = runValidations ? [isEmptyResource] : []
 
     return (
         <Modal onClose={onClose} open={show} >

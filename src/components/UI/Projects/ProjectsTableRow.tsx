@@ -8,8 +8,6 @@ import { Link, useNavigate } from 'react-router-dom';
 import EditIcon from '@mui/icons-material/Edit';
 import EditProjectModal from './editProjectModal'
 import ConfirmModal from './confirmationModal'
-import CircleIcon from '@mui/icons-material/Circle';
-import LoadingIndicator from '../../../components/Loading/LoadingIndicator';
 
 interface  ProjectTableRowProps {
     row: Project,
@@ -53,11 +51,6 @@ const  ProjectTableRow = (props:  ProjectTableRowProps) => {
     const openConfirmationDeleteModal = () =>{
         setShowConfirmationModal(true);
     }
-
-    /*const navigateToAPoject = () => {
-        navigate('/project');
- 
-      };*/
 
     const [riskImpact, setRiskImpact] = useState('');
     const [riskColor, setRiskColor] = useState('#9297A0');

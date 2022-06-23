@@ -1,5 +1,5 @@
-import { Modal, TextField, Typography, MenuItem, InputAdornment } from '@mui/material';
-import { useEffect, useState } from 'react';
+import { Modal, Typography } from '@mui/material';
+import { useState } from 'react';
 
 
 interface ConfirmModalProps {
@@ -11,7 +11,6 @@ interface ConfirmModalProps {
 
 const ConfirmModal = (props: ConfirmModalProps) => {
     const { onSubmit, onClose, show, txt} = props;
-    const [isLoading, setLoading] = useState<boolean>(false)
    
 
     return (

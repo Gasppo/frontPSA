@@ -1,7 +1,6 @@
 import { Modal, TextField, Typography, MenuItem, InputAdornment } from '@mui/material';
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import{Client} from '../../../components/types/clientTypes'
-import AccountCircle from '@mui/icons-material/AccountCircle';
 import { Project } from '../../types/projectTypes'
 import ConfirmModal from './confirmationModal'  
 
@@ -28,7 +27,6 @@ const EditProjectModal = (props: EditProjectModalProps) => {
     const endDate = yearE +'-'+monthE+'-'+dayE;
     const [showCofirmationModal, setShowConfirmationModal] = useState(false);
     const { onClose, show ,onRefresh} = props;
-    const [showProductModal, setShowProductModal] = useState(false);
     const [isFormValid, setFormValidation] = useState(false);
     const [isNameValid, setNameValidation] = useState(true);
     const [isStartDateValid, setStartDateValidation] = useState(true);
@@ -36,10 +34,8 @@ const EditProjectModal = (props: EditProjectModalProps) => {
 
     const [isProjectStateValid, setProjectStateValidation] = useState(true);
     const [isEndDateValid, setEndDateValidation] = useState(true);
-    const [isLoading, setLoading] = useState<boolean>(false)
     const [loadedClients, setLoadedClients] = useState<Client[]>([])
     const date = new Date();
-    const month = date.getMonth()+1
     const [newProject, setNewProject] = useState({
         name: props.row.name,
         updatedDate: currentDate,
@@ -106,7 +102,7 @@ const EditProjectModal = (props: EditProjectModalProps) => {
     }
     
     const validateProjectEndDate = () =>{
-        //if(regexddmmyyyy.test(newProject.endDate)){
+
         if(newProject.endDate!="dd/mm/yyyy" && newProject.endDate >= currentDate && newProject.endDate > newProject.startDate){
             setEndDateValidation(true)
         }
@@ -129,10 +125,6 @@ const EditProjectModal = (props: EditProjectModalProps) => {
     const handleSubmit = async () => {
         //Falta hacer la validacion, si la hago aca no lleg a cargarse a tiempo
         //validateProjectValues();
-        /*if(isFormValid){
-            console.log("valid");
-            submit();
-        }*/
         submit();
     };
 

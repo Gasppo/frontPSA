@@ -1,16 +1,10 @@
-import { Modal, TextField, Typography, MenuItem, InputAdornment } from '@mui/material';
+import { Modal, TextField, Typography } from '@mui/material';
 import React from 'react';
 import { useEffect, useState } from 'react';
-import{Client} from '../../components/types/clientTypes'
-import AccountCircle from '@mui/icons-material/AccountCircle';
-import {Project} from '../../components/types/projectTypes'
 import ValidatingInput from '../../components/UI/Inputs/ValidatingInput';
 import ValidatingInputDates from '../../components/UI/Inputs/ValidatingInputDates';
 import SelectBox from '../../components/UI/Inputs/SelectBox';
 import Autocomplete from '@mui/material/Autocomplete';
-import CenteredModal from '../../components/UI/Modal/CenteredModal'
-import { VoicemailRounded } from '@mui/icons-material';
-import { isPrivateIdentifier } from 'typescript';
 import{Resource} from '../../components/types/resourceType';
 
 interface AddTicketModalProps {
@@ -51,7 +45,6 @@ const AddProjectModal = (props: AddTicketModalProps) => {
         client: 1,
         productId: 0,
         description: " ",
-
         //iteration: 1,
         //fase: 1,
     })
@@ -66,11 +59,6 @@ const AddProjectModal = (props: AddTicketModalProps) => {
     };
 
     const isADevelopProjectAndHasNOTAProductAssign = (newProject.type == "Desarrollo") && newProject.productId == 0;
-
-    const handleChangeInt = (e: any) => {
-        setNewProject(({ ...newProject, [e.target.name]: Number(e.target.value) }))
-    };
-
 
     const handleClientTypeSelection = (event: React.ChangeEvent<HTMLInputElement>) => {
         setClientType(event.target.value);
@@ -145,7 +133,6 @@ const AddProjectModal = (props: AddTicketModalProps) => {
                 setClients(Object.values(JSON.parse(JSON.stringify(myJson))));
             })
             .catch(err => console.log(err))
-            //sleep(3000).then(res => setLoading(false));
     }
 
     const getResources = () => {
@@ -159,9 +146,7 @@ const AddProjectModal = (props: AddTicketModalProps) => {
             .then((response) => {
                 return response.json()})
             .then((myJson) => {
-                //console.log(myJson);
                 setLoadedResources(Object.values(JSON.parse(JSON.stringify(myJson))));
-                //setOptions( resources.map( resource => {resource.legajo }));
             })
             .catch(err => console.log(err))
             //sleep(3000).then(res => setLoading(false));
@@ -193,7 +178,6 @@ const AddProjectModal = (props: AddTicketModalProps) => {
         getProducts();
         getResources();
     }, []);
-    // }, [clients, products]);
 
 
     const generateProjectUsingAPI = async () => {
@@ -212,7 +196,6 @@ const AddProjectModal = (props: AddTicketModalProps) => {
     }
 
     const invalidFields = (!newProject?.name || newProject.startDate== "dd/mm/yyyy" || newProject.endDate < newProject.startDate  || newProject.endDate == "dd/mm/yyyy" || !clientType || newProject.client==0 || !newProject?.type )
-    const disabled = runValidations && invalidFields
 
     const isEmpty = (value: any) => !value ? "Este campo no puede estar vacio" : ""
     const validations = runValidations ? [isEmpty] : []
