@@ -2,7 +2,7 @@ import { Box, Tab, Tabs } from '@mui/material'
 import { useState } from 'react'
 import { Ticket, TicketProduct } from '../../../types/ticketTypes'
 import CenteredModal from '../../Modal/CenteredModal'
-import TicketTasks from '../Task/TicketTasks'
+import TicketTasks from '../Task/Table/TicketTasks'
 import TicketDetails from './TicketDetails'
 
 interface TicketDetailsModalProps {
@@ -37,7 +37,7 @@ const TicketDetailsModal = (props: TicketDetailsModalProps) => {
                 </Tabs>
             </Box>
             {value === 0 && <TicketDetails cliente={cliente} producto={producto} ticket={currTicket} />}
-            {value === 1 && <TicketTasks  /> }
+            {value === 1 && <TicketTasks ticket={currTicket} /> }
         </CenteredModal >
     )
 }
