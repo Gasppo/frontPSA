@@ -62,6 +62,7 @@ const  TaskTableRow = (props:  TaskTableRowProps) => {
     
             },
         })
+        window.location.reload();
         return response;   
     }
 
