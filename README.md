@@ -21,7 +21,6 @@ Para arrancar a instalar las dependencias del proyecto
 
 Una vez finalizado el install, con yarn start / npm start podrán levantar el ambiente local
 
-
 ## Recomendaciones para commits en este repositorio
 
 - Se recomienda que cada squad genere su propia branch en base a master, y la utilice como master para trabajar en sus cambios
