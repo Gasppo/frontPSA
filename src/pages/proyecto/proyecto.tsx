@@ -67,29 +67,10 @@ const Proyecto = () => {
             sleep(3000).then(res => setLoading(false));
     }
 
-    /*const gatherTasks = () => {
-        //setLoading(true)
-        fetch('http://localhost:2000/tasks',{
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        })
-            .then((response) => {
-                return response.json()})
-            .then((myJson) => {
-               // console.log(myJson);
-                setLoadedTasks(JSON.parse(JSON.stringify(myJson)));
-
-            })
-            .catch(err => console.log(err))
-            sleep(3000).then(res => setLoading(false));
-            //console.log(loadedTasks);
-    }*/
 
     const handleAddResourcesSubmit = () => {
-        //asociar los recursos
         setshowResourcesModal(false);
+        console.log(showResourcesModal);
     };
     
     const handleModalAddResourcesClose = () => {
@@ -99,18 +80,6 @@ const Proyecto = () => {
     const handleOpenModalAddResources = () =>{
         setshowResourcesModal(true);
     };
-
-    /*const updateProjectUsingAPI = async () => {
-        const response = await fetch(`http://localhost:2000/projects/${projectData.code}`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-
-            },
-            body: JSON.stringify(newProject)
-        })
-        return response
-    }*/
 
     const determineRisk = () => {
         if(project.risk?.impact == 1){
