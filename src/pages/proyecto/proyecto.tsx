@@ -7,15 +7,15 @@ import { Circle } from '@mui/icons-material';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import TaskTableRow from '../../components/UI/Projects/TaskTableRow';
+import TaskTableRow from '../../components/UI/Table Rows/TaskTableRow';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import {useNavigate} from 'react-router-dom';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import Popup from 'reactjs-popup';
-import AddTaskModal from './AddTaskModal';
-import EditProjectModal from '../../components/UI/Projects/editProjectModal';
+import AddTaskModal from '../../components/UI/Tasks Modal/AddTaskModal';
+import EditProjectModal from '../../components/UI/Projects Modal/editProjectModal';
 import { Task } from '../../components/types/taskType'
-import AddResourcesModal from '../proyectos/AddResourcesModal'
+import AddResourcesModal from '../../components/UI/Projects Modal/AddResourcesModal'
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 
 interface ProyectProps {
@@ -154,7 +154,6 @@ const Proyecto = () => {
             setProjectTasks(JSON.parse(JSON.stringify(myJson)));
         })
         .catch(err => console.log(err))
-        //sleep(3000).then(res => setLoading(false));
     }
 
     const updatePage = () => {

@@ -1,11 +1,11 @@
 import { Modal, TextField, Typography } from '@mui/material';
 import React from 'react';
 import { useEffect, useState } from 'react';
-import ValidatingInput from '../../components/UI/Inputs/ValidatingInput';
-import ValidatingInputDates from '../../components/UI/Inputs/ValidatingInputDates';
-import SelectBox from '../../components/UI/Inputs/SelectBox';
+import ValidatingInput from '../Inputs/ValidatingInput';
+import ValidatingInputDates from '../Inputs/ValidatingInputDates';
+import SelectBox from '../Inputs/SelectBox';
 import Autocomplete from '@mui/material/Autocomplete';
-import{Resource} from '../../components/types/resourceType';
+import{Resource} from '../../types/resourceType';
 
 interface AddTicketModalProps {
     onSubmit: (newProject: any) => void
@@ -34,7 +34,6 @@ const AddProjectModal = (props: AddTicketModalProps) => {
     const [products, setProducts] = useState<any[]>([]);
     const [newProject, setNewProject] = useState({
         name: "",
-       // id: 0, //realizar un generador de id
         creationDate: currentDate,
         updatedDate: currentDate,
         startDate: "dd/mm/yyyy",
@@ -45,8 +44,6 @@ const AddProjectModal = (props: AddTicketModalProps) => {
         client: 1,
         productId: 0,
         description: " ",
-        //iteration: 1,
-        //fase: 1,
     })
 
 
@@ -119,7 +116,6 @@ const AddProjectModal = (props: AddTicketModalProps) => {
     };
 
     const getClients = () => {
-        //setLoading(true)
         fetch('https://modulo-soporte-productos-psa.herokuapp.com/client',{
             method: 'GET',
             headers: {
@@ -135,7 +131,6 @@ const AddProjectModal = (props: AddTicketModalProps) => {
     }
 
     const getResources = () => {
-        //setLoading(true)
         fetch('https://modulo-recursos-psa.herokuapp.com/employees',{
             method: 'GET',
             headers: {
@@ -165,7 +160,6 @@ const AddProjectModal = (props: AddTicketModalProps) => {
                 setProducts(Object.values(JSON.parse(JSON.stringify(myJson))));
             })
             .catch(err => console.log(err))
-            //sleep(3000).then(res => setLoading(false));
     }
 
     useEffect(() => {

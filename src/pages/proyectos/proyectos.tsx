@@ -5,9 +5,9 @@ import { Link } from 'react-router-dom'
 import PageTitle from '../../components/UI/Dashboard/PageTitle'
 import LoadingIndicator from '../../components/Loading/LoadingIndicator'
 import {Project} from '../../components/types/projectTypes'
-import ProjectTableRow from '../../components/UI/Projects/ProjectsTableRow'
-import AddProjectModal from '../proyectos/AddProjectModal'
-import FilterProjectsModal from '../proyectos/FilterProjectsModal';
+import ProjectTableRow from '../../components/UI/Table Rows/ProjectsTableRow'
+import AddProjectModal from '../../components/UI/Projects Modal/AddProjectModal'
+import FilterProjectsModal from '../../components/UI/Projects Modal/FilterProjectsModal';
 
 interface ProyectosProps {
     
@@ -29,7 +29,6 @@ const Proyectos = (props: ProyectosProps) => {
     const [showFiltersModal, setshowFiltersModal] = useState(false)
     const [newProject, setProject] = useState({
         name: "",
-       // id: 0, //realizar un generador de id
         creationDate: currentDate,
         updatedDate: currentDate,
         startDate: "dd/mm/yyyy",
@@ -71,14 +70,10 @@ const Proyectos = (props: ProyectosProps) => {
     const handleAddProjectSubmit = (projectCreated : Project) => {
         gatherProjects();
         setshowProjectModal(false);
-        //setshowResourcesModal(true);
         setProject(projectCreated);
-        //window.location.reload();
-    
     };
 
     const gatherProjects = () => {
-            //setLoading(true)
             fetch('https://modulo-proyectos-psa-2022.herokuapp.com/projects',{
                 method: 'GET',
                 headers: {

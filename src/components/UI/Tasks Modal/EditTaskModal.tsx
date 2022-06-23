@@ -1,9 +1,9 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Modal, TextField, Typography, TextFieldProps } from '@mui/material';
-import ValidatingInput from '../../components/UI/Inputs/ValidatingInput';
-import SelectBox from '../../components/UI/Inputs/SelectBox'
-import {Task} from '../../components/types/taskType'
-import{Resource} from '../../components/types/resourceType';
+import ValidatingInput from '../Inputs/ValidatingInput';
+import SelectBox from '../Inputs/SelectBox'
+import {Task} from '../../types/taskType'
+import{Resource} from '../../types/resourceType';
 import Autocomplete from '@mui/material/Autocomplete';
 
 interface EditTaskModalProps {
@@ -16,31 +16,7 @@ interface EditTaskModalProps {
 
 const EditTaskModal = (props: EditTaskModalProps) => {
     const { onSubmit, onClose, show, currentTask, projectResources} = props;
-    const [isLoading, setIsLoading] = useState(false);
-    const [priorityValue, setPriorityValue] = useState("Baja");
-    const [stateValue, setStateValue] = useState("Pendiente");
     const [resources, setLoadedResources] = useState<Resource []>([]);
-    const determinePriorityValue = () => {
-        if(props.currentTask.priority == 1 ){
-            setPriorityValue(state => ('Baja'));
-        }else if (props.currentTask.priority == 2){
-            setPriorityValue(state => ('Media'));
-        }else if (props.currentTask.priority == 3){
-            setPriorityValue(state => ('Alta'));
-        }else if (props.currentTask.priority == 4){
-            setPriorityValue(state => ('Critica'));
-        }
-    }
-
-    const determineStateValue = () => {
-        if(props.currentTask.isCompleted == 0 ){
-            setStateValue(state => ('Pendiente'));
-        }else if (props.currentTask.isCompleted == 1){
-            setStateValue(state => ('En Progreso'));
-        }else{
-            setStateValue(state => ('Completa'));
-        }
-    }
 
     const [newTask, setNewTask] = useState({
         code: props.currentTask.code,
@@ -55,7 +31,6 @@ const EditTaskModal = (props: EditTaskModalProps) => {
     const [runValidations, setRunValidations] = useState(false)
 
     const getResources = () => {
-        //setLoading(true)
         fetch('https://modulo-recursos-psa.herokuapp.com/employees',{
             method: 'GET',
             headers: {
@@ -66,10 +41,8 @@ const EditTaskModal = (props: EditTaskModalProps) => {
                 return response.json()})
             .then((myJson) => {
                 setLoadedResources(Object.values(JSON.parse(JSON.stringify(myJson))));
-                //setOptions( resources.map( resource => {resource.legajo }));
             })
             .catch(err => console.log(err))
-            //sleep(3000).then(res => setLoading(false));
     };
     const invalidFields = (!newTask?.name || newTask.resource==0 );
  
@@ -88,20 +61,15 @@ const EditTaskModal = (props: EditTaskModalProps) => {
         if (invalidFields) {
             setRunValidations(true);
         }
-        setIsLoading(true);
         updateTaskUsingAPI();
-        setIsLoading(false);
         onSubmit();
-    
     };
 
     const handlePrioridadSelection = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setPriorityValue(event.target.value);
         setNewTask(({ ...newTask, [event.target.name]: event.target.value }))
     };
 
     const handleStateSelection = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setStateValue(event.target.value);
         setNewTask(({ ...newTask, [event.target.name]: event.target.value }))
     };
 
@@ -111,8 +79,6 @@ const EditTaskModal = (props: EditTaskModalProps) => {
     };
 
     useEffect(() => {
-        determinePriorityValue();
-        determineStateValue();
         setRunValidations(false)
         getResources();
     }, []);

@@ -1,10 +1,11 @@
 import { Modal, TextField, Typography, } from '@mui/material';
 import { useEffect, useState } from 'react'
-import{Resource} from '../../components/types/resourceType'
-import {Project} from '../../components/types/projectTypes'
+import{Resource} from '../../types/resourceType'
+import {Project} from '../../types/projectTypes'
 import DeleteIcon from '@mui/icons-material/DeleteForeverOutlined'
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import Autocomplete from '@mui/material/Autocomplete';
+import ErrorModal from '../Modal/errorModal'
 
 interface AddProjectModalProps {
     onClose: () => void
@@ -12,21 +13,22 @@ interface AddProjectModalProps {
     show: boolean
     project: Project
     onRefresh: () => void
+    projectTasks: []
 }
 
 const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
 const AddProjectModal = (props: AddProjectModalProps) => {
-    const { onSubmit, onClose, show, project, onRefresh } = props;
+    const { onSubmit, onClose, show, project, onRefresh, projectTasks} = props;
     const [newProject, setNewProject] = useState({
         resources: project.resources
     });
 
     const [resources, setLoadedResources] = useState<Resource []>([]);
     const [resourcesNumbers,setResourcesNumbers] = useState<number[]>([]);
+    const [isErrorModalOpen, setIsErrorModalOpen] = useState(false);
 
     const getResources = () => {
-        //setLoading(true)
         fetch('https://modulo-recursos-psa.herokuapp.com/employees',{
             method: 'GET',
             headers: {
@@ -66,14 +68,30 @@ const AddProjectModal = (props: AddProjectModalProps) => {
         return response;
     }
 
+    const hasTasksAssign = (resource: any) =>{
+        return (projectTasks.some(element=> {
+            if (element.resource == resource){return true}
+            else {return false}
+        
+        }));
+    }
+
     const handleResourceRemoval = async (resource : number) => {
-        setNewProject({resources: newProject.resources.filter((item:any)=> item!==resource)});
+        if(!hasTasksAssign(resource))
+            setNewProject({resources: newProject.resources.filter((item:any)=> item!==resource)});
+        else
+            setIsErrorModalOpen(true);
+    }
+
+    const closeErrorModal= () =>{
+        setIsErrorModalOpen(false);
     }
 
 
     return (
-        <Modal onClose={onClose} open={show} >
+        <Modal onClose={onClose} open={show} > 
             <div style= {{padding: '10vh', backgroundColor: 'white'}} className='p-15 absolute text-slate-800 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[100vh] h-[60vh] rounded-xl shadow-lg'>
+                <ErrorModal  onClose={closeErrorModal} show={isErrorModalOpen} txt='No puede eliminar un recurso que tiene tareas asignadas, elimine o modifique primero las tareas del mismo' />
                 <Typography variant='h5'>Asigne recursos que desee al proyecto #{project.code}</Typography>
                 <div style= {{padding: '5vh'}} className='flex flex-col items-center'>
                     <div className='flex mb-6 flex-row'>

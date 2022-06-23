@@ -5,8 +5,8 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { Circle } from '@mui/icons-material';
 import { Link, useNavigate } from 'react-router-dom';
 import EditIcon from '@mui/icons-material/Edit';
-import EditProjectModal from './editProjectModal'
-import ConfirmModal from './confirmationModal'
+import EditProjectModal from '../Projects Modal/editProjectModal'
+import ConfirmModal from '../Modal/confirmationModal'
 
 interface  ProjectTableRowProps {
     row: Project,
@@ -50,21 +50,16 @@ const  ProjectTableRow = (props:  ProjectTableRowProps) => {
         setShowConfirmationModal(true);
     }
 
-    const [riskImpact, setRiskImpact] = useState('');
     const [riskColor, setRiskColor] = useState('#9297A0');
 
     useEffect(() => {
         if(row.risk?.impact == 1){
-            setRiskImpact(state => ('Bajo'));
             setRiskColor(state => ('#8CD867'));
         }else if (row.risk?.impact == 2){
-            setRiskImpact(state => ('Medio'));
             setRiskColor(state => ('#FFB20F'));
         }else if (row.risk?.impact == 3){
-            setRiskImpact(state => ('Alto'));
             setRiskColor(state => ('#E71D36'));
         }else if (row.risk?.impact == 4){
-            setRiskImpact(state => ('Critico'));
             setRiskColor(state => ('#481E3A'));
         }
     }, []);
