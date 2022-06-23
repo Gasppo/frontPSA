@@ -43,6 +43,7 @@ const AddTaskModal = (props: AddTicketModalProps) => {
             body: JSON.stringify(newTask)
         })
         console.log(response)
+        window.location.reload();
         return response;
     }
     
@@ -93,7 +94,6 @@ const AddTaskModal = (props: AddTicketModalProps) => {
         generateTaskUsingAPI();
         getTasksByProject();
         updateProject();
-        window.location.reload();
         //setIsLoading(false);
         onSubmit();
     
