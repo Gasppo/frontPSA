@@ -37,8 +37,8 @@ const CargaDeHoras = (props: CargaDeHorasProps,) => {
     const handleSubmit = () => {
         if (total<=8){
         sendHoursToAPI();
-        window.location.href="/recursos/horasSemanales"
         alert("Las horas han sido cargadas con exito")
+        window.location.href="/recursos/horasSemanales"
 
         }else{
             alert("La cantidad total de horas del dia no puede superar las 8 horas")
@@ -74,7 +74,7 @@ const CargaDeHoras = (props: CargaDeHorasProps,) => {
             let body = {
                 duration:tasks[key],
                 hourAssignee: 2,
-                startingDate: "2022-06-16",
+                startingDate: state.date,
                 taskCode: key
             }
             information.push(body)
@@ -84,7 +84,10 @@ const CargaDeHoras = (props: CargaDeHorasProps,) => {
             const request = await fetch("https://modulo-recursos-psa.herokuapp.com/hours", {
             method: 'POST',
             body: JSON.stringify(data),
-            headers: {'Content-Type': 'application/json; charset=UTF-8'} });
+            headers: {'Content-Type': 'application/json; charset=UTF-8'} })
+            .catch(err => {
+                alert("Se ha producido un error y sus horas no han sido cargadas")
+            });
         }
     }
 
