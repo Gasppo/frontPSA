@@ -105,7 +105,6 @@ const CargaDeHoras = (props: CargaDeHorasProps,) => {
     return (
         <>
 
-
             <div className="flex flex-row" >
                 <Link to={'/recursos/horasSemanales/carga/'} >
                     <Button>Volver atras</Button>

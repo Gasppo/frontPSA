@@ -14,9 +14,9 @@ interface ProductsProps {
 const ProductsAndVersions = (props: ProductsProps) => {
 
     const sections = [
-        { title: 'Portal Productos', description: 'Acceso a portal de gestion de productos', Icon: AppsIcon, href: 'products' },
-        { title: 'Portal Licencias', description: 'Acceso a portal de gestion de licencias', Icon: HistoryEduIcon, href: 'licences'},
-        { title: 'Portal Clientes', description: 'Acceso a portal de gestion de clientes', Icon: ContactsIcon, href: 'clients'},
+        { title: 'Portal Productos', description: 'Acceso al portal de gestión de productos', Icon: AppsIcon, href: 'products' },
+        { title: 'Portal Licencias', description: 'Acceso al portal de gestión de licencias', Icon: HistoryEduIcon, href: 'licences'},
+        { title: 'Portal Clientes', description: 'Acceso al portal de gestión de clientes', Icon: ContactsIcon, href: 'clients'},
     ]
 
     return (

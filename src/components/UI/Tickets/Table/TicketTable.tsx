@@ -1,9 +1,9 @@
 import { Paper, Table, TableBody, TableContainer, TableFooter } from '@mui/material'
 import { useState } from 'react'
-import { Data, HeadCell, Order, Ticket, TicketProduct } from '../../types/ticketTypes'
-import EnhancedTableHead from './EnhancedTableHead'
-import TicketTableFooter from './TicketTableFooter'
+import { Data, HeadCell, Order, Ticket, TicketProduct } from '../../../types/ticketTypes'
+import EnhancedTicketTableHead from './EnhancedTicketTableHead'
 import TicketTableRow from './TicketTableRow'
+import DefaultTableFooter from '../../Table/DefaultTableFooter'
 
 
 const tableHeaders = [
@@ -82,7 +82,7 @@ const TicketTable = (props: TicketTableProps) => {
     return (
         <TableContainer component={Paper} className="mt-10"  >
             <Table>
-                <EnhancedTableHead order={order} orderBy={orderBy} onRequestSort={handleRequestSort} headers={tableHeaders} />
+                <EnhancedTicketTableHead order={order} orderBy={orderBy} onRequestSort={handleRequestSort} headers={tableHeaders} />
                 <TableBody>
                     {loadedTickets &&
                         loadedTickets
@@ -101,7 +101,7 @@ const TicketTable = (props: TicketTableProps) => {
                             ))}
                 </TableBody>
                 <TableFooter>
-                    <TicketTableFooter count={loadedTickets.length || 0} onPageChange={handleChangePage} onRowsPerPageChange={handleChangeRowsPerPage} page={page} rowsPerPage={rowsPerPage} />
+                    <DefaultTableFooter colSpan={8} count={loadedTickets.length || 0} onPageChange={handleChangePage} onRowsPerPageChange={handleChangeRowsPerPage} page={page} rowsPerPage={rowsPerPage} />
                 </TableFooter>
             </Table>
         </TableContainer>

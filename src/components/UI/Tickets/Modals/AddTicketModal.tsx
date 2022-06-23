@@ -1,10 +1,10 @@
 import { useEffect, useMemo, useState } from 'react'
-import { createTicket, getClientLicenses, getProductVersions } from '../../api/ticketSupport'
-import { defaultTicketData, prioridades } from '../../dev/dummyData'
-import { Resource, TicketLicense, TicketProduct, TicketProductVersion } from '../../types/ticketTypes'
-import SelectBox from '../Inputs/SelectBox'
-import ValidatingInput from '../Inputs/ValidatingInput'
-import CenteredModal from '../Modal/CenteredModal'
+import { createTicket, getClientLicenses, getProductVersions } from '../../../api/ticketSupport'
+import { defaultTicketData, prioridades } from '../../../dev/dummyData'
+import { Resource, TicketLicense, TicketProduct, TicketProductVersion } from '../../../types/ticketTypes'
+import SelectBox from '../../Inputs/SelectBox'
+import ValidatingInput from '../../Inputs/ValidatingInput'
+import CenteredModal from '../../Modal/CenteredModal'
 
 interface AddTicketModalProps {
     onClose: () => void

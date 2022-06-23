@@ -10,8 +10,8 @@ interface AddVersionModalProps {
     show: boolean
 }
 const versionStates = [
-    {state: 'ACTIVE'},
-    {state: 'DEPRECATED'}
+    {state: 'Activa'},
+    {state: 'Deprecada'}
 ]
 
 const AddProductModal = (props: AddVersionModalProps) => {
@@ -22,11 +22,11 @@ const AddProductModal = (props: AddVersionModalProps) => {
         productName: "",
         versionId:0,
         versionName: "",
-        state: "ACTIVE"
+        state: "Activa"
     }
 
     const validateVersion = () => {
-        const regex = RegExp('^[a-zA-Z0-9. ..]{5,10}$')
+        const regex = RegExp('^[a-zA-Z0-9. ..]{3,10}$')
         return regex.test(input.versionName)
     }
 
@@ -70,7 +70,7 @@ const AddProductModal = (props: AddVersionModalProps) => {
 
     const isInvalidProduct = (value: any) => invalidProduct ? "Debe tener un mínimo de 5 (cinco) caracteres y un máximo de 20 (veinte) y solo puede contener letras, números y espacios" : ""
     const productValidations = invalidProduct ? [isInvalidProduct] : []
-    const isInvalidVersion = (value: any) => invalidVersion ? "Debe tener un mínimo de 5 (cinco) caracteres y un máximo de 10 (diez) y solo puede contener letras, números, espacios y puntos" : ""
+    const isInvalidVersion = (value: any) => invalidVersion ? "Debe tener un mínimo de 3 (tres) caracteres y un máximo de 10 (diez) y solo puede contener letras, números, espacios y puntos" : ""
     const versionValidations = invalidVersion ? [isInvalidVersion] : []
 
     return (
@@ -82,7 +82,7 @@ const AddProductModal = (props: AddVersionModalProps) => {
                 <ValidatingInput required validations={versionValidations} name="versionName" className='mr-8 w-[42rem]' label="Nombre de Versión" value={input?.versionName} onChange={handleChangeText} />
             </div>
             <div className='flex mb-6  flex-row'>
-                <SelectBox name="state" validations={[]} className='mr-8 w-[42rem]' label="Estado" onChange={handleChangeText} valueKey="state" value={input.state} options={versionStates} text="state" />
+                <SelectBox name="state" validations={[]} className='mr-8 w-[42rem]' label="Estado de Versión" onChange={handleChangeText} valueKey="state" value={input.state} options={versionStates} text="state"/>
             </div>
         </CenteredModal>
     )

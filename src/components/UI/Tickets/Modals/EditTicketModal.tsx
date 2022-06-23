@@ -1,12 +1,12 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import useIsDirty from '../../../hooks/useIsDirty'
-import { getClientLicenses, getProductVersions, updateTicket } from '../../api/ticketSupport'
-import { defaultTicketData, prioridades } from '../../dev/dummyData'
-import { ticketSupportURI } from '../../dev/URIs'
-import { Resource, TicketLicense, TicketProduct, TicketProductVersion } from '../../types/ticketTypes'
-import SelectBox from '../Inputs/SelectBox'
-import ValidatingInput from '../Inputs/ValidatingInput'
-import CenteredModal from '../Modal/CenteredModal'
+import useIsDirty from '../../../../hooks/useIsDirty'
+import { getClientLicenses, getProductVersions, updateTicket } from '../../../api/ticketSupport'
+import { defaultTicketData, prioridades } from '../../../dev/dummyData'
+import { ticketSupportURI } from '../../../dev/URIs'
+import { Resource, TicketLicense, TicketProduct, TicketProductVersion } from '../../../types/ticketTypes'
+import SelectBox from '../../Inputs/SelectBox'
+import ValidatingInput from '../../Inputs/ValidatingInput'
+import CenteredModal from '../../Modal/CenteredModal'
 
 interface EditTicketModalProps {
     onClose: () => void
@@ -119,7 +119,7 @@ const EditTicketModal = (props: EditTicketModalProps) => {
     }, [input?.productId])
 
     useEffect(() => {
-       if(input?.productId) gatherProductVersions(input?.productId)
+        if (input?.productId) gatherProductVersions(input?.productId)
     }, [input?.productId])
 
     useEffect(() => {
@@ -160,7 +160,7 @@ const EditTicketModal = (props: EditTicketModalProps) => {
                 <SelectBox disabledText='Primero ingrese un cliente...' required validations={validations} name="productId" className='mr-8 w-80' disabled={disableClientInput} label="Producto" onChange={handleProductChange} valueKey="id" value={input?.productId} options={filteredProducts} text="name" />
                 <SelectBox disabledText='Primero ingrese un producto...' required validations={validations} name="productLicenseId" className='mr-8 w-80' disabled={disableClientInput || input?.productId <= 0} label="Version" onChange={handleChangeInt} valueKey="id" value={input?.productLicenseId} options={filteredVersions} text="productVersion" />
             </div>
-            <ValidatingInput required validations={validations}  className='mb-6 w-[42rem] mr-8' name='description' label="Descripcion" value={input?.description} multiline rows={2} onChange={() => { console.log(input) }} />
+            <ValidatingInput required validations={validations} className='mb-6 w-[42rem] mr-8' name='description' label="Descripcion" value={input?.description} multiline rows={2} onChange={() => { console.log(input) }} />
         </CenteredModal>
     )
 }
