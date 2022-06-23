@@ -12,8 +12,8 @@ const ClientTableRow = (props: ClientTableRowProps) => {
     return (
         <TableRow hover key={row.id}>
             <TableCell align="left">{row.id}</TableCell>
-            <TableCell align="left">{row.razon_social}</TableCell>
-            <TableCell align="left">{row.cuit}</TableCell>
+            <TableCell align="left">{row.razonSocial}</TableCell>
+            <TableCell align="left">{row.CUIT}</TableCell>
         </TableRow>
     )
 }
