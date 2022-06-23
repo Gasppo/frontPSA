@@ -26,6 +26,7 @@ const EditTaskModal = (props: EditTaskModalProps) => {
     const [priorityValue, setPriorityValue] = useState("Baja");
     const [stateValue, setStateValue] = useState("Pendiente");
     const [resources, setLoadedResources] = useState<Resource []>([]);
+    
     const determinePriorityValue = () => {
         if(props.currentTask.priority == 1 ){
             setPriorityValue(state => ('Baja'));
