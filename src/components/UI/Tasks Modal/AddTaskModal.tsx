@@ -90,7 +90,6 @@ const AddTaskModal = (props: AddTicketModalProps) => {
         generateTaskUsingAPI();
         getTasksByProject();
         updateProject();
-        window.location.reload();
         onSubmit();
     
     };
