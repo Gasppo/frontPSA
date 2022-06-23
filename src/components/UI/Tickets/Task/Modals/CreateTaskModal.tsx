@@ -42,7 +42,11 @@ const CreateTaskModal = (props: CreateTaskModalProps) => {
     const reducedProjects = useMemo(() => projects.map(proj => ({
         id: proj.code,
         name: proj.name
-    })), [projects])
+    })).sort((a, b) => {
+        if (a.name < b.name) return -1
+        if (a.name > b.name) return 1
+        return 0
+    }), [projects])
 
     const defaultTaskData = useMemo(() => ({
         description: '',
@@ -90,7 +94,7 @@ const CreateTaskModal = (props: CreateTaskModalProps) => {
 
 
     return (
-        <CenteredModal isLoading={loading} onClose={onClose} onSubmit={handleSubmit} show={show} label="Crear tarea" addbuttonLabel="Crear" width='w-[80vh]' disableSubmit={disabled}>
+        <CenteredModal isLoading={loading} onClose={onClose} onSubmit={handleSubmit} show={show} label="Crear tarea" addbuttonLabel="Crear" width='md:w-[90vh] w-[80vh]' disableSubmit={disabled}>
             <div className='flex mb-6 flex-row' >
                 <ValidatingInput validations={validations} required name="name" className='mr-8 w-80' label="Titulo" value={input.name} onChange={handleChangeText} />
                 <SelectBox validations={validations} required name="projectCode" className='mr-8 w-80' label="Proyecto" onChange={handleChangeInt} valueKey="id" value={input.projectCode} options={reducedProjects} text="name" />

@@ -37,7 +37,6 @@ const SelectBox = (props: SelectProps) => {
             <InputLabel>{label}</InputLabel>
             <Select
                 name={name}
-                defaultValue={value}
                 label={label}
                 onChange={onChange}
                 className={className || ''}
@@ -45,6 +44,7 @@ const SelectBox = (props: SelectProps) => {
                 color='primary'
                 disabled={disabled}
                 renderValue={renderText}
+                value={value}
             >
                 {options.map((el, i) => <MenuItem value={el[valueKey]} key={i}>{el?.[text] || 'N/A'}</MenuItem>)}
             </Select>
