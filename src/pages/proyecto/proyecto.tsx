@@ -168,9 +168,6 @@ const Proyecto = () => {
         getTasksByProject();
     }, []);
 
-    /*useEffect(() => {
-        determineStateTagColor();
-    }, [stateTagColor]);*/
 
     useEffect(() => {
         determineRisk();
@@ -188,7 +185,7 @@ const Proyecto = () => {
         <>
             <EditProjectModal onRefresh={updatePage} onClose={handleAddProjectClose} show={showProjectModal} row={project} />
             <AddTaskModal onSubmit={handleAddTaskSubmit} onClose={handleNewTaskClose} show={isOpenNewTaskModal} toProject={project} projectResources={project.resources}/>
-            <AddResourcesModal onSubmit={handleAddResourcesSubmit} onClose={handleModalAddResourcesClose} show={showResourcesModal} project={project} onRefresh={fetchProject} projectTasks={[]}/> 
+            <AddResourcesModal onSubmit={handleAddResourcesSubmit} onClose={handleModalAddResourcesClose} show={showResourcesModal} project={project} onRefresh={fetchProject} projectTasks={projectTasks}/> 
             <div style={{display: 'flex', flexDirection: 'row', margin: 25, paddingBottom: 20, paddingLeft: 80, borderBottomColor:'#C5D0CB', borderBottomWidth: '1px'}}> 
                 
                 <ArrowBackIosNewIcon  onClick={() => navigate(-1)} style={{color: 'slate', fontSize: 25, marginTop: -9, marginRight: 20}} className= 'hover:bg-gray-200 hover:text-teal-900 hover:rounded-3xl hover:shadow-lg transition-all duration-200  group  h-12'/>

@@ -6,6 +6,7 @@ import DeleteIcon from '@mui/icons-material/DeleteForeverOutlined'
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import Autocomplete from '@mui/material/Autocomplete';
 import ErrorModal from '../Modal/errorModal'
+import { Task } from '../../types/taskType'
 
 interface AddProjectModalProps {
     onClose: () => void
@@ -13,7 +14,7 @@ interface AddProjectModalProps {
     show: boolean
     project: Project
     onRefresh: () => void
-    projectTasks: []
+    projectTasks: Task[]
 }
 
 const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
@@ -24,7 +25,6 @@ const AddProjectModal = (props: AddProjectModalProps) => {
     const [newProject, setNewProject] = useState({
         resources: project.resources
     });
-
     const [resources, setLoadedResources] = useState<Resource []>([]);
     const [isErrorModalOpen, setIsErrorModalOpen] = useState(false);
 
@@ -42,6 +42,8 @@ const AddProjectModal = (props: AddProjectModalProps) => {
             })
             .catch(err => console.log(err))
     }
+
+
     useEffect(() => {
         if (flag) {
             getResources();
@@ -78,9 +80,11 @@ const AddProjectModal = (props: AddProjectModalProps) => {
     }
 
     const handleResourceRemoval = async (resource : number) => {
-        setNewProject({resources: newProject.resources.filter((item:any)=> item!==resource)});
         if(hasTasksAssign(resource))
             setIsErrorModalOpen(true);
+        else
+            setNewProject({resources: newProject.resources.filter((item:any)=> item!==resource)});
+
     }
 
     const closeErrorModal= () =>{
@@ -90,7 +94,7 @@ const AddProjectModal = (props: AddProjectModalProps) => {
     return (
         <Modal onClose={onClose} open={show} > 
             <div style= {{padding: '10vh', backgroundColor: 'white'}} className='p-15 absolute text-slate-800 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[100vh] h-[60vh] rounded-xl shadow-lg'>
-                <ErrorModal  onClose={closeErrorModal} show={isErrorModalOpen} txt='No puede eliminar un recurso que tiene tareas asignadas, elimine o modifique primero las tareas del mismo' />
+                <ErrorModal  onClose={closeErrorModal} show={isErrorModalOpen} txt='No puede eliminar un recurso que tiene tareas asignadas, elimine o modifique primero las tareas realizadas por el.' />
                 <Typography variant='h5'>Asigne recursos que desee al proyecto #{project.code}</Typography>
                 <div style= {{padding: '5vh'}} className='flex flex-col items-center'>
                     <div className='flex mb-6 flex-row'>
