@@ -44,7 +44,7 @@ const AddProjectModal = (props: AddProjectModalProps) => {
     }
     useEffect(() => {
         getResources();
-    }, [resources,resourcesNumbers, newProject]);
+    }, [ newProject]);
 
     const handleSubmit = async () => {
         sleep(100);

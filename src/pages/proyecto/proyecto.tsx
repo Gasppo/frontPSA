@@ -165,7 +165,7 @@ const Proyecto = () => {
         fetchProject();
         getTasksByProject();
         determineStateTagColor();
-    }, [projectTasks, stateTagColor]);
+    }, []);
 
     useEffect(() => {
         determineRisk();
@@ -174,6 +174,10 @@ const Proyecto = () => {
         setexpandedDetails(false);
         checkIfItIsADevelopmentProject();
     }, []);
+
+    useEffect(() => {
+        getTasksByProject()
+    }, [isOpenNewTaskModal]);
 
     return (
         <>
