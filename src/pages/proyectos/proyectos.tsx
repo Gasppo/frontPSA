@@ -8,7 +8,6 @@ import{Project} from '../../components/types/projectTypes'
 import ProjectTableRow from '../../components/UI/Projects/ProjectsTableRow'
 import AddProjectModal from '../proyectos/AddProjectModal'
 import FilterProjectsModal from '../proyectos/FilterProjectsModal';
- 
 
 interface ProyectosProps {
     
