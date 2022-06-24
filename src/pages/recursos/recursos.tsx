@@ -4,7 +4,7 @@ import LoadingIndicator from '../../components/Loading/LoadingIndicator'
 import PageTitle from '../../components/UI/Dashboard/PageTitle'
 //import AddHourModal from '../../components/UI/Horas/AddHourModal'
 import { useEffect, useState } from 'react'
-import { Hours } from '../../components/types/resourcesTypes'
+import { Hours, Proyect } from '../../components/types/resourcesTypes'
 import HoursTableRow from '../../components/UI/Horas/HoursTableRow'
 interface RecursosProps {
 
@@ -13,17 +13,46 @@ interface RecursosProps {
 
 const Recursos = (props: RecursosProps) => {
 
-    const [isLoading, setLoading] = useState<boolean>(false)
+    const [isLoading, setLoading] = useState<boolean>(true)
+    const [proyects, setProyects] = useState<Proyect[]>([])
     const [horas, setHoras] = useState<Hours[]>([])
     const [rowsPerPage, setRowsPerPage] = useState(9)
     const [page, setPage] = useState(0)
+    const [initialDay, setInitialDay] = useState("")
+    const [endDay, setEndDay] = useState("")
+    const [totalHours, setTotalHours] = useState(0)
 
+    const fetchProyects = () => {
+            fetch('https://modulo-proyectos-psa-2022.herokuapp.com/projects/')
+            .then(res => res.json())
+            .then(res => {
+                setProyects(res)
+                console.log(proyects)
+            })
+    }
 
-    const fetchHours = () => {
+    const getProyectID = (id:number) => {
+        return proyects.find((item) => item.code === id)
+    }
+
+    const fetchProjects = () => {
+        // monday =date of this weeks monday at 23:59:59
+        const monday = new Date(new Date().setDate(new Date().getDate() - new Date().getDay() + 1))
+        const friday = new Date(new Date().setDate(new Date().getDate() - new Date().getDay() + 5))
+        monday.setHours(0, 0, 0)
+        friday.setHours(23, 59, 59)
+
+        // slice monday and friday to keep only the date
+        const mondayDate = monday.toISOString().slice(0, 10)
+        const fridayDate = friday.toISOString().slice(0, 10)
+
+        setInitialDay(mondayDate)
+        setEndDay(fridayDate)
+
         let body = JSON.stringify({
-            startDate:'2022-06-14',
-            finalDate: '2022-06-21',
-            hourAssignee: 2})
+            startDate:mondayDate,
+            finalDate: fridayDate,
+            hourAssignee: 3})
 
 
         fetch('https://modulo-recursos-psa.herokuapp.com/hours/filterByDate',{
@@ -35,8 +64,13 @@ const Recursos = (props: RecursosProps) => {
         .then(res => {
 
             //let horasId = res.filter((element:Hours) => {return element.hourAssignee==4})
-            let horasAgrupadasPorTask:{[id: string]:Hours[]} = {}
-            res.forEach((item:Hours) => {
+            let horasAgrupadasPorTask:{[id: string]:any[]} = {}
+            
+            res.forEach((item:any) => {
+                let hora = {
+                    ...item,
+                    proyectName: typeof getProyectID(item.code)?.name === "undefined" ? "null" : getProyectID(item.code)?.name
+                }
                if(!Object.keys(horasAgrupadasPorTask).includes(item.task.code.toString())){
                     horasAgrupadasPorTask[item.task.code]=[item] 
                 }else{
@@ -66,13 +100,14 @@ const Recursos = (props: RecursosProps) => {
 
             })
 
-            console.log(horas);
+
             setHoras(horas);
+            setLoading(false)
 
 
         })
         .catch(err => {
-            console.log(JSON.stringify(err))
+            console.log("Error")
         })
         
 
@@ -86,8 +121,19 @@ const Recursos = (props: RecursosProps) => {
         setPage(0);
     };
 
+    const fetchTotalTimeWorked = () => {
+        fetch("https://modulo-recursos-psa.herokuapp.com/reports/person/3")
+        .then(res => res.json())
+        .then(res => {
+            setTotalHours(typeof res.total_hours_worked == "undefined" ? 0 :res.total_hours_worked )
+            console.log(res)
+        })
+    }
+
     useEffect(() => {
-        fetchHours()
+        fetchProyects()
+        fetchProjects()
+        fetchTotalTimeWorked()
     }, []);
 
 
@@ -101,7 +147,6 @@ const Recursos = (props: RecursosProps) => {
                 </Link>
                 </div>
             </PageTitle>
-            <Typography variant='h5' className={'mb-10'}>Recursos</Typography>
             <LoadingIndicator show={isLoading} className={`flex flex-col items-start  transition-all duration-200`} >
 
                 <div className="self-end mr-10 border-2 text-center  rounded-xl shadow-lg text-slate-800 hover:bg-gray-200 hover:text-teal-600 transition-all duration-300 cursor-pointer">
@@ -110,9 +155,9 @@ const Recursos = (props: RecursosProps) => {
                     </Link>
                 </div>
                     
-                
+                <Typography variant='h5' className={'mb-0'}>{"Horas de la semana " + initialDay + " - " + endDay}</Typography>
 
-                <TableContainer component={Paper} className="mt-10"  >
+                <TableContainer component={Paper} className="mt-5"  >
                     <Table>
                         <TableHead>
                             <TableRow>

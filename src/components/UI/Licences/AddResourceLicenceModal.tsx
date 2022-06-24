@@ -1,125 +1,173 @@
 import { useEffect, useState } from 'react'
 import {  TextField } from '@mui/material';
-import {createLicence } from '../../api/productAndVersionSupport'
 import SelectBox from '../Inputs/SelectBox'
 import CenteredModal from '../Modal/CenteredModal'
-import {productAndVersionsURI} from '../../dev/URIs'
-import { Version } from '../../../components/types/productTypes'
+import { SelectResource, LicenseType } from '../../types/resourcesTypes';
+import { LunchDiningSharp } from '@mui/icons-material';
+import ValidatingInput from '../Inputs/ValidatingInput';
 
 interface AddResourceLicenceModalProps {
     onClose: () => void
     onSubmit: () => void
     show: boolean
-    clients: any[]
-    products: any[]
 }
 
-const versionStates = [
-    {state: 'Active'},
-    {state: 'Deprecated'},
-    {state: 'On hold'}
-]
-
 const AddResourceLicenceModal = (props: AddResourceLicenceModalProps)=>{
-    const { onSubmit, onClose, show, clients, products} = props
+    const { onSubmit, onClose, show} = props
+
+    const defaultDate = new Date(new Date)
+    defaultDate.setDate(defaultDate.getDate() + 1)
 
     const defaultLicenceData = {
-        licenceId:0,
-        productId: 0,
-        versionId: 0,
-        clientId: 0,
-        expirationDate: "",
-        state: "Active"
+        licensedPersonCode:0,
+        licenseType:"Maternidad",
+        startingDate: defaultDate.toISOString().slice(0, 10),
+        durationDays:0,
     }
 
-    const emptyAuthor = {
-        id: 0, 
-        CUIT: "", 
-        razonSocial: ""
+    const emptyEmployee = {
+        value: 0, 
+        label: ""
+    }
+    const emptyLicense = {
+        value:0,
+        label: ""
     }
 
-    const emptyProduct = {
-        id: 0, 
-        name: ""
-    }
 
-    const emptyVersion = {
-        id: 0, 
-        name: "",
-        state: "Active"
-    }
-
+    const tipos_de_licencia=[{value:1,label: "Maternidad"}, {value:2, label: "Salud"}, {value:3,label: "Vacaciones"}]
 
     const [runValidations, setRunValidations] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
     const [input, setInput] = useState(defaultLicenceData)
-    const [author, setAuthor] = useState(emptyAuthor)
-    const [product, setProduct] = useState(emptyProduct)
-    const [version, setVersion] = useState(emptyVersion)
-    const [loadedVersions, setLoadedVersions] = useState<Version[]>([])
-    const invalidFields = (!input?.productId || !input?.versionId || !input?.clientId || !input?.expirationDate ||  !input?.state)
+    const [empleados, setEmpleados] = useState<SelectResource[]>([])
+    const [employee, setEmpleado]= useState(emptyEmployee)
+    const[tipoDeLicencia,setTipoDeLicencia]= useState(emptyLicense)
+    const [invalidDurationDays, setInvalidDurationDays] = useState(false)
+    const invalidFields = (!input?.licensedPersonCode || !input?.licenseType || !input?.startingDate ||  !input?.durationDays)
     const disabled = runValidations && invalidFields
+    const isEmpty = (value: any) => !value ? "Este campo no puede estar vacio" : ""
+    const validations = runValidations ? [isEmpty] : []
+    const isInvalidDurationDays = (value: any) => invalidDurationDays ? "Debe tener un mínimo de 5 (cinco) caracteres y un máximo de 10 (diez) y solo puede contener letras, números, espacios y puntos" : ""
+    const durationDaysValidations = invalidDurationDays ? [isInvalidDurationDays] : []
 
-  
+
+    const fetchEmployees = () => {
+        fetch('https://modulo-recursos-psa.herokuapp.com/employees')
+            .then(res => res.json())
+            .then(res => {
+                console.log(res)
+                let resources: SelectResource[] = [];
+                res.forEach((item: any) => {
+                    let proj = {
+                        label: item.Apellido + "," + item.Nombre,
+                        value: item.legajo
+                    }
+                    if (true)
+                        resources.push(proj)
+                })
+                setEmpleados(resources)
+            })
+            .catch(err => {
+                console.log(JSON.stringify(err))
+            })
+    }
+
+    const handleSubmit = async () => {
+        if (!invalidFields && validateDurationDays()) {
+            setIsLoading(true)
+            setInput({ ...input})
+            const response = await createLicence({ ...input})
+            setIsLoading(false)
+            if (response.status >= 200 && response.status < 300) onSubmit()
+        }
+        if(invalidFields) setRunValidations(true)
+        //if(!validateDate()) setInvalidDate(true)
+        return
+        
+    }
+
+    const createLicence = async (body: any) => {
+        return await fetch(`https://modulo-recursos-psa.herokuapp.com/licenses`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(body)
+        })
+    }
+
+
+    useEffect(() => {
+        if (show) return
+        setRunValidations(false)
+        setInput(defaultLicenceData)
+        setEmpleado(emptyEmployee)
+        setTipoDeLicencia(emptyLicense)
+        setInvalidDurationDays(false)
+    }, [show]);
+
+
+    useEffect(() => {
+        fetchEmployees();
+
+    }, []);
+
+    const validateDurationDays = () => {
+        return input.durationDays > 0
+    }
+
     const handleChangeText = (e: any) => {
         setInput(({ ...input, [e.target.name]: e.target.value }))
     };
 
-    const handleChangeInt = (e: any) => {
-        setInput(({ ...input, [e.target.name]: Number(e.target.value) }))
-        console.log(e.target.name)
-        console.log(e.target.value)
+    const handleChangeTextLabel = (e: any) => {
+
+        if(e.target.value == 1){
+            setInput(({ ...input, [e.target.name]: "Maternidad" }))
+        }
+        if(e.target.value == 2){
+            setInput(({ ...input, [e.target.name]: "Salud" }))
+        }
+        if(e.target.value == 3){
+            setInput(({ ...input, [e.target.name]: "Vacaciones" }))
+        }
+       
     };
 
-    const handleClientChange = (e: any) => {
-        
-    }
+    const handleChangeInt = (e: any) => {
+        setInput(({ ...input, [e.target.name]: Number(e.target.value) }))
+    };
 
-    const handleProductChange = (e: any) => {
-
-    }
-
-    const handleVersionChange = (e: any) => {
-        const version = loadedVersions.find(el => el.id === e.target.value)
+    const handleSeleccionDeEmpleado = (e:any) =>{
+        const empleado = empleados.find(el => el.value === e.target.value)
         handleChangeInt(e)
-        setVersion({ id: version?.id || 0, name: version?.name || "", state: version?.state || ""})
+        setEmpleado({ value: empleado?.value || 0, label: empleado?.label || ""})
     }
 
-    const handleSubmit = async () => {
-        if (invalidFields) {
-            setRunValidations(true)
-            return
-        }
-        setIsLoading(true)
-        const randomLicenceId = Math.floor(Math.random() * 300) + 1
-        console.log('licenceId: '+randomLicenceId)
-        setIsLoading(false)
-        setInput({ ...input, ['licenceId']: randomLicenceId})
-        console.log({ ...input, ['licenceId']: randomLicenceId})
-        const response = await createLicence({ ...input, ['licenceId']: randomLicenceId})
-        setIsLoading(false)
-        if (response.status === 200) onSubmit()
+    const handleLicenseTypeChange =(e:any) =>{
+        console.log(e)
+        const licencia = tipos_de_licencia.find(el => el.value === e.target.value)
+        handleChangeTextLabel(e)
+        setTipoDeLicencia({value:licencia?.value ||0, label:licencia?.label || ""})
+  
     }
+
 
     return (
-        <CenteredModal isLoading={isLoading} onClose={onClose} show={show} onSubmit={handleSubmit} label="Crear Licencia" addbuttonLabel="Crear" disableSubmit={disabled}>
+        <CenteredModal isLoading={isLoading} onClose={onClose} show={show} label="Crear Licencia" addbuttonLabel="Crear" onSubmit={handleSubmit } disableSubmit={disabled}>
             <div className='flex mb-6 flex-row'>
-            <SelectBox required name="clientId"  className='mr-8 w-[42rem]' label="Seleccione un Cliente" onChange={handleClientChange} valueKey="id" value={author.id} options={clients} text="razonSocial" />
+            <SelectBox required validations={validations} name="licensedPersonCode" className='mr-8 w-[42rem]' label="Seleccione un Empleado" valueKey="value" options={empleados} text="label" value={employee.value} onChange={handleSeleccionDeEmpleado} />
             </div>
             <div className='flex mb-6 flex-row'>
-            <SelectBox required name="productId"  className='mr-8 w-[42rem]' label="Seleccione un Producto" onChange={handleProductChange} valueKey="id" value={product.id} options={products} text="name" />
+            <SelectBox required validations={validations} name="licenseType" className='mr-8 w-[42rem]' label="Seleccione un Tipo de Licencia" valueKey="value" options={tipos_de_licencia} text="label" value={tipoDeLicencia.value} onChange={handleLicenseTypeChange} />
             </div>
             <div className='flex mb-6  flex-row'>
-                <SelectBox disabledText='Primero ingrese un producto...'  required  name="versionId" className='mr-8 w-[42rem]' disabled={input?.productId <= 0} label="Seleccione una Version" onChange={handleVersionChange} valueKey="id" value={version?.id} options={loadedVersions} text="name" />
-            </div>
-            <div className='flex mb-6  flex-row'>
-                <SelectBox required name="state" className='mr-8 w-80' label="Estado" onChange={handleChangeText} valueKey="state" value={input.state} options={versionStates} text="state" />
-                <TextField type='date' className='mr-8 w-80' inputProps={{min: new Date().toISOString().slice(0, 10)}} defaultValue={new Date().toISOString().slice(0, 10)} label='Fecha de Expiración' onChange={handleChangeText} name='expirationDate'></TextField>
+            <TextField type='date' className='mr-8 w-80' inputProps={{min: new Date().toISOString().slice(0, 10)}} defaultValue={new Date().toISOString().slice(0, 10)} label='Fecha de Expiración' name='startingDate' onChange={handleChangeText}></TextField>
+            <ValidatingInput required validations={durationDaysValidations} name="durationDays" className='mr-8 w-[42rem]' label="Dias de duracion" value={input?.durationDays} onChange={handleChangeInt} />
             </div>
         </CenteredModal>
     )
-
-
 
 }
 export default AddResourceLicenceModal
