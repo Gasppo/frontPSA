@@ -38,7 +38,7 @@ const Recursos = (props: RecursosProps) => {
     const fetchProjects = () => {
         // monday =date of this weeks monday at 23:59:59
         const monday = new Date(new Date().setDate(new Date().getDate() - new Date().getDay() + 1))
-        const friday = new Date(new Date().setDate(new Date().getDate() - new Date().getDay() + 5))
+        const friday = new Date(new Date().setDate(new Date().getDate() - new Date().getDay() + 4))
         monday.setHours(0, 0, 0)
         friday.setHours(23, 59, 59)
 
@@ -69,12 +69,12 @@ const Recursos = (props: RecursosProps) => {
             res.forEach((item:any) => {
                 let hora = {
                     ...item,
-                    proyectName: typeof getProyectID(item.code)?.name === "undefined" ? "null" : getProyectID(item.code)?.name
+                    proyectName: "proyecto"
                 }
-               if(!Object.keys(horasAgrupadasPorTask).includes(item.task.code.toString())){
-                    horasAgrupadasPorTask[item.task.code]=[item] 
+               if(!Object.keys(horasAgrupadasPorTask).includes(hora.task.code.toString())){
+                    horasAgrupadasPorTask[hora.task.code]=[hora] 
                 }else{
-                    horasAgrupadasPorTask[item.task.code].push(item)
+                    horasAgrupadasPorTask[hora.task.code].push(hora)
                 }
                 
             });
@@ -82,6 +82,7 @@ const Recursos = (props: RecursosProps) => {
             let horas: Hours[]= [] 
 
             Object.keys(horasAgrupadasPorTask).forEach((key:string) =>{
+                console.log(horasAgrupadasPorTask[key][0].task.proyectName)
                 let horaInicial:Hours = {
                     _id: horasAgrupadasPorTask[key][0]._id,
                     hourAssignee:horasAgrupadasPorTask[key][0].hourAssignee,
@@ -162,7 +163,6 @@ const Recursos = (props: RecursosProps) => {
                         <TableHead>
                             <TableRow>
                                 <TableCell align="left">Codigo de Proyecto</TableCell>
-                                <TableCell align="left">Proyecto</TableCell>
                                 <TableCell align="left">Codigo de Tarea</TableCell>
                                 <TableCell align="left">Tarea</TableCell>
                                 <TableCell align="left">Descripcion</TableCell>

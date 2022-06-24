@@ -10,7 +10,6 @@ const HoursTableRow = (props: HoursTableRowProps) => {
     return (
         <TableRow hover key={row._id}>
             <TableCell align="left">{row.task.projectCode}</TableCell>
-            <TableCell align="left">{row.task.name}</TableCell>
             <TableCell align="left">{row.task.code}</TableCell>
             <TableCell align="left">{row.task.name}</TableCell>
             <TableCell align="left">{row.task.description}</TableCell>
