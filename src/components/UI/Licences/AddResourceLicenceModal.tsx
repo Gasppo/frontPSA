@@ -22,7 +22,7 @@ const AddResourceLicenceModal = (props: AddResourceLicenceModalProps)=>{
         licensedPersonCode:0,
         licenseType:"Maternidad",
         startingDate: defaultDate.toISOString().slice(0, 10),
-        durationDaysName:"",
+        durationDays:0,
     }
 
     const emptyEmployee = {
@@ -43,9 +43,8 @@ const AddResourceLicenceModal = (props: AddResourceLicenceModalProps)=>{
     const [empleados, setEmpleados] = useState<SelectResource[]>([])
     const [employee, setEmpleado]= useState(emptyEmployee)
     const[tipoDeLicencia,setTipoDeLicencia]= useState(emptyLicense)
-    const [licenciaSeleccionada, setLicenciaSeleccionada]= useState<LicenseType>()
     const [invalidDurationDays, setInvalidDurationDays] = useState(false)
-    const invalidFields = (!input?.licensedPersonCode || !input?.licenseType || !input?.startingDate ||  !input?.durationDaysName)
+    const invalidFields = (!input?.licensedPersonCode || !input?.licenseType || !input?.startingDate ||  !input?.durationDays)
     const disabled = runValidations && invalidFields
     const isEmpty = (value: any) => !value ? "Este campo no puede estar vacio" : ""
     const validations = runValidations ? [isEmpty] : []
@@ -115,8 +114,7 @@ const AddResourceLicenceModal = (props: AddResourceLicenceModalProps)=>{
     }, []);
 
     const validateDurationDays = () => {
-        const regex = RegExp('^[1-9]*$')
-        return regex.test(input.durationDaysName)
+        return input.durationDays > 0
     }
 
     const handleChangeText = (e: any) => {
@@ -157,7 +155,7 @@ const AddResourceLicenceModal = (props: AddResourceLicenceModalProps)=>{
 
 
     return (
-        <CenteredModal isLoading={isLoading} onClose={onClose} show={show} label="Crear Licencia" addbuttonLabel="Crear" onSubmit={handleSubmit }>
+        <CenteredModal isLoading={isLoading} onClose={onClose} show={show} label="Crear Licencia" addbuttonLabel="Crear" onSubmit={handleSubmit } disableSubmit={disabled}>
             <div className='flex mb-6 flex-row'>
             <SelectBox required validations={validations} name="licensedPersonCode" className='mr-8 w-[42rem]' label="Seleccione un Empleado" valueKey="value" options={empleados} text="label" value={employee.value} onChange={handleSeleccionDeEmpleado} />
             </div>
@@ -165,8 +163,8 @@ const AddResourceLicenceModal = (props: AddResourceLicenceModalProps)=>{
             <SelectBox required validations={validations} name="licenseType" className='mr-8 w-[42rem]' label="Seleccione un Tipo de Licencia" valueKey="value" options={tipos_de_licencia} text="label" value={tipoDeLicencia.value} onChange={handleLicenseTypeChange} />
             </div>
             <div className='flex mb-6  flex-row'>
-            <TextField type='date' className='mr-8 w-80' inputProps={{min: new Date().toISOString().slice(0, 10)}} defaultValue={new Date().toISOString().slice(0, 10)} label='Fecha de Expiración' name='startingDate'></TextField>
-            <ValidatingInput required validations={durationDaysValidations} name="durationDaysName" className='mr-8 w-[42rem]' label="Dias de duracion" value={input?.durationDaysName} onChange={handleChangeText} />
+            <TextField type='date' className='mr-8 w-80' inputProps={{min: new Date().toISOString().slice(0, 10)}} defaultValue={new Date().toISOString().slice(0, 10)} label='Fecha de Expiración' name='startingDate' onChange={handleChangeText}></TextField>
+            <ValidatingInput required validations={durationDaysValidations} name="durationDays" className='mr-8 w-[42rem]' label="Dias de duracion" value={input?.durationDays} onChange={handleChangeInt} />
             </div>
         </CenteredModal>
     )
