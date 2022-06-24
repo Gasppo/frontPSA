@@ -19,9 +19,8 @@ const AddResourceLicenceModal = (props: AddResourceLicenceModalProps)=>{
     defaultDate.setDate(defaultDate.getDate() + 1)
 
     const defaultLicenceData = {
-        codigoLicencia:0,
         licensedPersonCode:0,
-        licenseId:0,
+        licenseType:"Maternidad",
         startingDate: defaultDate.toISOString().slice(0, 10),
         durationDaysName:"",
     }
@@ -46,7 +45,7 @@ const AddResourceLicenceModal = (props: AddResourceLicenceModalProps)=>{
     const[tipoDeLicencia,setTipoDeLicencia]= useState(emptyLicense)
     const [licenciaSeleccionada, setLicenciaSeleccionada]= useState<LicenseType>()
     const [invalidDurationDays, setInvalidDurationDays] = useState(false)
-    const invalidFields = (!input?.licensedPersonCode || !input?.licenseId || !input?.startingDate ||  !input?.durationDaysName)
+    const invalidFields = (!input?.licensedPersonCode || !input?.licenseType || !input?.startingDate ||  !input?.durationDaysName)
     const disabled = runValidations && invalidFields
     const isEmpty = (value: any) => !value ? "Este campo no puede estar vacio" : ""
     const validations = runValidations ? [isEmpty] : []
@@ -123,6 +122,21 @@ const AddResourceLicenceModal = (props: AddResourceLicenceModalProps)=>{
     const handleChangeText = (e: any) => {
         setInput(({ ...input, [e.target.name]: e.target.value }))
     };
+
+    const handleChangeTextLabel = (e: any) => {
+
+        if(e.target.value == 1){
+            setInput(({ ...input, [e.target.name]: "Maternidad" }))
+        }
+        if(e.target.value == 2){
+            setInput(({ ...input, [e.target.name]: "Salud" }))
+        }
+        if(e.target.value == 3){
+            setInput(({ ...input, [e.target.name]: "Vacaciones" }))
+        }
+       
+    };
+
     const handleChangeInt = (e: any) => {
         setInput(({ ...input, [e.target.name]: Number(e.target.value) }))
     };
@@ -134,22 +148,21 @@ const AddResourceLicenceModal = (props: AddResourceLicenceModalProps)=>{
     }
 
     const handleLicenseTypeChange =(e:any) =>{
+        console.log(e)
         const licencia = tipos_de_licencia.find(el => el.value === e.target.value)
-        setLicenciaSeleccionada(e.id)
+        handleChangeTextLabel(e)
         setTipoDeLicencia({value:licencia?.value ||0, label:licencia?.label || ""})
   
     }
 
 
-
-
     return (
-        <CenteredModal isLoading={isLoading} onClose={onClose} show={show} label="Crear Licencia" addbuttonLabel="Crear" disableSubmit={disabled} onSubmit={handleSubmit }>
+        <CenteredModal isLoading={isLoading} onClose={onClose} show={show} label="Crear Licencia" addbuttonLabel="Crear" onSubmit={handleSubmit }>
             <div className='flex mb-6 flex-row'>
             <SelectBox required validations={validations} name="licensedPersonCode" className='mr-8 w-[42rem]' label="Seleccione un Empleado" valueKey="value" options={empleados} text="label" value={employee.value} onChange={handleSeleccionDeEmpleado} />
             </div>
             <div className='flex mb-6 flex-row'>
-            <SelectBox required validations={validations} name="licenseId" className='mr-8 w-[42rem]' label="Seleccione un Tipo de Licencia" valueKey="value" options={tipos_de_licencia} text="label" value={tipoDeLicencia.value} onChange={handleLicenseTypeChange} />
+            <SelectBox required validations={validations} name="licenseType" className='mr-8 w-[42rem]' label="Seleccione un Tipo de Licencia" valueKey="value" options={tipos_de_licencia} text="label" value={tipoDeLicencia.value} onChange={handleLicenseTypeChange} />
             </div>
             <div className='flex mb-6  flex-row'>
             <TextField type='date' className='mr-8 w-80' inputProps={{min: new Date().toISOString().slice(0, 10)}} defaultValue={new Date().toISOString().slice(0, 10)} label='Fecha de Expiración' name='startingDate'></TextField>
