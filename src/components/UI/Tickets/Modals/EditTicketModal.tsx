@@ -37,7 +37,10 @@ const EditTicketModal = (props: EditTicketModalProps) => {
 
     const enabledProducts = useMemo(() => clientLicenses.map(el => el.productId), [clientLicenses])
     const filteredProducts = useMemo(() => products.filter(el => enabledProducts.includes(el.id)), [enabledProducts, products])
-    const filteredVersions = useMemo(() => clientLicenses.filter(el => el.productId === input?.productId).map(el => ({ id: el.id, productVersion: versions.find(ver => ver.id === el.versionId)?.name || 'N/A' })), [input, clientLicenses, versions]) || []
+    const filteredVersions = useMemo(() => clientLicenses
+        .filter(el => el.productId === input?.productId && el.state === 'Activa' )
+        .map(el => ({ id: el.id, productVersion: versions.find(ver => ver.id === el.versionId)?.name || 'N/A' })) || []
+        , [input, clientLicenses, versions])
 
     const handleChangeText = (e: any) => {
         setInput(prev => ({ ...prev, [e.target.name]: e.target.value }))
@@ -131,8 +134,6 @@ const EditTicketModal = (props: EditTicketModalProps) => {
     }, [gatherStartingData, show])
 
     useIsDirty(input, originalData, setDirty)
-
-
 
     const statuses = [
         { id: "Abierto" },
