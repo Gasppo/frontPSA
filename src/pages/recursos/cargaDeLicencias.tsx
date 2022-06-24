@@ -109,8 +109,8 @@ const CargaDeLicencias = (props: CargaDeLicenciasProps,) => {
                     <div className="m-4"> Crear Licencia</div>
                 </div>
 
-                <AddResourceLicenceModal onSubmit={handleSubmit} onClose={handleClose} show={showAddModal} clients={[]} products={[]} />
-                <AddResourceLicenceModal onSubmit={handleSubmit} onClose={handleClose} show={showEditModal} clients={[]} products={[]} />
+                <AddResourceLicenceModal onSubmit={handleSubmit} onClose={handleClose} show={showAddModal} />
+                <AddResourceLicenceModal onSubmit={handleSubmit} onClose={handleClose} show={showEditModal} />
 
                 <TableContainer component={Paper} className="mt-10"  >
                     <Table>

@@ -24,6 +24,7 @@ const AddHoras = (props: AddHorasProps) => {
     const [proyectos, setProyectos] = useState<SelectProyect[]>([]);
     const [tasks, setTasks] = useState<Task[]>([]);
     const [selectedItems, setSelectedItems] = useState<any[]>([]);
+    const [allTasks, setAllTasks] = useState<any[]>([]);
     const [date,setDate]= useState<any>(new Date().toISOString().split('T')[0]);
     const [rowsPerPage, setRowsPerPage] = useState(9);
     const [page, setPage] = useState(0);
@@ -48,35 +49,38 @@ const AddHoras = (props: AddHorasProps) => {
             })
     }
 
-    const fetchTasks = () => {
-        fetch('https://modulo-proyectos-psa-2022.herokuapp.com/projects')
-            .then(res => res.json())
-            .then(res => {
-                setTasks([])
-                let proyectsId: any[] = []
-                selected.forEach(item => proyectsId.push(item.value))
-                let selectedProyects = res.filter((item: Proyect) => proyectsId.includes(item.code))
-                let tasks: Task[] = []
-                selectedProyects.forEach((element: Proyect) => {
-                    element.tasks.forEach((item: Task) => {
-                        let proyectTask = {
-                            ...item,
-                            proyectName: element.name,
-                            proyectCode: element.code,
-                        }
-                        tasks.push(proyectTask)
-                    });
-                    setTasks(tasks)
-                });
-
-
-            })
-            .catch(err => {
-                console.log(JSON.stringify(err))
-            })
-
+    const fetchAllTasks = () => {
+        fetch('https://modulo-proyectos-psa-2022.herokuapp.com/tasks/')
+        .then(res => res.json())
+        .then(res => {
+            setAllTasks(res)
+        })
     }
 
+    const fetchTasks = (selected:any) => {
+        let tasksSelected:any[] = []
+        selected.forEach((item:any) => {
+            let selectedTasks = allTasks.filter((element)=> element.projectCode === item.value)
+            selectedTasks.forEach((element)=>{
+                let taskSelected = {
+                    _id: element._id,
+                    priority: element.priority,
+                    name: element.name,
+                    description: element.description,
+                    effort:element.number,
+                    resource:element.resource,
+                    code:element.code,
+                    _v: element._v,
+                    proyectCode: element.projectCode,
+                    proyectName: item.label,
+                }
+                tasksSelected.push(taskSelected)
+            })
+            
+        })
+
+        setTasks(tasksSelected)
+    }
     const handleSelect = (item: any) => {
         setSelectedItems(prev => [...prev, item])
     }
@@ -96,13 +100,15 @@ const AddHoras = (props: AddHorasProps) => {
 
     useEffect(() => {
         fetchProyects();
-        fetchTasks();
+        fetchAllTasks();
+        console.log(selected)
+        fetchTasks(selected);
 
     }, [selected]);
 
     useEffect(() => {
-        console.log(selectedItems)
-    }, [selectedItems]);
+
+    }, [selected]);
 
     const links = [
         { label: "Inicio", href: "/" },
