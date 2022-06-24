@@ -46,7 +46,7 @@ const TicketTable = (props: TicketTableProps) => {
     const { loadedTickets, resources, products, onRefresh, onTicketEdit, onTicketView } = props
 
     const [order, setOrder] = useState<Order>('asc');
-    const [orderBy, setOrderBy] = useState<keyof Data>('razonSocial');
+    const [orderBy, setOrderBy] = useState<keyof Data>('updatedAt');
     const [rowsPerPage, setRowsPerPage] = useState(5)
     const [page, setPage] = useState(0)
 

@@ -74,7 +74,7 @@ const CreateTaskModal = (props: CreateTaskModalProps) => {
             setRunValidations(true)
             return
         }
-        onSubmit(input)
+        onSubmit({...input, effort: input.priority})
     }
 
 
