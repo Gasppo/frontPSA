@@ -20,6 +20,7 @@ const Recursos = (props: RecursosProps) => {
     const [page, setPage] = useState(0)
     const [initialDay, setInitialDay] = useState("")
     const [endDay, setEndDay] = useState("")
+    const [totalHours, setTotalHours] = useState(0)
 
     const fetchProyects = () => {
             fetch('https://modulo-proyectos-psa-2022.herokuapp.com/projects/')
@@ -120,9 +121,19 @@ const Recursos = (props: RecursosProps) => {
         setPage(0);
     };
 
+    const fetchTotalTimeWorked = () => {
+        fetch("https://modulo-recursos-psa.herokuapp.com/reports/person/3")
+        .then(res => res.json())
+        .then(res => {
+            setTotalHours(typeof res.total_hours_worked == "undefined" ? 0 :res.total_hours_worked )
+            console.log(res)
+        })
+    }
+
     useEffect(() => {
         fetchProyects()
         fetchProjects()
+        fetchTotalTimeWorked()
     }, []);
 
 
@@ -185,6 +196,7 @@ const Recursos = (props: RecursosProps) => {
                       </TableFooter>
                     </Table>
                 </TableContainer>
+                <div>{"TOTAL: " + totalHours}</div>
             </LoadingIndicator>
         </>
     )
