@@ -38,7 +38,7 @@ const Recursos = (props: RecursosProps) => {
     const fetchProjects = () => {
         // monday =date of this weeks monday at 23:59:59
         const monday = new Date(new Date().setDate(new Date().getDate() - new Date().getDay() + 1))
-        const friday = new Date(new Date().setDate(new Date().getDate() - new Date().getDay() + 5))
+        const friday = new Date(new Date().setDate(new Date().getDate() - new Date().getDay() + 4))
         monday.setHours(0, 0, 0)
         friday.setHours(23, 59, 59)
 
