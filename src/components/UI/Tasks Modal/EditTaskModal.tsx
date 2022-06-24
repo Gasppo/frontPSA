@@ -1,15 +1,9 @@
 import { useEffect, useMemo, useState } from 'react'
-import { Modal, TextField, Typography, MenuItem, InputAdornment, TextFieldProps } from '@mui/material';
-import{Client} from '../../components/types/clientTypes'
-import AccountCircle from '@mui/icons-material/AccountCircle';
-import ValidatingInput from '../../components/UI/Inputs/ValidatingInput';
-import ValidatingInputDates from '../../components/UI/Inputs/ValidatingInputDates';
-import SelectBox from '../../components/UI/Inputs/SelectBox'
-import CenteredModal from '../../components/UI/Modal/CenteredModal'
-import { VoicemailRounded } from '@mui/icons-material';
-import { isPrivateIdentifier } from 'typescript';
-import {Task} from '../../components/types/taskType'
-import{Resource} from '../../components/types/resourceType';
+import { Modal, TextField, Typography, TextFieldProps } from '@mui/material';
+import ValidatingInput from '../Inputs/ValidatingInput';
+import SelectBox from '../Inputs/SelectBox'
+import {Task} from '../../types/taskType'
+import{Resource} from '../../types/resourceType';
 import Autocomplete from '@mui/material/Autocomplete';
 
 interface EditTaskModalProps {
@@ -22,32 +16,6 @@ interface EditTaskModalProps {
 
 const EditTaskModal = (props: EditTaskModalProps) => {
     const { onSubmit, onClose, show, currentTask, projectResources} = props;
-    const [isLoading, setIsLoading] = useState(false);
-    const [priorityValue, setPriorityValue] = useState("Baja");
-    const [stateValue, setStateValue] = useState("Pendiente");
-    const [resources, setLoadedResources] = useState<Resource []>([]);
-    
-    const determinePriorityValue = () => {
-        if(props.currentTask.priority == 1 ){
-            setPriorityValue(state => ('Baja'));
-        }else if (props.currentTask.priority == 2){
-            setPriorityValue(state => ('Media'));
-        }else if (props.currentTask.priority == 3){
-            setPriorityValue(state => ('Alta'));
-        }else if (props.currentTask.priority == 4){
-            setPriorityValue(state => ('Critica'));
-        }
-    }
-
-    const determineStateValue = () => {
-        if(props.currentTask.isCompleted == 0 ){
-            setStateValue(state => ('Pendiente'));
-        }else if (props.currentTask.isCompleted == 1){
-            setStateValue(state => ('En Progreso'));
-        }else{
-            setStateValue(state => ('Completa'));
-        }
-    }
 
     const [newTask, setNewTask] = useState({
         code: props.currentTask.code,
@@ -61,23 +29,6 @@ const EditTaskModal = (props: EditTaskModalProps) => {
     
     const [runValidations, setRunValidations] = useState(false)
 
-    const getResources = () => {
-        //setLoading(true)
-        fetch('https://modulo-recursos-psa.herokuapp.com/employees',{
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        })
-            .then((response) => {
-                return response.json()})
-            .then((myJson) => {
-                setLoadedResources(Object.values(JSON.parse(JSON.stringify(myJson))));
-                //setOptions( resources.map( resource => {resource.legajo }));
-            })
-            .catch(err => console.log(err))
-            //sleep(3000).then(res => setLoading(false));
-    };
     const invalidFields = (!newTask?.name || newTask.resource==0 );
  
     const prioridades = [{ id: 1, valor: "Baja" }, { id: 2, valor: "Media" }, { id: 3, valor: "Alta" }, { id: 4, valor: "Critica" }];
@@ -95,20 +46,15 @@ const EditTaskModal = (props: EditTaskModalProps) => {
         if (invalidFields) {
             setRunValidations(true);
         }
-        setIsLoading(true);
         updateTaskUsingAPI();
-        setIsLoading(false);
         onSubmit();
-    
     };
 
     const handlePrioridadSelection = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setPriorityValue(event.target.value);
         setNewTask(({ ...newTask, [event.target.name]: event.target.value }))
     };
 
     const handleStateSelection = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setStateValue(event.target.value);
         setNewTask(({ ...newTask, [event.target.name]: event.target.value }))
     };
 
@@ -118,10 +64,7 @@ const EditTaskModal = (props: EditTaskModalProps) => {
     };
 
     useEffect(() => {
-        determinePriorityValue();
-        determineStateValue();
         setRunValidations(false)
-        getResources();
     }, []);
 
     const isEmpty = (value: any) => !value ? "Este campo no puede estar vacio" : ""
@@ -178,13 +121,12 @@ const EditTaskModal = (props: EditTaskModalProps) => {
                             disablePortal
                             className='mr-8 w-80'
                             id="combo-box-demo"
-                            defaultValue={resources.filter(resource => props.projectResources.includes(resource.legajo))[0]}
-                            options={resources.filter(resource => props.projectResources.includes(resource.legajo))}
-                            getOptionLabel={(option: { Nombre: any; }) => (option.Nombre) ? option.Nombre : ""}
+                            defaultValue={newTask.resource}
+                            options={projectResources}
                             sx={{ width: 300 }}
                             renderInput={(params: JSX.IntrinsicAttributes & TextFieldProps) => <TextField {...params} name= 'resource' label="Modifique el responsable" variant="outlined" color='primary' />}
                             onChange={(event: any, newValue: any) => {
-                                setNewTask(({ ...newTask, resource: newValue.legajo }))
+                                setNewTask(({ ...newTask, resource: newValue }))
                             }}
                     />
                     <ValidatingInput  validations={validations} name="effort" className='mr-8 w-80' label="Modifique el Esfuerzo Estimado" value={newTask?.effort} onChange={handleChangeInt} />

@@ -1,9 +1,8 @@
 import { Modal, TextField, Typography, MenuItem, InputAdornment } from '@mui/material';
-import { border } from '@mui/system';
-import Triangle from './Triangle';
+import Triangle from '../Figures/Triangle';
 import { useState } from 'react';
 import AccountCircle from '@mui/icons-material/AccountCircle';
-import{Project} from '../../components/types/projectTypes';
+import{Project} from '../../types/projectTypes';
 
 interface FilterProjectsModalProps {
     onClose: () => void,
@@ -11,9 +10,6 @@ interface FilterProjectsModalProps {
     refreshProjects: (filterProjects: Project[])=>void,
     currentProjects: Project[],
     show: boolean
-}
-
-interface ProyectProps {
 }
 
 const FilterProjectsModal = (props: FilterProjectsModalProps) => {

@@ -1,6 +1,4 @@
 import { Modal, Typography } from '@mui/material';
-import { useState } from 'react';
-
 
 interface ConfirmModalProps {
     onClose: () => void

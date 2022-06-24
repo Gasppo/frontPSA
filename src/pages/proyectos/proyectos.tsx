@@ -1,13 +1,13 @@
-import { Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material'
+import { Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TableFooter, TablePagination } from '@mui/material'
 import { useEffect, useState} from 'react'
 import FilterAltIcon from '@mui/icons-material/FilterAlt';
 import { Link } from 'react-router-dom'
 import PageTitle from '../../components/UI/Dashboard/PageTitle'
 import LoadingIndicator from '../../components/Loading/LoadingIndicator'
-import{Project} from '../../components/types/projectTypes'
-import ProjectTableRow from '../../components/UI/Projects/ProjectsTableRow'
-import AddProjectModal from '../proyectos/AddProjectModal'
-import FilterProjectsModal from '../proyectos/FilterProjectsModal';
+import {Project} from '../../components/types/projectTypes'
+import ProjectTableRow from '../../components/UI/Table Rows/ProjectsTableRow'
+import AddProjectModal from '../../components/UI/Projects Modal/AddProjectModal'
+import FilterProjectsModal from '../../components/UI/Projects Modal/FilterProjectsModal';
 
 interface ProyectosProps {
     
@@ -27,9 +27,10 @@ const Proyectos = (props: ProyectosProps) => {
     const [isLoading, setLoading] = useState<boolean>(false)
     const [showProjectModal, setshowProjectModal] = useState(false)
     const [showFiltersModal, setshowFiltersModal] = useState(false)
+    const [rowsPerPage, setRowsPerPage] = useState(5)
+    const [page, setPage] = useState(0)
     const [newProject, setProject] = useState({
         name: "",
-       // id: 0, //realizar un generador de id
         creationDate: currentDate,
         updatedDate: currentDate,
         startDate: "dd/mm/yyyy",
@@ -71,14 +72,10 @@ const Proyectos = (props: ProyectosProps) => {
     const handleAddProjectSubmit = (projectCreated : Project) => {
         gatherProjects();
         setshowProjectModal(false);
-        //setshowResourcesModal(true);
         setProject(projectCreated);
-        //window.location.reload();
-    
     };
 
     const gatherProjects = () => {
-            //setLoading(true)
             fetch('https://modulo-proyectos-psa-2022.herokuapp.com/projects',{
                 method: 'GET',
                 headers: {
@@ -93,6 +90,15 @@ const Proyectos = (props: ProyectosProps) => {
                 })
                 .catch(err => console.log(err))
     }
+
+    const handleChangePage = (event: React.MouseEvent<HTMLButtonElement> | null, newPage: number) => {
+        setPage(newPage);
+    };
+  
+    const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        setRowsPerPage(parseInt(event.target.value, 10));
+        setPage(0);
+    };
 
 
     useEffect(() => {
@@ -133,8 +139,29 @@ const Proyectos = (props: ProyectosProps) => {
                                 </TableRow>
                             </TableHead>
                             <TableBody>
-                                {filteredProjects && filteredProjects.map(row => <ProjectTableRow refresh={gatherProjects} row={row} key={row.code} />)}
+                                {filteredProjects && filteredProjects
+                                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                                .map(row => <ProjectTableRow refresh={gatherProjects} row={row} key={row.code} />)}
                             </TableBody>
+                            <TableFooter>
+                          <TableRow>
+                              <TablePagination
+                                  rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
+                                  colSpan={8}
+                                  count={filteredProjects.length}
+                                  rowsPerPage={rowsPerPage}
+                                  page={page}
+                                  SelectProps={{
+                                      inputProps: {
+                                          'aria-label': 'rows per page',
+                                      },
+                                      native: true,
+                                  }}
+                                  onPageChange={handleChangePage}
+                                  onRowsPerPageChange={handleChangeRowsPerPage}
+                              />
+                          </TableRow>
+                      </TableFooter>
                         </Table>
                     </TableContainer>
                 </>
