@@ -29,7 +29,7 @@ const Calendario = (props: CalendarioProps) => {
                     title: item.task.name + " (" + item.duration + "hs)",
                     start: Date.parse(item.startingDate),
                     timeZone: 'local',
-                    end: Date.parse(item.startingDate) + 60 * 60 * 1000 * item.duration,
+                    end: Date.parse(item.startingDate), //+ 60 * 60 * 1000 * item.duration,
                     color: "blue",
                     allDay: false
                 }
