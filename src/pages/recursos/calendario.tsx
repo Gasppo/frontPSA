@@ -27,7 +27,7 @@ const Calendario = (props: CalendarioProps) => {
             horas_por_empleado.forEach((item:Hours) => {
                 let evento:Event = {
                     title: item.task.name + " (" + item.duration + "hs)",
-                    start: Date.parse(item.startingDate),
+                    start: Date.parse(item.startingDate) + 60*60*24*1000,
                     timeZone: 'local',
                     end: Date.parse(item.startingDate), //+ 60 * 60 * 1000 * item.duration,
                     color: "blue",
