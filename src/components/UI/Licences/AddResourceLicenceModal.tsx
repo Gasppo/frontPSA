@@ -164,7 +164,7 @@ const AddResourceLicenceModal = (props: AddResourceLicenceModalProps)=>{
             </div>
             <div className='flex mb-6  flex-row'>
             <TextField type='date' className='mr-8 w-80' inputProps={{min: new Date().toISOString().slice(0, 10)}} defaultValue={new Date().toISOString().slice(0, 10)} label='Fecha de Expiración' name='startingDate' onChange={handleChangeText}></TextField>
-            <ValidatingInput required validations={durationDaysValidations} name="durationDays" className='mr-8 w-[42rem]' label="Dias de duracion" value={input?.durationDays} onChange={handleChangeInt} />
+            <ValidatingInput required validations={durationDaysValidations} name="durationDays" className='mr-8 w-80' label="Dias de duracion" value={input?.durationDays} onChange={handleChangeInt} />
             </div>
         </CenteredModal>
     )
