@@ -14,12 +14,13 @@ interface ReportePorProyectoProps {
 }
 
 const ReportePorProyecto = (props: ReportePorProyectoProps,) => {
-    const [isLoading, setLoading] = useState<boolean>(false)
+    const [isLoading, setLoading] = useState<boolean>(true)
     const [selected, setSelected] = useState<any>(0);
     const [proyectos, setProyectos] = useState<SelectProyect[]>([]);
     const [tareas, setTareas] = useState<ProjectReport[]>([]);
-    const [rowsPerPage, setRowsPerPage] = useState(9)
-    const [page, setPage] = useState(0)
+    const [rowsPerPage, setRowsPerPage] = useState(9);
+    const [page, setPage] = useState(0);
+    const [total_hours, setTotalHours] = useState(0);
 
     const fetchEmployees = () => {
         
@@ -37,13 +38,14 @@ const ReportePorProyecto = (props: ReportePorProyectoProps,) => {
                 })
                 setProyectos(resources)
                 console.log(proyectos)
+                setLoading(false);
             })
             .catch(err => {
                 console.log(JSON.stringify(err))
             })
     }
   
-    const fetchHours = () => {
+    const fetchProjects = () => {
         
         fetch("https://modulo-recursos-psa.herokuapp.com/reports/project/"+ selected.value)
         .then(res => res.json())
@@ -67,7 +69,8 @@ const ReportePorProyecto = (props: ReportePorProyectoProps,) => {
             });
             console.log(tareasDeProyecto)
             setTareas(tareasDeProyecto)
-            setLoading(false)
+            setLoading(false);
+            setTotalHours(res.total_hours_worked);
         })
         .catch(err => {
             console.log(JSON.stringify(err))
@@ -89,10 +92,9 @@ const ReportePorProyecto = (props: ReportePorProyectoProps,) => {
     },[])
 
     useEffect(() => {
-        setLoading(false);
-        fetchHours();
+        setLoading(true);
+        fetchProjects();
     }, [selected]);
-
 
     return (
         <>
@@ -111,9 +113,6 @@ const ReportePorProyecto = (props: ReportePorProyectoProps,) => {
             <Select options={proyectos} onChange={(value) => setSelected(value)} />    
             <Typography variant='h5' className={'mb-10'}></Typography>
             <LoadingIndicator show={isLoading} className={`flex flex-col items-start  transition-all duration-200`} >
-            
-
-            
 
             <TableContainer component={Paper} className="mt-10"  >
                     <Table>
@@ -152,7 +151,11 @@ const ReportePorProyecto = (props: ReportePorProyectoProps,) => {
                           </TableRow>
                       </TableFooter>
                     </Table>
+
                 </TableContainer>
+
+                <div>Total de horas trabajas: {total_hours}</div>
+
                 </LoadingIndicator>
 
         </>

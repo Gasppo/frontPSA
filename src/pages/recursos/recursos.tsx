@@ -34,7 +34,7 @@ const Recursos = (props: RecursosProps) => {
         return proyects.find((item) => item.code === id)
     }
 
-    const fetchHours = () => {
+    const fetchProjects = () => {
         // monday =date of this weeks monday at 23:59:59
         const monday = new Date(new Date().setDate(new Date().getDate() - new Date().getDay() + 1))
         const friday = new Date(new Date().setDate(new Date().getDate() - new Date().getDay() + 5))
@@ -122,7 +122,7 @@ const Recursos = (props: RecursosProps) => {
 
     useEffect(() => {
         fetchProyects()
-        fetchHours()
+        fetchProjects()
     }, []);
 
 
