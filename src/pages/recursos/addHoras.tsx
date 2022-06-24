@@ -7,7 +7,7 @@ import LoadingIndicator from '../../components/Loading/LoadingIndicator';
 import { Proyect, SelectProyect, Task } from '../../components/types/resourcesTypes';
 import PageTitle from '../../components/UI/Dashboard/PageTitle';
 import TasksTableRow from '../../components/UI/Horas/TasksTableRow';
-import PageLinker from '../../components/UI/Tickets/PageLinker';
+import PageLinker from '../../components/UI/Inputs/PageLinker';
 //import DatePicker from "react-datepicker"
 
 
@@ -24,10 +24,10 @@ const AddHoras = (props: AddHorasProps) => {
     const [proyectos, setProyectos] = useState<SelectProyect[]>([]);
     const [tasks, setTasks] = useState<Task[]>([]);
     const [selectedItems, setSelectedItems] = useState<any[]>([]);
-    const [allTasks, setAllTasks] = useState<any[]>([]);
     const [date,setDate]= useState<any>(new Date().toISOString().split('T')[0]);
     const [rowsPerPage, setRowsPerPage] = useState(9);
     const [page, setPage] = useState(0);
+    const [allTasks, setAllTasks] = useState<any[]>([]);
 
     const fetchProyects = () => {
         fetch('https://modulo-proyectos-psa-2022.herokuapp.com/projects')
@@ -60,6 +60,7 @@ const AddHoras = (props: AddHorasProps) => {
     const fetchTasks = (selected:any) => {
         let tasksSelected:any[] = []
         selected.forEach((item:any) => {
+            setLoading(true)
             let selectedTasks = allTasks.filter((element)=> element.projectCode === item.value)
             selectedTasks.forEach((element)=>{
                 let taskSelected = {
@@ -76,6 +77,7 @@ const AddHoras = (props: AddHorasProps) => {
                 }
                 tasksSelected.push(taskSelected)
             })
+            setLoading(false)
             
         })
 

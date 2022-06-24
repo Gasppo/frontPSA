@@ -19,13 +19,16 @@ const LinkCard = (props: LinkCardProps) => {
 
     return (
         <>
-        <Link to={href}>
-            <div className={`border-gray-200 border-2 rounded-xl shadow-lg text-slate-800 hover:bg-gray-200 hover:text-teal-600 transition-all duration-300 flex flex-col items-center justify-center cursor-pointer  ${customSize ? customSize : "w-60 h-80"} `} >
-                <Typography variant='h5' className="self-start ml-8 mb-8" >{title}</Typography>
-                <Icon className={iconStyle}/>
-                <Typography variant='caption' className="self-start ml-4 mt-8" >{description}</Typography>
-            </div>
-        </Link>
+            <Link to={href !== '/placeholder' ? href : '#'}>
+                <div
+                    className={
+                        `${customSize ? customSize : "w-60 h-80"} ${ href !== '/placeholder' ? 'dashboard-card-enabled' : 'dashboard-card-disabled'}`
+                    }>
+                    <Typography variant='h5' className="self-start ml-8 mb-8" >{title}</Typography>
+                    <Icon className={iconStyle} />
+                    <Typography variant='caption' className="self-start ml-4 mt-8" >{description}</Typography>
+                </div>
+            </Link>
         </>
     )
 }

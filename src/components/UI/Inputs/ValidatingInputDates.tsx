@@ -14,7 +14,7 @@ interface ValidatingInputProps {
 }
 
 
-const ValidatingInput = (props: ValidatingInputProps) => {
+const ValidatingInputDates = (props: ValidatingInputProps) => {
     const { required, value, onChange, label, name, className, validations = [], disabled, multiline, rows } = props
 
     const errorMessage = validations.reduce((prev, validation) => {
@@ -28,6 +28,7 @@ const ValidatingInput = (props: ValidatingInputProps) => {
 
     return (
         <TextField
+            type='date'
             name={name}
             className={className || ''}
             label={label}
@@ -43,7 +44,8 @@ const ValidatingInput = (props: ValidatingInputProps) => {
             multiline={multiline}
             rows={rows}
         />
+        
     )
 }
 
-export default ValidatingInput;
+export default ValidatingInputDates;

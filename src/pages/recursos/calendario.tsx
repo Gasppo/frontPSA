@@ -16,7 +16,7 @@ const Calendario = (props: CalendarioProps) => {
 
     const [eventos, setEventos] = useState<Event[]>([])
 
-    const fetchHours = () => {
+    const fetchProjects = () => {
         fetch('https://modulo-recursos-psa.herokuapp.com/hours')
         .then(res => res.json())
         .then(res => {
@@ -69,7 +69,7 @@ const Calendario = (props: CalendarioProps) => {
     }
 
     useEffect(() => {
-        fetchHours()
+        fetchProjects()
     }, []);
 
     return (
@@ -82,6 +82,7 @@ const Calendario = (props: CalendarioProps) => {
             <FullCalendar
                 plugins={[dayGridPlugin]}
                 initialView="dayGridMonth"
+                displayEventTime={false}
                 events={eventos}
             />
         </>

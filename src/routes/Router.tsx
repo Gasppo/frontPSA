@@ -17,6 +17,8 @@ import Calendario from '../pages/recursos/calendario'
 import ReportePorPersona from '../pages/recursos/reportePorPersona'
 import ReportePorProyecto from '../pages/recursos/reportePorProyecto'
 import CargaDeLicencias from '../pages/recursos/cargaDeLicencias'
+import Proyectos from '../pages/proyectos/proyectos'
+import Proyecto from '../pages/proyecto/proyecto'
 
 interface RouterProps {
     
@@ -35,6 +37,8 @@ const Router = (props: RouterProps) => {
             <Route path='recursos/licencias' element= {<CargaDeLicencias/>}/>
             <Route path="recursos/horasSemanales/carga/seleccion" element={<CargaDeHoras />} />
             <Route path="soporte" element={<Soporte />} />
+            <Route path="proyectos" element={<Proyectos />} />
+            <Route path="proyecto" element={<Proyecto/>} />
             <Route path='soporte/tickets' element={<Tickets />} />
             <Route path='soporte/productsAndVersions' element={<ProductsAndVersions />} />
             <Route path='soporte/productsAndVersions/products' element={<Products />} />

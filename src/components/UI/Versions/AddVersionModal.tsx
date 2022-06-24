@@ -11,8 +11,8 @@ interface AddVersionModalProps {
     product: number
 }
 const versionStates = [
-    {state: 'ACTIVE'},
-    {state: 'DEPRECATED'}
+    {state: 'Activa'},
+    {state: 'Deprecada'}
 ]
 
 const AddVersionModal = (props: AddVersionModalProps) => {
@@ -21,7 +21,7 @@ const AddVersionModal = (props: AddVersionModalProps) => {
     const defaultVersionData = {
         versionId:0,
         versionName: "",
-        state: "ACTIVE",
+        state: "Activa",
         productId: product
     }
 
@@ -30,7 +30,7 @@ const AddVersionModal = (props: AddVersionModalProps) => {
     const [input, setInput] = useState(defaultVersionData)
 
     const validateVersion = () => {
-        const regex = RegExp('^[a-zA-Z0-9. ..]{5,10}$')
+        const regex = RegExp('^[a-zA-Z0-9. ..]{3,10}$')
         return regex.test(input.versionName)
     }
 
@@ -58,7 +58,7 @@ const AddVersionModal = (props: AddVersionModalProps) => {
         setInput(defaultVersionData)
     }, [show]);
 
-    const isInvalidVersion = (value: any) => invalidVersion ? "Debe tener un mínimo de 5 (cinco) caracteres y un máximo de 10 (diez) y solo puede contener letras, números, espacios y puntos" : ""
+    const isInvalidVersion = (value: any) => invalidVersion ? "Debe tener un mínimo de 3 (tres) caracteres y un máximo de 10 (diez) y solo puede contener letras, números, espacios y puntos" : ""
     const versionValidations = invalidVersion ? [isInvalidVersion] : []
 
     return (

@@ -3,17 +3,15 @@
 @tailwind utilities;
 
 @layer components {
-    .sidebar-icon {
-        @apply relative flex items-center justify-center h-12 w-12 mt-2 mb-2 mx-2 px-2 shadow-lg bg-slate-900 text-teal-600  rounded-3xl
-        hover:bg-teal-600 hover:text-slate-900 hover:rounded-xl
-        transition-all duration-200 cursor-pointer;
+    .sidebar-icon-contracted {
+        @apply relative flex items-center justify-start h-12 mt-2 mb-2 mx-2 px-2 shadow-lg rounded-3xl
+        hover:bg-teal-600 hover:text-slate-900 transition-all duration-200 w-10 hover:rounded-xl;
     }
 
     .sidebar-icon-expanded {
-        @apply relative flex items-center justify-start h-12 w-48 mt-2 mb-2 mx-2 px-2 shadow-lg bg-slate-900 text-teal-600  rounded-3xl
-        hover:bg-teal-600 hover:text-slate-900
-        transition-all duration-200 cursor-pointer;
-    }
+      @apply relative flex items-center justify-start h-12 mt-2 mb-2 mx-2 px-2 shadow-lg rounded-3xl
+      hover:bg-teal-600 hover:text-slate-900 transition-all duration-200 w-48;
+  }
 
 
     .sidebar-tooltip {
@@ -24,10 +22,37 @@
         transition-all duration-200 scale-0 origin-left;
       }
 
+      .risk-tooltip {
+        @apply absolute w-auto p-2 m-1 min-w-max left-[50vh]
+        rounded-md shadow-md
+        text-slate-600  bg-gray-100
+        text-xs font-bold
+        transition-all duration-200 scale-0 origin-left;
+      }
+
+      .task-state-tooltip{
+        @apply absolute w-auto p-2 m-1 min-w-max left-[70vh]
+        rounded-md shadow-md
+        text-slate-600  bg-gray-100
+        text-xs font-bold
+        transition-all duration-200 scale-0 origin-left;
+      }
+
       .sidebar-tooltip-expanded {
         @apply p-2
         text-xs font-bold
         overflow-hidden truncate
         transition-all duration-200 origin-right;
+      }
+
+      .dashboard-card-enabled {
+        @apply text-slate-800 border-gray-200 border-2 rounded-xl shadow-lg 
+        flex flex-col items-center justify-center transition-all duration-300 
+        hover:bg-gray-200 hover:text-teal-600 cursor-pointer
+      }
+
+      .dashboard-card-disabled {
+        @apply text-slate-800 bg-gray-400 border-gray-200 border-2 rounded-xl shadow-lg 
+        flex flex-col items-center justify-center transition-all duration-300 cursor-default
       }
 }

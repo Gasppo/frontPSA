@@ -5,12 +5,12 @@ import { ticketSupportURI } from '../../components/dev/URIs'
 import LoadingIndicator from '../../components/Loading/LoadingIndicator'
 import { Ticket, TicketProduct } from '../../components/types/ticketTypes'
 import PageTitle from '../../components/UI/Dashboard/PageTitle'
-import AddTicketModal from '../../components/UI/Tickets/AddTicketModal'
-import CreateTicketButton from '../../components/UI/Tickets/CreateTicketButton'
-import EditTicketModal from '../../components/UI/Tickets/EditTicketModal'
-import PageLinker from '../../components/UI/Tickets/PageLinker'
-import TicketDetailsModal from '../../components/UI/Tickets/TicketDetailsModal'
-import TicketTable from '../../components/UI/Tickets/TicketTable'
+import AddTicketModal from '../../components/UI/Tickets/Modals/AddTicketModal'
+import CreateTicketButton from '../../components/UI/Tickets/Modals/CreateTicketButton'
+import EditTicketModal from '../../components/UI/Tickets/Modals/EditTicketModal'
+import TicketDetailsModal from '../../components/UI/Tickets/Modals/TicketDetailsModal'
+import PageLinker from '../../components/UI/Inputs/PageLinker'
+import TicketTable from '../../components/UI/Tickets/Table/TicketTable'
 
 interface TicketsProps {
 
