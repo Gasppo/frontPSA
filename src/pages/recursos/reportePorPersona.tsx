@@ -168,7 +168,6 @@ const ReportePorPersona = (props: ReportePorPersonaProps,) => {
                         <TableHead>
                             <TableRow>
                                 <TableCell align="left">Codigo de Proyecto</TableCell>
-                                <TableCell align="left">Proyecto</TableCell>
                                 <TableCell align="left">Codigo de Tarea</TableCell>
                                 <TableCell align="left">Tarea</TableCell>
                                 <TableCell align="left">Descripcion</TableCell>
