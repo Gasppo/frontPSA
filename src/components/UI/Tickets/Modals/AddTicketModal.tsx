@@ -28,7 +28,11 @@ const AddTicketModal = (props: AddTicketModalProps) => {
 
     const enabledProducts = useMemo(() => clientLicenses.map(el => el.productId), [clientLicenses])
     const filteredProducts = useMemo(() => products.filter(el => enabledProducts.includes(el.id)), [enabledProducts, products])
-    const filteredVersions = useMemo(() => clientLicenses.filter(el => el.productId === input?.productId).map(el => ({ id: el.id, productVersion: versions.find(ver => ver.id === el.versionId)?.name || 'N/A' })), [input, clientLicenses, versions]) || []
+    const filteredVersions = useMemo(() => clientLicenses
+        .filter(el => el.productId === input?.productId && el.state === 'Activa')
+        .map(el => ({ id: el.id, productVersion: versions.find(ver => ver.id === el.versionId)?.name || 'N/A' })) || []
+        , [input, clientLicenses, versions])
+
 
     const handleChangeText = (e: any) => {
         setInput(prev => ({ ...prev, [e.target.name]: e.target.value }))
@@ -99,7 +103,7 @@ const AddTicketModal = (props: AddTicketModalProps) => {
                 <SelectBox disabledText='Primero ingrese un cliente...' required validations={validations} name="productId" className='mr-8 w-80' disabled={!input?.authorId && input?.authorId === 0} label="Producto" onChange={handleProductChange} valueKey="id" value={input?.productId} options={filteredProducts} text="name" />
                 <SelectBox disabledText='Primero ingrese un producto...' required validations={validations} name="productLicenseId" className='mr-8 w-80' disabled={(!input?.authorId && input?.authorId === 0) || input?.productId <= 0} label="Version" onChange={handleChangeInt} valueKey="id" value={input?.productLicenseId} options={filteredVersions} text="productVersion" />
             </div>
-            <ValidatingInput required validations={validations}  className='mb-6 w-[42rem] mr-8' name='description' label="Descripcion" multiline rows={2} value={input?.description} onChange={handleChangeText} />
+            <ValidatingInput required validations={validations} className='mb-6 w-[42rem] mr-8' name='description' label="Descripcion" multiline rows={2} value={input?.description} onChange={handleChangeText} />
         </CenteredModal>
     )
 }
