@@ -196,7 +196,6 @@ const Recursos = (props: RecursosProps) => {
                       </TableFooter>
                     </Table>
                 </TableContainer>
-                <div>{"TOTAL: " + totalHours}</div>
             </LoadingIndicator>
         </>
     )

@@ -21,7 +21,7 @@ const Calendario = (props: CalendarioProps) => {
         .then(res => res.json())
         .then(res => {
 
-            let horas_por_empleado = res.filter((item:Hours) => item.hourAssignee === 2 )
+            let horas_por_empleado = res.filter((item:Hours) => item.hourAssignee === 3 )
             let eventos2:Event[] = []
 
             horas_por_empleado.forEach((item:Hours) => {
@@ -40,7 +40,7 @@ const Calendario = (props: CalendarioProps) => {
             .then(res => res.json())
             .then(res => {
 
-                let licencias_por_empleado = res.filter((item:License) => item.licensedPersonCode === 2 )
+                let licencias_por_empleado = res.filter((item:License) => item.licensedPersonCode === 3 )
 
                 licencias_por_empleado.forEach((item:License) => {
                     let evento:Event = {
