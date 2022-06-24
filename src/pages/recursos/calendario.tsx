@@ -3,6 +3,8 @@ import dayGridPlugin from '@fullcalendar/daygrid' // a plugin!
 import { useCallback, useEffect, useState } from 'react'
 import { Hours, Event, License } from '../../components/types/resourcesTypes'
 import { isTypeNode } from 'typescript'
+import { Link } from 'react-router-dom'
+import { Button } from '@mui/material'
 
 
 interface CalendarioProps {
@@ -14,12 +16,12 @@ const Calendario = (props: CalendarioProps) => {
 
     const [eventos, setEventos] = useState<Event[]>([])
 
-    const fetchHours = () => {
+    const fetchProjects = () => {
         fetch('https://modulo-recursos-psa.herokuapp.com/hours')
         .then(res => res.json())
         .then(res => {
 
-            let horas_por_empleado = res.filter((item:Hours) => item.hourAssignee === 2 )
+            let horas_por_empleado = res.filter((item:Hours) => item.hourAssignee === 3 )
             let eventos2:Event[] = []
 
             horas_por_empleado.forEach((item:Hours) => {
@@ -38,7 +40,7 @@ const Calendario = (props: CalendarioProps) => {
             .then(res => res.json())
             .then(res => {
 
-                let licencias_por_empleado = res.filter((item:License) => item.licensedPersonCode === 2 )
+                let licencias_por_empleado = res.filter((item:License) => item.licensedPersonCode === 3 )
 
                 licencias_por_empleado.forEach((item:License) => {
                     let evento:Event = {
@@ -67,14 +69,20 @@ const Calendario = (props: CalendarioProps) => {
     }
 
     useEffect(() => {
-        fetchHours()
+        fetchProjects()
     }, []);
 
     return (
         <>
+         <div className="flex flex-row" >
+            <Link to={'/recursos/'} >
+                <Button>Volver atras</Button>
+            </Link>
+        </div>
             <FullCalendar
                 plugins={[dayGridPlugin]}
                 initialView="dayGridMonth"
+                displayEventTime={false}
                 events={eventos}
             />
         </>

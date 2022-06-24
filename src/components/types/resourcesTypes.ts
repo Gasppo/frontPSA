@@ -56,11 +56,18 @@ export type Event = {
 }
 
 export type License = {
+    _id:string;
     licensedPersonCode: number;
     startingDate: string;
     durationDays: number;
     licenseType: string;
     created: Date;
+}
+
+export type LicenseType = {
+    value: number;
+    label:string
+
 }
 
 export type SelectResource = {
@@ -80,6 +87,6 @@ export type ProjectReport={
     description: string;
     resource:number;
     code:number;
-    totalHours:number | 0;
+    hours_worked:number | 0;
 
 }

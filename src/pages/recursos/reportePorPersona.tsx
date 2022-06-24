@@ -1,8 +1,11 @@
-import { Button } from '@mui/material';
+import { Button, Paper, Table, TableBody, TableCell, TableContainer, TableFooter, TableHead, TablePagination, TableRow, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import Select from 'react-select';
-import { SelectResource } from '../../components/types/resourcesTypes';
+import LoadingIndicator from '../../components/Loading/LoadingIndicator';
+import { Hours, ProjectReport, Proyect, SelectResource } from '../../components/types/resourcesTypes';
+import HoursTableRow from '../../components/UI/Horas/HoursTableRow';
+import ProyectReportTableRow from '../../components/UI/Reports/proyectReportTableRow';
 //import AddHourModal from '../../components/UI/Horas/AddHourModal';
 //import DatePicker from "react-datepicker"
 
@@ -16,6 +19,13 @@ const ReportePorPersona = (props: ReportePorPersonaProps,) => {
     const [selected, setSelected] = useState<any>(0);
     const [recursos, setRecursos] = useState<SelectResource[]>([]);
     const [horas_trabajas, setHorasTrabajadas] = useState<any>(0);
+    const [rowsPerPage, setRowsPerPage] = useState(9);
+    const [isLoading, setLoading] = useState<boolean>(false)
+    const [page, setPage] = useState(0);
+    const [proyects, setProyects] = useState<Proyect[]>([])
+    const [horas, setHoras] = useState<Hours[]>([])
+    const [totalHours, setTotalHours] = useState(0)
+
 
     const fetchEmployees = () => {
         fetch('https://modulo-recursos-psa.herokuapp.com/employees')
@@ -38,10 +48,109 @@ const ReportePorPersona = (props: ReportePorPersonaProps,) => {
             })
     }
 
+    const getProyectID = (id:number) => {
+        return proyects.find((item) => item.code === id)
+    }
+
+    const fetchProyects = () => {
+        fetch('https://modulo-proyectos-psa-2022.herokuapp.com/projects/')
+        .then(res => res.json())
+        .then(res => {
+            setProyects(res)
+            console.log(proyects)
+        })
+    }
+
+    const fetchHours = () => {
+
+        let body = JSON.stringify({
+            hourAssignee: selected.value
+        })
+
+        fetch('https://modulo-recursos-psa.herokuapp.com/hours/employeeHistorial',{
+            method:'POST',
+            body:body,
+            headers: {"Content-Type":"application/json"},
+        })
+        .then(res => res.json())
+        .then(res => {
+
+            console.log(res)
+
+            //let horasId = res.filter((element:Hours) => {return element.hourAssignee==4})
+            let horasAgrupadasPorTask:{[id: string]:any[]} = {}
+            
+            res.forEach((item:any) => {
+                let hora = {
+                    ...item,
+                    proyectName: typeof getProyectID(item.code)?.name === "undefined" ? "null" : getProyectID(item.code)?.name
+                }
+               if(!Object.keys(horasAgrupadasPorTask).includes(item.task.code.toString())){
+                    horasAgrupadasPorTask[item.task.code]=[item] 
+                }else{
+                    horasAgrupadasPorTask[item.task.code].push(item)
+                }
+                
+            });
+
+            let horas: Hours[]= [] 
+
+            Object.keys(horasAgrupadasPorTask).forEach((key:string) =>{
+                let horaInicial:Hours = {
+                    _id: horasAgrupadasPorTask[key][0]._id,
+                    hourAssignee:horasAgrupadasPorTask[key][0].hourAssignee,
+                    created: horasAgrupadasPorTask[key][0].created,
+                    _v: horasAgrupadasPorTask[key][0]._v,
+                    task: horasAgrupadasPorTask[key][0].task,
+                    startingDate: horasAgrupadasPorTask[key][0].startingDate,
+                    duration: 0,
+                }
+
+                horasAgrupadasPorTask[key].forEach((item:Hours)=>{
+                    horaInicial.duration += item.duration
+                })
+
+                horas.push(horaInicial)
+
+            })
+
+
+            setHoras(horas);
+            setLoading(false)
+
+
+        })
+        .catch(err => {
+            console.log("Error")
+        })
+        
+
+    }
+    const fetchTotalTimeWorked = () => {
+        fetch("https://modulo-recursos-psa.herokuapp.com/reports/person/"+selected.value)
+        .then(res => res.json())
+        .then(res => {
+            setTotalHours(typeof res.total_hours_worked == "undefined" ? 0 :res.total_hours_worked )
+            console.log(res)
+        })
+    }
+
     useEffect(() => {
         fetchEmployees();
-
+        fetchProyects()
+        setLoading(true)
+        fetchHours();
+        fetchTotalTimeWorked()
     }, [selected]);
+
+    const handleChangePage = (event: React.MouseEvent<HTMLButtonElement> | null, newPage: number) => {
+        setPage(newPage);
+    };
+  
+    const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        setRowsPerPage(parseInt(event.target.value, 10));
+        setPage(0);
+    };
 
     return (
         <>
@@ -51,6 +160,54 @@ const ReportePorPersona = (props: ReportePorPersonaProps,) => {
                 </Link>
             </div>
             <Select options={recursos} onChange={(value) => setSelected(value)} />
+
+            <LoadingIndicator show={isLoading} className={`flex flex-col items-start  transition-all duration-200`} >
+
+            <TableContainer component={Paper} className="mt-10"  >
+                    <Table>
+                        <TableHead>
+                            <TableRow>
+                                <TableCell align="left">Codigo de Proyecto</TableCell>
+                                <TableCell align="left">Proyecto</TableCell>
+                                <TableCell align="left">Codigo de Tarea</TableCell>
+                                <TableCell align="left">Tarea</TableCell>
+                                <TableCell align="left">Descripcion</TableCell>
+                                <TableCell align="left">Cantidad de Horas</TableCell>
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
+                            {horas &&
+                                    horas
+                                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                                    .map((row:Hours)=><HoursTableRow row={row} key={row._id}/>)}
+                        </TableBody>
+                        <TableFooter>
+                          <TableRow>
+                              <TablePagination
+                                  rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
+                                  colSpan={8}
+                                  count={horas.length}
+                                  rowsPerPage={rowsPerPage}
+                                  page={page}
+                                  SelectProps={{
+                                      inputProps: {
+                                          'aria-label': 'rows per page',
+                                      },
+                                      native: true,
+                                  }}
+                                  onPageChange={handleChangePage}
+                                  onRowsPerPageChange={handleChangeRowsPerPage}
+                              />
+                          </TableRow>
+                      </TableFooter>
+                    </Table>
+
+                </TableContainer>
+                
+                <div>{"TOTAL: " + totalHours}</div>
+                
+
+                </LoadingIndicator>
         </>
 
     )
