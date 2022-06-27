@@ -16,7 +16,8 @@ const EmployeeReportTableRow = (props: EmployeeReportTableRowProps) => {
             <TableCell align="left">{row.code}</TableCell>
             <TableCell align="left">{row.name}</TableCell>
             <TableCell align="left">{row.description}</TableCell>
-            <TableCell align="left">{row.hours_worked}</TableCell>
+            <TableCell align="left">{row.hours_worked}hs</TableCell>
+            <TableCell align="left">{row.deviation}hs</TableCell>
         </TableRow>
     )
 }

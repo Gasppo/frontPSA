@@ -114,12 +114,13 @@ const Recursos = (props: RecursosProps) => {
                 console.log(horasAgrupadasPorTask[key][0].task.proyectName)
                 let horaInicial:Hours = {
                     _id: horasAgrupadasPorTask[key][0]._id,
-                    hourAssignee:horasAgrupadasPorTask[key][0].hourAssignee,
+                    hourAssignee: horasAgrupadasPorTask[key][0].hourAssignee,
                     created: horasAgrupadasPorTask[key][0].created,
                     _v: horasAgrupadasPorTask[key][0]._v,
                     task: horasAgrupadasPorTask[key][0].task,
                     startingDate: horasAgrupadasPorTask[key][0].startingDate,
                     duration: 0,
+                    deviation: 0
                 }
 
                 horasAgrupadasPorTask[key].forEach((item:Hours)=>{

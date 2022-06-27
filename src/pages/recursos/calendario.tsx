@@ -7,6 +7,7 @@ import { isTypeNode } from 'typescript'
 import Select from 'react-select';
 import { Link } from 'react-router-dom'
 import { Button } from '@mui/material'
+import PageTitle from '../../components/UI/Dashboard/PageTitle';
 
 
 interface CalendarioProps {
@@ -105,11 +106,14 @@ const Calendario = (props: CalendarioProps) => {
 
     return (
         <>
-         <div className="flex flex-row" >
-            <Link to={'/recursos/'} >
-                <Button>Volver atras</Button>
-            </Link>
-        </div>
+            <PageTitle label='Calendario'>
+            <div className="flex flex-row" >
+                <Link to={'/recursos/'} >
+                    <Button>Volver al inicio</Button>
+                </Link>
+            </div>
+            </PageTitle>
+
         <Select options={recursos} onChange={(value) => setSelected(value)} className={`z-20`} />
         <FullCalendar
             plugins={[dayGridPlugin]}

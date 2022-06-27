@@ -7,6 +7,7 @@ import LoadingIndicator from '../../components/Loading/LoadingIndicator';
 import AddResourceLicenceModal from '../../components/UI/Licences/AddResourceLicenceModal';
 import LicenseResourceTableRow from '../../components/UI/Licences/LicenseResourceTableRow';
 import { License } from '../../components/types/resourcesTypes';
+import PageTitle from '../../components/UI/Dashboard/PageTitle';
 
 
 interface CargaDeLicenciasProps {
@@ -93,14 +94,13 @@ const CargaDeLicencias = (props: CargaDeLicenciasProps,) => {
     return (
         <>
 
+            <PageTitle label='Carga de licencias'>
             <div className="flex flex-row" >
                 <Link to={'/recursos/'} >
-                    <Button>Volver atras</Button>
+                    <Button>Volver al inicio</Button>
                 </Link>
             </div>
-
-
-
+            </PageTitle>
 
             <Typography variant='h5' className={'mb-10'}></Typography>
             <LoadingIndicator show={isLoading} className={`flex flex-col items-start  transition-all duration-200`} >

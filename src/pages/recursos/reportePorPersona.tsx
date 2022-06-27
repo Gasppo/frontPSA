@@ -7,6 +7,7 @@ import { Hours, ProjectReport, Proyect, SelectResource } from '../../components/
 import HoursTableRow from '../../components/UI/Horas/HoursTableRow';
 import { ExportToCsv } from 'export-to-csv';
 import ProyectReportTableRow from '../../components/UI/Reports/proyectReportTableRow';
+import PageTitle from '../../components/UI/Dashboard/PageTitle';
 //import AddHourModal from '../../components/UI/Horas/AddHourModal';
 //import DatePicker from "react-datepicker"
 
@@ -109,6 +110,7 @@ const ReportePorPersona = (props: ReportePorPersonaProps,) => {
                     task: horasAgrupadasPorTask[key][0].task,
                     startingDate: horasAgrupadasPorTask[key][0].startingDate,
                     duration: 0,
+                    deviation: horasAgrupadasPorTask[key][0].task.effort - horasAgrupadasPorTask[key][0].duration
                 }
 
                 horasAgrupadasPorTask[key].forEach((item:Hours)=>{
@@ -123,6 +125,7 @@ const ReportePorPersona = (props: ReportePorPersonaProps,) => {
                     name: horasAgrupadasPorTask[key][0].task.name,
                     description: horasAgrupadasPorTask[key][0].task.description,
                     duration: horasAgrupadasPorTask[key][0].duration,
+                    deviation: horasAgrupadasPorTask[key][0].task.effort - horasAgrupadasPorTask[key][0].duration,
                 })
 
             })
@@ -173,11 +176,14 @@ const ReportePorPersona = (props: ReportePorPersonaProps,) => {
 
     return (
         <>
+            <PageTitle label='Reporte por persona'>
             <div className="flex flex-row" >
                 <Link to={'/recursos/'} >
                     <Button>Volver al inicio</Button>
                 </Link>
             </div>
+            </PageTitle>
+
             <Select options={recursos} onChange={(value) => setSelected(value)} />
 
             <LoadingIndicator show={isLoading} className={`flex flex-col items-start  transition-all duration-200`} >
@@ -191,6 +197,7 @@ const ReportePorPersona = (props: ReportePorPersonaProps,) => {
                                 <TableCell align="left">Tarea</TableCell>
                                 <TableCell align="left">Descripcion</TableCell>
                                 <TableCell align="left">Cantidad de Horas</TableCell>
+                                <TableCell align="left">Desvio del esfuerzo</TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>

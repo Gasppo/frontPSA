@@ -6,6 +6,7 @@ import LoadingIndicator from '../../components/Loading/LoadingIndicator';
 import { ProjectReport, Proyect, SelectProyect } from '../../components/types/resourcesTypes';
 import ProyectReportTableRow from '../../components/UI/Reports/proyectReportTableRow';
 import { ExportToCsv } from 'export-to-csv';
+import PageTitle from '../../components/UI/Dashboard/PageTitle';
 
 //import AddHourModal from '../../components/UI/Horas/AddHourModal';
 //import DatePicker from "react-datepicker"
@@ -65,9 +66,11 @@ const ReportePorProyecto = (props: ReportePorProyectoProps,) => {
                     _id: item._id,
                     name: item.name,
                     description: item.description,
-                    resource:item.resource,
-                    code:item.code,
-                    hours_worked:typeof item.hours_worked == "undefined" ? 0: item.hours_worked ,
+                    resource: item.resource,
+                    code: item.code,
+                    hours_worked: typeof item.hours_worked == "undefined" ? 0 : item.hours_worked,
+                    deviation: item.effort - item.hours_worked,
+                    effort: 0
                 }
 
                 csvData.push({
@@ -75,6 +78,7 @@ const ReportePorProyecto = (props: ReportePorProyectoProps,) => {
                     name: item.name,
                     description: item.description,
                     duration: item.hours_worked,
+                    deviation: item.effort - item.hours_worked,
                 })
 
                 tareasDeProyecto.push(tareaAMostrar)
@@ -112,12 +116,14 @@ const ReportePorProyecto = (props: ReportePorProyectoProps,) => {
 
     return (
         <>
+            <PageTitle label='Reporte por persona'>
             <div className="flex flex-row" >
                 <Link to={'/recursos/'} >
-                    <Button>Volver al inicio</Button>
+                    <Button>Reporte por proyecto</Button>
                 </Link>
-                
             </div>
+            </PageTitle>
+
             <div className="self-end mr-10 border-2 text-center  rounded-xl shadow-lg text-slate-800 hover:bg-gray-200 hover:text-teal-600 transition-all duration-300 cursor-pointer">
                     <div >
                         
@@ -136,6 +142,7 @@ const ReportePorProyecto = (props: ReportePorProyectoProps,) => {
                                 <TableCell align="left">Tarea</TableCell>
                                 <TableCell align="left">Descripcion</TableCell>
                                 <TableCell align="left">Cantidad de Horas</TableCell>
+                                <TableCell align="left">Desviacion de esfuerzo</TableCell>
                             </TableRow>
                         </TableHead>
                        <TableBody>
