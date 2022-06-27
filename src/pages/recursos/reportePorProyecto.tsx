@@ -173,6 +173,7 @@ const ReportePorProyecto = (props: ReportePorProyectoProps,) => {
                         fieldSeparator: ',',
                         quoteStrings: '"',
                         decimalSeparator: '.',
+                        filename: "reporte_de_proyecto_"+ selected.value,
                         showLabels: true, 
                         showTitle: true,
                         title: 'Reporte del proyecto con codigo '+ selected.value,

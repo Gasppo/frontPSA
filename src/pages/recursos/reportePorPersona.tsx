@@ -228,6 +228,7 @@ const ReportePorPersona = (props: ReportePorPersonaProps,) => {
                         fieldSeparator: ',',
                         quoteStrings: '"',
                         decimalSeparator: '.',
+                        filename: "reporte_de_persona_"+ selected.value,
                         showLabels: true, 
                         showTitle: true,
                         title: 'Reporte del empleado con legajo '+ selected.value,
