@@ -5,9 +5,10 @@ import Select from 'react-select';
 import LoadingIndicator from '../../components/Loading/LoadingIndicator';
 import { ProjectReport, Proyect, SelectProyect } from '../../components/types/resourcesTypes';
 import ProyectReportTableRow from '../../components/UI/Reports/proyectReportTableRow';
+import { ExportToCsv } from 'export-to-csv';
+
 //import AddHourModal from '../../components/UI/Horas/AddHourModal';
 //import DatePicker from "react-datepicker"
-
 
 interface ReportePorProyectoProps {
 
@@ -21,6 +22,7 @@ const ReportePorProyecto = (props: ReportePorProyectoProps,) => {
     const [rowsPerPage, setRowsPerPage] = useState(9);
     const [page, setPage] = useState(0);
     const [total_hours, setTotalHours] = useState(0);
+    const [csv_data, setCSVData] = useState<any[]>();
 
     const fetchEmployees = () => {
         
@@ -55,6 +57,7 @@ const ReportePorProyecto = (props: ReportePorProyectoProps,) => {
             //let horasId = res.filter((element:Hours) => {return element.hourAssignee==4})
             //let horasAgrupadasPorTask:{[id: string]:Hours[]} = {}
             let tareasDeProyecto: ProjectReport[] = []
+            let csvData: any[]= [] 
             res.tasks.forEach((item:ProjectReport) => {
                 
                 let tareaAMostrar: ProjectReport ={
@@ -65,10 +68,19 @@ const ReportePorProyecto = (props: ReportePorProyectoProps,) => {
                     code:item.code,
                     hours_worked:typeof item.hours_worked == "undefined" ? 0: item.hours_worked ,
                 }
+
+                csvData.push({
+                    code: item.code,
+                    name: item.name,
+                    description: item.description,
+                    duration: item.hours_worked,
+                })
+
                 tareasDeProyecto.push(tareaAMostrar)
             });
             console.log(tareasDeProyecto)
             setTareas(tareasDeProyecto)
+            setCSVData(csvData)
             setLoading(false);
             setTotalHours(res.total_hours_worked);
         })
@@ -155,6 +167,24 @@ const ReportePorProyecto = (props: ReportePorProyectoProps,) => {
                 </TableContainer>
 
                 <div>Total de horas trabajas: {total_hours}</div>
+
+                <Button onClick={()=>{
+                    const options = { 
+                        fieldSeparator: ',',
+                        quoteStrings: '"',
+                        decimalSeparator: '.',
+                        showLabels: true, 
+                        showTitle: true,
+                        title: 'Reporte del proyecto con codigo '+ selected.value,
+                        useTextFile: false,
+                        useBom: true,
+                        useKeysAsHeaders: true,
+                    };
+                    
+                    const csvExporter = new ExportToCsv(options);
+                    
+                    csvExporter.generateCsv(csv_data);
+                }}>Exportar reporte</Button>
 
                 </LoadingIndicator>
 

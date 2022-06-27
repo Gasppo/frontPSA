@@ -5,6 +5,7 @@ import Select from 'react-select';
 import LoadingIndicator from '../../components/Loading/LoadingIndicator';
 import { Hours, ProjectReport, Proyect, SelectResource } from '../../components/types/resourcesTypes';
 import HoursTableRow from '../../components/UI/Horas/HoursTableRow';
+import { ExportToCsv } from 'export-to-csv';
 import ProyectReportTableRow from '../../components/UI/Reports/proyectReportTableRow';
 //import AddHourModal from '../../components/UI/Horas/AddHourModal';
 //import DatePicker from "react-datepicker"
@@ -25,6 +26,7 @@ const ReportePorPersona = (props: ReportePorPersonaProps,) => {
     const [proyects, setProyects] = useState<Proyect[]>([])
     const [horas, setHoras] = useState<Hours[]>([])
     const [totalHours, setTotalHours] = useState(0)
+    const [csv_data, setCSVData] = useState<any[]>();
 
 
     const fetchEmployees = () => {
@@ -46,6 +48,7 @@ const ReportePorPersona = (props: ReportePorPersonaProps,) => {
             .catch(err => {
                 console.log(JSON.stringify(err))
             })
+
     }
 
     const getProyectID = (id:number) => {
@@ -94,6 +97,7 @@ const ReportePorPersona = (props: ReportePorPersonaProps,) => {
             });
 
             let horas: Hours[]= [] 
+            let csvData: any[]= [] 
 
             Object.keys(horasAgrupadasPorTask).forEach((key:string) =>{
                 let horaInicial:Hours = {
@@ -112,9 +116,18 @@ const ReportePorPersona = (props: ReportePorPersonaProps,) => {
 
                 horas.push(horaInicial)
 
+                csvData.push({
+                    proyectCode: horasAgrupadasPorTask[key][0].task.projectCode,
+                    code: horasAgrupadasPorTask[key][0].task.code,
+                    name: horasAgrupadasPorTask[key][0].task.name,
+                    description: horasAgrupadasPorTask[key][0].task.description,
+                    duration: horasAgrupadasPorTask[key][0].duration,
+                })
+
             })
 
-
+            console.log(horas)
+            setCSVData(csvData);
             setHoras(horas);
             setLoading(false)
 
@@ -132,15 +145,20 @@ const ReportePorPersona = (props: ReportePorPersonaProps,) => {
         .then(res => {
             setTotalHours(typeof res.total_hours_worked == "undefined" ? 0 :res.total_hours_worked )
             console.log(res)
+
         })
     }
 
     useEffect(() => {
-        fetchEmployees();
+        if(recursos.length == 0){
+            fetchEmployees();
+        }
+        else{
         fetchProyects()
         setLoading(true)
         fetchHours();
         fetchTotalTimeWorked()
+        }
     }, [selected]);
 
     const handleChangePage = (event: React.MouseEvent<HTMLButtonElement> | null, newPage: number) => {
@@ -204,7 +222,24 @@ const ReportePorPersona = (props: ReportePorPersonaProps,) => {
                 </TableContainer>
                 
                 <div>{"TOTAL: " + totalHours}</div>
-                
+
+                <Button onClick={()=>{
+                    const options = { 
+                        fieldSeparator: ',',
+                        quoteStrings: '"',
+                        decimalSeparator: '.',
+                        showLabels: true, 
+                        showTitle: true,
+                        title: 'Reporte del empleado con legajo '+ selected.value,
+                        useTextFile: false,
+                        useBom: true,
+                        useKeysAsHeaders: true,
+                    };
+                    
+                    const csvExporter = new ExportToCsv(options);
+                    
+                    csvExporter.generateCsv(csv_data);
+                }}>Exportar reporte</Button>
 
                 </LoadingIndicator>
         </>
