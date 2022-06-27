@@ -55,7 +55,7 @@ export const getExternalResources = async () => {
 export const getClientLicenses = async (clientId: number) => {
     return await fetch(`${productAndVersionsURI}/licence/${clientId}`)
         .then(response => response.json())
-        .then(json => { return json.licences.map((licence: any) => { return { id: licence.id, productId: licence.productId, versionId: licence.versionId, clientId: licence.clientId } }) })
+        .then(json => { return json.licences.map((licence: any) => { return { id: licence.id, productId: licence.productId, versionId: licence.versionId, clientId: licence.clientId, state: licence.state } }) })
 }
 
 export const getProducts = async () => {

@@ -43,7 +43,7 @@ export type TicketProductVersion = {
     productId: number;
 }
 
-export type TicketLicense = { id: number, productId: number, versionId: number, clientId: number }
+export type TicketLicense = { id: number, productId: number, versionId: number, clientId: number, state: string }
 
 export type TicketDetails = Ticket & {
     razonSocial: string;

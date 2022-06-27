@@ -1,4 +1,4 @@
-import { Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material'
+import { Table, TableBody, TableCell, TableContainer,Paper, TableHead, TableRow, Typography, getInitColorSchemeScript, TableFooter, TablePagination } from '@mui/material'
 import { useLocation } from 'react-router-dom'
 import {Project} from '../../components/types/projectTypes'
 import LoadingIndicator from '../../components/Loading/LoadingIndicator'
@@ -7,18 +7,16 @@ import { Circle } from '@mui/icons-material';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import TaskTableRow from '../../components/UI/Projects/TaskTableRow';
+import TaskTableRow from '../../components/UI/Table Rows/TaskTableRow';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
-import { Link, useNavigate} from 'react-router-dom';
+import {useNavigate} from 'react-router-dom';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import Popup from 'reactjs-popup';
-import AddTaskModal from './AddTaskModal';
-import{Resource} from '../../components/types/resourceType';
-import EditProjectModal from '../../components/UI/Projects/editProjectModal';
+import AddTaskModal from '../../components/UI/Tasks Modal/AddTaskModal';
+import EditProjectModal from '../../components/UI/Projects Modal/editProjectModal';
 import { Task } from '../../components/types/taskType'
-import AddResourcesModal from '../proyectos/AddResourcesModal'
+import AddResourcesModal from '../../components/UI/Projects Modal/AddResourcesModal'
 import AddCircleIcon from '@mui/icons-material/AddCircle';
-import { render } from 'react-dom';
 
 interface ProyectProps {
     projectData: Project,
@@ -41,15 +39,14 @@ const Proyecto = () => {
     const [riskColor, setRiskColor] = useState('#9297A0');
     const [riskImpact, setRiskImpact] = useState('None');
     const [showResourcesModal, setshowResourcesModal] = useState(false);
-    const [stateTagColor, setStateTagColor] = useState('#9297A0');
+    const [stateTagColor, setStateTagColor] = useState(' ');
+    const [rowsPerPage, setRowsPerPage] = useState(5)
+    const [page, setPage] = useState(0)
     const [expandedRecursos, setexpandedRecursos] = useState(false);
     const [expandedDates, setexpandedDates] = useState(false);
     const [expandedDetails, setexpandedDetails] = useState(false);
-    const [resources, setLoadedResources] = useState<Resource []>([]);
-    const [clients, setClients] = useState<any[]>([]);
     const navigate = useNavigate();
     const [isADevelopmentProject, setIfItIsADevelomentProject]= useState(false);
-
 
     const fetchProject = () => {
         fetch(`https://modulo-proyectos-psa-2022.herokuapp.com/projects/${projectData.code}`,{
@@ -65,31 +62,13 @@ const Proyecto = () => {
             })
             .catch(err => console.log(err));
             sleep(3000).then(res => setLoading(false));
+            console.log(project.state)
     }
 
-    /*const gatherTasks = () => {
-        //setLoading(true)
-        fetch('http://localhost:2000/tasks',{
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        })
-            .then((response) => {
-                return response.json()})
-            .then((myJson) => {
-               // console.log(myJson);
-                setLoadedTasks(JSON.parse(JSON.stringify(myJson)));
-
-            })
-            .catch(err => console.log(err))
-            sleep(3000).then(res => setLoading(false));
-            //console.log(loadedTasks);
-    }*/
 
     const handleAddResourcesSubmit = () => {
-        //asociar los recursos
         setshowResourcesModal(false);
+        console.log(showResourcesModal);
     };
     
     const handleModalAddResourcesClose = () => {
@@ -99,18 +78,6 @@ const Proyecto = () => {
     const handleOpenModalAddResources = () =>{
         setshowResourcesModal(true);
     };
-
-    /*const updateProjectUsingAPI = async () => {
-        const response = await fetch(`http://localhost:2000/projects/${projectData.code}`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-
-            },
-            body: JSON.stringify(newProject)
-        })
-        return response
-    }*/
 
     const determineRisk = () => {
         if(project.risk?.impact == 1){
@@ -128,15 +95,18 @@ const Proyecto = () => {
         }
     }
 
-    const determineStateTagColor = () => {
+    const getColor = () => {
         if(project.state === 'No Iniciado' || project.state === 'no iniciado' ){
-            setStateTagColor(state => ('#FC7A1E'));
+            return ('#FC7A1E');
         }else if (project.state === 'Iniciado' || project.state === 'iniciado'){
-            setStateTagColor(state => ('#329F5B'));
+            return ('#329F5B');
         }else if (project.state === 'Finalizado' || project.state === 'finalizado'){
-            setStateTagColor(state => ('#4D7298'));
+            return('#4D7298');
         }else if (project.state === 'Cancelado' || project.state === 'cancelado'){
-            setStateTagColor(state => ('#A54657'));
+            return ('#A54657');
+        }
+        else{
+            return '#'
         }
     }
 
@@ -169,7 +139,6 @@ const Proyecto = () => {
     };
     
     const handleAddTaskSubmit = () =>{
-        //agregar la tarea
         setIsOpenNewTaskModal(false);
     };
 
@@ -187,23 +156,29 @@ const Proyecto = () => {
         .then((response) => {
             return response.json()})
         .then((myJson) => {
-            //console.log(JSON.parse(JSON.stringify(myJson)));
             setProjectTasks(JSON.parse(JSON.stringify(myJson)));
         })
         .catch(err => console.log(err))
-        //sleep(3000).then(res => setLoading(false));
     }
 
     const updatePage = () => {
         fetchProject();
-        determineStateTagColor();
+    };
+
+    const handleChangePage = (event: React.MouseEvent<HTMLButtonElement> | null, newPage: number) => {
+        setPage(newPage);
+    };
+  
+    const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        setRowsPerPage(parseInt(event.target.value, 10));
+        setPage(0);
     };
 
     useEffect(() => {
         fetchProject();
         getTasksByProject();
-        determineStateTagColor();
     }, []);
+
 
     useEffect(() => {
         determineRisk();
@@ -221,7 +196,7 @@ const Proyecto = () => {
         <>
             <EditProjectModal onRefresh={updatePage} onClose={handleAddProjectClose} show={showProjectModal} row={project} />
             <AddTaskModal onSubmit={handleAddTaskSubmit} onClose={handleNewTaskClose} show={isOpenNewTaskModal} toProject={project} projectResources={project.resources}/>
-            <AddResourcesModal onSubmit={handleAddResourcesSubmit} onClose={handleModalAddResourcesClose} show={showResourcesModal} project={project} onRefresh={fetchProject}/> 
+            <AddResourcesModal onSubmit={handleAddResourcesSubmit} onClose={handleModalAddResourcesClose} show={showResourcesModal} project={project} onRefresh={fetchProject} projectTasks={projectTasks}/> 
             <div style={{display: 'flex', flexDirection: 'row', margin: 25, paddingBottom: 20, paddingLeft: 80, borderBottomColor:'#C5D0CB', borderBottomWidth: '1px'}}> 
                 
                 <ArrowBackIosNewIcon  onClick={() => navigate(-1)} style={{color: 'slate', fontSize: 25, marginTop: -9, marginRight: 20}} className= 'hover:bg-gray-200 hover:text-teal-900 hover:rounded-3xl hover:shadow-lg transition-all duration-200  group  h-12'/>
@@ -251,7 +226,7 @@ const Proyecto = () => {
             </div>
             <div style={{display: 'flex', flexDirection: 'row', marginLeft: 100}}> 
                 <div style={{display: 'flex', flexDirection: 'column', marginTop: -10, width:'90vh'}}>
-                    <div style={{padding: 5, width: 110, height: 30, display: 'flex', flexDirection: 'row', backgroundColor: stateTagColor, borderRadius: 5}}><Typography variant='body2' style= {{color: '#F4F6F5', fontWeight: 'bold'}}>{project.state.toUpperCase()}</Typography></div>
+                    <div style={{padding: 5, width: 110, height: 30, display: 'flex', flexDirection: 'row', backgroundColor: getColor(), borderRadius: 5}}><Typography variant='body2' style= {{color: '#F4F6F5', fontWeight: 'bold'}}>{project.state.toUpperCase()}</Typography></div>
                     <div style={{alignSelf:'left', marginTop: 25}}>
                         <Typography variant='body2' className='w-[27vh]' style={{fontWeight: 'bold', color: '#5C7067'}}>Descripción: </Typography>
                         <div style= {{ marginTop: 10, backgroundColor: "#E9EDEB", borderRadius: 15, padding: 10, paddingLeft: 30, paddingRight: 30, minHeight:110}}>
@@ -276,8 +251,30 @@ const Proyecto = () => {
                                             </TableRow>
                                         </TableHead>
                                         <TableBody>
-                                            {(projectTasks.sort((a, b) => b.priority - a.priority)).map(row => <TaskTableRow refresh={getTasksByProject} row={row} code= {project.code} tasks = {projectTasks} key={row.code} projectResources={project.resources} />)}
+                                            {(projectTasks.sort((a, b) => b.priority - a.priority))
+                                            .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                                            .map(row => <TaskTableRow refresh={getTasksByProject} row={row} code= {project.code} tasks = {projectTasks} key={row.code} projectResources={project.resources} />)}
+                                        
                                         </TableBody>
+                                        <TableFooter>
+                                            <TableRow>
+                                                <TablePagination
+                                                    rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
+                                                    colSpan={8}
+                                                    count={projectTasks.length}
+                                                    rowsPerPage={rowsPerPage}
+                                                    page={page}
+                                                    SelectProps={{
+                                                        inputProps: {
+                                                            'aria-label': 'rows per page',
+                                                        },
+                                                        native: true,
+                                                    }}
+                                                    onPageChange={handleChangePage}
+                                                    onRowsPerPageChange={handleChangeRowsPerPage}
+                                                />
+                                            </TableRow>
+                                        </TableFooter>
                                     </Table>
                                 </TableContainer>
                             </>

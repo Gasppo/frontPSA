@@ -15,11 +15,12 @@ interface SelectProps {
     validations?: ((value: any) => string)[]
     required?: boolean
     disabledText?: string
+    size?: 'medium' | 'small' | undefined
 }
 
 const SelectBox = (props: SelectProps) => {
 
-    const { value, onChange, options, valueKey, text, name, className, label, disabled, validations = [], required, disabledText = 'Disabled' } = props
+    const { value, onChange, options, valueKey, text, name, className, label, disabled, validations = [], required, disabledText = 'Disabled',size } = props
 
     const errorMessage = validations.reduce((prev, validation) => {
         const newError = validation(value)
@@ -42,6 +43,7 @@ const SelectBox = (props: SelectProps) => {
                 className={className || ''}
                 variant="outlined"
                 color='primary'
+                size={size ? size : 'medium'}
                 disabled={disabled}
                 renderValue={renderText}
                 value={value}

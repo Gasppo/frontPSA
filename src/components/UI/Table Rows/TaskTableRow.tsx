@@ -3,11 +3,10 @@ import { useEffect, useState } from 'react'
 import { Task } from '../../types/taskType'
 import DeleteIcon from '@mui/icons-material/Delete';
 import { Circle } from '@mui/icons-material';
-import { useNavigate } from 'react-router-dom';
 import EditIcon from '@mui/icons-material/Edit';
-import ConfirmModal from './confirmationModal';
-import EditTaskModal from '../../../pages/proyecto/EditTaskModal';
-import VerTareaModal from '../../../pages/proyecto/VerTareaModal';
+import ConfirmModal from '../Modal/confirmationModal';
+import EditTaskModal from '../Tasks Modal/EditTaskModal';
+import VerTareaModal from '../Tasks Modal/VerTareaModal';
 
 interface  TaskTableRowProps {
     row: Task,
@@ -63,6 +62,7 @@ const  TaskTableRow = (props:  TaskTableRowProps) => {
     
             },
         })
+        window.location.reload();
         return response;   
     }
 
