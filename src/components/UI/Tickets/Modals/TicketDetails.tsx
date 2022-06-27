@@ -23,6 +23,7 @@ const TicketDetails = (props: TicketDetailsProps) => {
 
     const fields = [
         { title: "Titulo", info: ticket?.title || 'N/A' },
+        { title: "Descripcion", info: ticket?.description || 'N/A' },
         { title: "Cliente", info: cliente?.razonSocial || 'N/A' },
         { title: "Producto", info: producto?.name || 'N/A' },
         { title: "Estado", info: ticket?.status || 'N/A' },
@@ -38,7 +39,7 @@ const TicketDetails = (props: TicketDetailsProps) => {
             <div className='w-1/3'>
                 <div className="mb-10" >
                     <Typography variant='h5'>Seguimiento</Typography>
-                    <div className='flex flex-col'>
+                    <div className='flex flex-col text-sm'>
                         <span>{`[${createDate}] - Ticket Creado`}</span>
                     </div>
                 </div>

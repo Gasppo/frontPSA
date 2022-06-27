@@ -1,17 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Modal, TextField, Typography, MenuItem, InputAdornment } from '@mui/material';
-import{Client} from '../../components/types/clientTypes'
-import AccountCircle from '@mui/icons-material/AccountCircle';
-import ValidatingInput from '../../components/UI/Inputs/ValidatingInput';
-import ValidatingInputDates from '../../components/UI/Inputs/ValidatingInputDates';
-import SelectBox from '../../components/UI/Inputs/SelectBox'
-import CenteredModal from '../../components/UI/Modal/CenteredModal'
-import { PropaneOutlined, VoicemailRounded } from '@mui/icons-material';
-import { isPrivateIdentifier } from 'typescript';
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
-import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import {Task} from '../../components/types/taskType'
+import {Task} from '../../types/taskType'
 
 interface VerTareaModalProps {
     onClose: () => void

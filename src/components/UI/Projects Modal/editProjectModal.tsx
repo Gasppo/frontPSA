@@ -1,8 +1,7 @@
 import { Modal, TextField, Typography, MenuItem, InputAdornment } from '@mui/material';
 import { useState } from 'react'
-import{Client} from '../../../components/types/clientTypes'
 import { Project } from '../../types/projectTypes'
-import ConfirmModal from './confirmationModal'  
+import ConfirmModal from '../Modal/confirmationModal'  
 
 interface EditProjectModalProps {
     onClose: () => void
@@ -27,15 +26,10 @@ const EditProjectModal = (props: EditProjectModalProps) => {
     const endDate = yearE +'-'+monthE+'-'+dayE;
     const [showCofirmationModal, setShowConfirmationModal] = useState(false);
     const { onClose, show ,onRefresh} = props;
-    const [isFormValid, setFormValidation] = useState(false);
     const [isNameValid, setNameValidation] = useState(true);
     const [isStartDateValid, setStartDateValidation] = useState(true);
-    const [isClientValid, setClientValidation] = useState(true);
-
     const [isProjectStateValid, setProjectStateValidation] = useState(true);
     const [isEndDateValid, setEndDateValidation] = useState(true);
-    const [loadedClients, setLoadedClients] = useState<Client[]>([])
-    const date = new Date();
     const [newProject, setNewProject] = useState({
         name: props.row.name,
         updatedDate: currentDate,
@@ -67,6 +61,8 @@ const EditProjectModal = (props: EditProjectModalProps) => {
             },
             body: JSON.stringify(newProject)
         })
+        //props.onRefresh();
+        window.location.reload();
         return response
     }
 
@@ -80,51 +76,11 @@ const EditProjectModal = (props: EditProjectModalProps) => {
 
     const submit = () => {
         updateProjectUsingAPI();
-        props.onRefresh();
-        //props.onSubmit();
         onClose();
 
     }
 
-    const validateProjectStartDate = () =>{
-        if(newProject.startDate >= currentDate){
-            setStartDateValidation(true);
-        }
-        else
-            setStartDateValidation(false)
-    }
-
-    const validateProjectState = () =>{
-        if (newProject.state != "")
-            setProjectStateValidation(true);
-        else 
-            setProjectStateValidation(false);
-    }
-    
-    const validateProjectEndDate = () =>{
-
-        if(newProject.endDate!="dd/mm/yyyy" && newProject.endDate >= currentDate && newProject.endDate > newProject.startDate){
-            setEndDateValidation(true)
-        }
-        else
-            setEndDateValidation(false)
-    }
-
-    const validateProjectValues = () =>{
-        validateProjectName();
-        validateProjectState();
-        validateProjectStartDate();
-
-        if (isNameValid && isProjectStateValid && isStartDateValid && isEndDateValid){
-            setFormValidation(true);
-            console.log("entro");
-        }
- 
-    }
-
     const handleSubmit = async () => {
-        //Falta hacer la validacion, si la hago aca no lleg a cargarse a tiempo
-        //validateProjectValues();
         submit();
     };
 
@@ -134,8 +90,6 @@ const EditProjectModal = (props: EditProjectModalProps) => {
     };
 
     const onCloseCreateProjectModal = () =>{
-        setClientValidation(true);
-        setFormValidation(false);
         setNameValidation(true);
         setProjectStateValidation(true);
         onClose();
