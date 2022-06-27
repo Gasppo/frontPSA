@@ -23,6 +23,7 @@ const ReportePorProyecto = (props: ReportePorProyectoProps,) => {
     const [page, setPage] = useState(0);
     const [total_hours, setTotalHours] = useState(0);
     const [csv_data, setCSVData] = useState<any[]>();
+    const [disableReport, setDisableReport] = useState<boolean>(true)
 
     const fetchEmployees = () => {
         
@@ -81,6 +82,7 @@ const ReportePorProyecto = (props: ReportePorProyectoProps,) => {
             console.log(tareasDeProyecto)
             setTareas(tareasDeProyecto)
             setCSVData(csvData)
+            setDisableReport(false);
             setLoading(false);
             setTotalHours(res.total_hours_worked);
         })
@@ -168,7 +170,7 @@ const ReportePorProyecto = (props: ReportePorProyectoProps,) => {
 
                 <div>Total de horas trabajas: {total_hours}</div>
 
-                <Button onClick={()=>{
+                <Button disabled={disableReport} onClick={()=>{
                     const options = { 
                         fieldSeparator: ',',
                         quoteStrings: '"',

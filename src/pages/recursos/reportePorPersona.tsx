@@ -22,6 +22,7 @@ const ReportePorPersona = (props: ReportePorPersonaProps,) => {
     const [horas_trabajas, setHorasTrabajadas] = useState<any>(0);
     const [rowsPerPage, setRowsPerPage] = useState(9);
     const [isLoading, setLoading] = useState<boolean>(false)
+    const [disableReport, setDisableReport] = useState<boolean>(true)
     const [page, setPage] = useState(0);
     const [proyects, setProyects] = useState<Proyect[]>([])
     const [horas, setHoras] = useState<Hours[]>([])
@@ -125,7 +126,7 @@ const ReportePorPersona = (props: ReportePorPersonaProps,) => {
                 })
 
             })
-
+            setDisableReport(false);
             console.log(horas)
             setCSVData(csvData);
             setHoras(horas);
@@ -240,7 +241,7 @@ const ReportePorPersona = (props: ReportePorPersonaProps,) => {
                     const csvExporter = new ExportToCsv(options);
                     
                     csvExporter.generateCsv(csv_data);
-                }}>Exportar reporte</Button>
+                }} disabled={disableReport}>Exportar reporte</Button>
 
                 </LoadingIndicator>
         </>
