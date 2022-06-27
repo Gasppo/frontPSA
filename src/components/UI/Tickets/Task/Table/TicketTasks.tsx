@@ -219,8 +219,8 @@ const TicketTasks = (props: TicketTasksProps) => {
                 <Table>
                     <EnhancedTaskTableHead order={order} orderBy={orderBy} onRequestSort={handleRequestSort} headers={tableHeaders} />
                     <TableBody>
-                        {loadedTask &&
-                            loadedTask
+                        {fullTasks &&
+                            fullTasks
                                 .sort(sortFunction)
                                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                                 .map(row => (
@@ -231,7 +231,7 @@ const TicketTasks = (props: TicketTasksProps) => {
                         <DefaultTableFooter
                             disableRowsPerPage
                             colSpan={4}
-                            count={loadedTask.length || 0}
+                            count={fullTasks.length || 0}
                             onPageChange={handleChangePage}
                             onRowsPerPageChange={handleChangeRowsPerPage}
                             page={page}
