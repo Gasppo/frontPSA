@@ -6,6 +6,7 @@ import { Project } from '../../../../types/projectTypes';
 import { Resource } from '../../../../types/resourcesTypes';
 import { Order, Ticket } from '../../../../types/ticketTypes';
 import DefaultTableFooter from '../../../Table/DefaultTableFooter';
+import Filter from '../../../Table/Filter';
 import CreateTaskModal from '../Modals/CreateTaskModal';
 import EnhancedTaskTableHead from './EnhancedTaskTableHead';
 import TaskTableRow from './TaskTableRow';
@@ -78,6 +79,8 @@ const TicketTasks = (props: TicketTasksProps) => {
     const [show, setShow] = useState(false)
     const [resources, setResources] = useState<Resource[]>([])
     const [projects, setProjects] = useState<Project[]>([])
+    const [filterKey, setFilterKey] = useState<string>('id')
+    const [filterValue, setFilterValue] = useState('')
 
     const handleClose = () => {
         setShow(false)
@@ -86,8 +89,6 @@ const TicketTasks = (props: TicketTasksProps) => {
     const handleOpen = () => {
         setShow(true)
     }
-
-
 
     const handleRequestSort = (event: React.MouseEvent<unknown>, property: keyof Data,) => {
         const isAsc = orderBy === property && order === 'asc';
@@ -111,6 +112,14 @@ const TicketTasks = (props: TicketTasksProps) => {
         gatherTasks(ticket?.id || 0)
         setLoading(false)
         handleClose()
+    }
+
+    const handleFilterKeyChange = (key: string) => {
+        setFilterKey(key)
+    }
+
+    const handleFilterValueChange = (value: string) => {
+        setFilterValue(value)
     }
 
     const sortFunction = (a: any, b: any) => {
@@ -171,8 +180,11 @@ const TicketTasks = (props: TicketTasksProps) => {
     }, [gatherEmployees]);
 
     useEffect(() => {
-       gatherTasks(ticket?.id || 0)
+        gatherTasks(ticket?.id || 0)
     }, [gatherTasks, ticket?.id]);
+
+
+    const fullTasks = loadedTask.filter((row: any) => filterKey in row ? row[filterKey]?.toString()?.toLowerCase()?.includes(filterValue?.toLowerCase()) : false)
 
     return (
         <LoadingIndicator show={loading} className="w-[95%] mb-10">
@@ -193,23 +205,23 @@ const TicketTasks = (props: TicketTasksProps) => {
                 </div>
             )}
             <TableContainer component={Paper} className="mt-10">
-
+                <Filter data={fullTasks || []} currentKey={filterKey} value={filterValue} onKeyChange={handleFilterKeyChange} onValueChange={handleFilterValueChange} filterOptions={tableHeaders} filterKey="id" filterText='label' />
                 <Table>
                     <EnhancedTaskTableHead order={order} orderBy={orderBy} onRequestSort={handleRequestSort} headers={tableHeaders} />
                     <TableBody>
-                        {loadedTask &&
-                            loadedTask
+                        {fullTasks &&
+                            fullTasks
                                 .sort(sortFunction)
                                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                                 .map(row => (
-                                    <TaskTableRow row={row} resources={resources} proyectos={projects}/>
+                                    <TaskTableRow row={row} resources={resources} proyectos={projects} />
                                 ))}
                     </TableBody>
                     <TableFooter>
                         <DefaultTableFooter
                             disableRowsPerPage
                             colSpan={4}
-                            count={loadedTask.length || 0}
+                            count={fullTasks.length || 0}
                             onPageChange={handleChangePage}
                             onRowsPerPageChange={handleChangeRowsPerPage}
                             page={page}

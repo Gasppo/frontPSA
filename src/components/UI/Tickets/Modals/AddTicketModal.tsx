@@ -25,8 +25,8 @@ const AddTicketModal = (props: AddTicketModalProps) => {
 
     const invalidFields = (!input?.title || !input?.authorId || !input.productLicenseId)
     const disabled = runValidations && invalidFields
-
-    const enabledProducts = useMemo(() => clientLicenses.map(el => el.productId), [clientLicenses])
+    
+    const enabledProducts = useMemo(() => clientLicenses.filter(el => el.state === "Activa").map(el => el.productId), [clientLicenses])
     const filteredProducts = useMemo(() => products.filter(el => enabledProducts.includes(el.id)), [enabledProducts, products])
     const filteredVersions = useMemo(() => clientLicenses
         .filter(el => el.productId === input?.productId && el.state === 'Activa')
@@ -89,6 +89,12 @@ const AddTicketModal = (props: AddTicketModalProps) => {
 
     const isEmpty = (value: any) => !value ? "Este campo no puede estar vacio" : ""
     const validations = runValidations ? [isEmpty] : []
+    const noAuthorSelected = (!input?.authorId && input?.authorId === 0)
+    const noProductSelected = input?.productId <= 0
+    const disableClientInput = noAuthorSelected || enabledProducts.length === 0
+    const disabledVersionInput = noAuthorSelected || noProductSelected
+    const productDisabledText = `${!noAuthorSelected && enabledProducts.length === 0 ? 'El cliente no tiene licencias activas' : 'Primero ingrese un cliente...'}`
+    const versionDisabledText = `${!noAuthorSelected && enabledProducts.length === 0 ? 'El cliente no tiene licencias activas' : 'Primero ingrese un producto...'}`
 
     return (
         <CenteredModal isLoading={isLoading} onClose={onClose} show={show} onSubmit={handleSubmit} label="Crear Ticket" addbuttonLabel="Crear" disableSubmit={disabled}>
@@ -100,8 +106,8 @@ const AddTicketModal = (props: AddTicketModalProps) => {
                 <SelectBox required validations={validations} name="priority" className='mr-8 w-80' label="Prioridad" onChange={handleChangeInt} valueKey="id" value={input?.priority} options={prioridades} text="valor" />
             </div>
             <div className='flex mb-6 flex-row' >
-                <SelectBox disabledText='Primero ingrese un cliente...' required validations={validations} name="productId" className='mr-8 w-80' disabled={!input?.authorId && input?.authorId === 0} label="Producto" onChange={handleProductChange} valueKey="id" value={input?.productId} options={filteredProducts} text="name" />
-                <SelectBox disabledText='Primero ingrese un producto...' required validations={validations} name="productLicenseId" className='mr-8 w-80' disabled={(!input?.authorId && input?.authorId === 0) || input?.productId <= 0} label="Version" onChange={handleChangeInt} valueKey="id" value={input?.productLicenseId} options={filteredVersions} text="productVersion" />
+                <SelectBox disabledText={productDisabledText} required validations={validations} name="productId" className='mr-8 w-80' disabled={disableClientInput} label="Producto" onChange={handleProductChange} valueKey="id" value={input?.productId} options={filteredProducts} text="name" />
+                <SelectBox disabledText={versionDisabledText} required validations={validations} name="productLicenseId" className='mr-8 w-80' disabled={disabledVersionInput} label="Version" onChange={handleChangeInt} valueKey="id" value={input?.productLicenseId} options={filteredVersions} text="productVersion" />
             </div>
             <ValidatingInput required validations={validations} className='mb-6 w-[42rem] mr-8' name='description' label="Descripcion" multiline rows={2} value={input?.description} onChange={handleChangeText} />
         </CenteredModal>

@@ -3,20 +3,17 @@ import { TableCell, TableRow } from '@mui/material';
 import { Ticket, TicketProduct } from '../../../types/ticketTypes';
 
 interface TicketTableRowProps {
-    row: Ticket,
-    refresh: () => void
-    onEdit: (id: number) => void,
-    product?: TicketProduct
-    client?: {
-        id: number;
-        CUIT: string;
+    row: Ticket & {
+        productName: string;
         razonSocial: string;
     }
+    refresh: () => void
+    onEdit: (id: number) => void
     onView: (id: number) => void
 }
 
 const TicketTableRow = (props: TicketTableRowProps) => {
-    const { row, onEdit, onView, product, client } = props
+    const { row, onEdit, onView } = props
 
     const handleEdit = () => {
         onEdit(row.id)
@@ -34,8 +31,8 @@ const TicketTableRow = (props: TicketTableRowProps) => {
         <TableRow hover key={row.id} >
             <TableCell align="left" onClick={handleOpenDetails} className="cursor-pointer" >{row.id}</TableCell>
             <TableCell align="left" onClick={handleOpenDetails} className="cursor-pointer">{row.title}</TableCell>
-            <TableCell align="left" onClick={handleOpenDetails} className="cursor-pointer">{client?.razonSocial || 'N/A'}</TableCell>
-            <TableCell align="left" onClick={handleOpenDetails} className="cursor-pointer">{product?.name || 'N/A'}</TableCell>
+            <TableCell align="left" onClick={handleOpenDetails} className="cursor-pointer">{row.razonSocial || 'N/A'}</TableCell>
+            <TableCell align="left" onClick={handleOpenDetails} className="cursor-pointer">{row.productName || 'N/A'}</TableCell>
             <TableCell align="left" onClick={handleOpenDetails} className="cursor-pointer">{new Date(row.createdAt).toLocaleDateString('es-AR')}</TableCell>
             <TableCell align="left" onClick={handleOpenDetails} className="cursor-pointer">{new Date(row.updatedAt).toLocaleDateString('es-AR')}</TableCell>
             <TableCell align="left" onClick={handleOpenDetails} className="cursor-pointer">{row.status}</TableCell>
