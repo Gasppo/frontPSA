@@ -116,10 +116,10 @@ const ReportePorProyecto = (props: ReportePorProyectoProps,) => {
 
     return (
         <>
-            <PageTitle label='Reporte por persona'>
+            <PageTitle label='Reporte por proyecto'>
             <div className="flex flex-row" >
                 <Link to={'/recursos/'} >
-                    <Button>Reporte por proyecto</Button>
+                    <Button>Volver al inicio</Button>
                 </Link>
             </div>
             </PageTitle>

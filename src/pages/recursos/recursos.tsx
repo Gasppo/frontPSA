@@ -177,9 +177,9 @@ const Recursos = (props: RecursosProps) => {
 
     return (
         <>
-            <PageTitle label='Modulo de Recursos Humanos'>
+            <PageTitle label='Carga de horas'>
             <div className="flex flex-row" >
-                <Link to={'/'} >
+                <Link to={'/recursos'} >
                     <Button>Volver al inicio</Button>
                 </Link>
                 </div>
