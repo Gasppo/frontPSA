@@ -1,16 +1,15 @@
-import { IconButton, Paper, Table, TableBody, TableContainer, TableFooter, Typography } from '@mui/material';
+import { Paper, Table, TableBody, TableContainer, TableFooter, Typography } from '@mui/material';
 import { useCallback, useEffect, useState } from 'react';
 import { proyectsAPI } from '../../../../dev/URIs';
 import LoadingIndicator from '../../../../Loading/LoadingIndicator';
 import { Project } from '../../../../types/projectTypes';
 import { Resource } from '../../../../types/resourcesTypes';
 import { Order, Ticket } from '../../../../types/ticketTypes';
-import Filter from '../../../Table/Filter';
 import DefaultTableFooter from '../../../Table/DefaultTableFooter';
+import Filter from '../../../Table/Filter';
 import CreateTaskModal from '../Modals/CreateTaskModal';
 import EnhancedTaskTableHead from './EnhancedTaskTableHead';
 import TaskTableRow from './TaskTableRow';
-import FilterListIcon from '@mui/icons-material/FilterList'
 
 interface Data {
     code: number;
@@ -82,7 +81,6 @@ const TicketTasks = (props: TicketTasksProps) => {
     const [projects, setProjects] = useState<Project[]>([])
     const [filterKey, setFilterKey] = useState<string>('id')
     const [filterValue, setFilterValue] = useState('')
-    const [filterEnabled, setFilterEnabled] = useState(false)
 
     const handleClose = () => {
         setShow(false)
@@ -90,11 +88,6 @@ const TicketTasks = (props: TicketTasksProps) => {
 
     const handleOpen = () => {
         setShow(true)
-    }
-
-
-    const handleFilterEnable = () => {
-        setFilterEnabled(prev => !prev)
     }
 
     const handleRequestSort = (event: React.MouseEvent<unknown>, property: keyof Data,) => {
@@ -212,10 +205,7 @@ const TicketTasks = (props: TicketTasksProps) => {
                 </div>
             )}
             <TableContainer component={Paper} className="mt-10">
-                <IconButton>
-                    <FilterListIcon color='primary' onClick={handleFilterEnable} />
-                </IconButton>
-                {filterEnabled && <Filter data={fullTasks || []} currentKey={filterKey} value={filterValue} onKeyChange={handleFilterKeyChange} onValueChange={handleFilterValueChange} filterOptions={tableHeaders} filterKey="id" filterText='label' />}
+                <Filter data={fullTasks || []} currentKey={filterKey} value={filterValue} onKeyChange={handleFilterKeyChange} onValueChange={handleFilterValueChange} filterOptions={tableHeaders} filterKey="id" filterText='label' />
                 <Table>
                     <EnhancedTaskTableHead order={order} orderBy={orderBy} onRequestSort={handleRequestSort} headers={tableHeaders} />
                     <TableBody>

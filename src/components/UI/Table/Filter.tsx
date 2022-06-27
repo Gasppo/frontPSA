@@ -1,5 +1,6 @@
-import { Autocomplete, TextField } from '@mui/material';
-import { ChangeEvent, SyntheticEvent } from 'react';
+import FilterListIcon from '@mui/icons-material/FilterList';
+import { Autocomplete, IconButton, TextField } from '@mui/material';
+import { ChangeEvent, SyntheticEvent, useState } from 'react';
 import SelectBox from '../Inputs/SelectBox';
 
 interface FilterProps {
@@ -15,6 +16,7 @@ interface FilterProps {
 
 const Filter = (props: FilterProps) => {
     const { filterOptions = [], onKeyChange, onValueChange, filterKey, filterText, currentKey, data, value } = props
+    const [filterEnabled, setFilterEnabled] = useState(false)
 
     const handleValueChange = (event: SyntheticEvent<Element, Event>, value: any) => {
         console.log(value)
@@ -26,6 +28,11 @@ const Filter = (props: FilterProps) => {
         onKeyChange(e.target.value)
     }
 
+    const handleFilterEnable = () => {
+        setFilterEnabled(prev => !prev)
+    }
+
+
     const filterWithoutDates = filterOptions.filter(el => el.id !== 'createdAt' && el.id !== 'updatedAt')
 
     const labelTitle = filterWithoutDates.find(el => el?.[filterKey] === currentKey)?.[filterText] || 'Filtro'
@@ -34,21 +41,26 @@ const Filter = (props: FilterProps) => {
     const uniqueOptions = [...new Set(options)]
 
     return (
-        <div className='m-4'>
-            <div className='flex'>
-                <SelectBox onChange={handleKeyChange} label="Filtrar por.." value={currentKey} options={filterWithoutDates} name="" valueKey={filterKey} text={filterText} size='small' className='mr-8 w-80 md:w-56' />
-                <Autocomplete
-                    value={value}
-                    disablePortal
-                    size='small'
-                    className='mr-8 w-96 md:w-64'
-                    options={uniqueOptions}
-                    renderInput={(params) => <TextField {...params} label={labelTitle} InputLabelProps={{ shrink: true }} />}
-                    onChange={handleValueChange}
-                    
-                />
-            </div>
-        </div>
+        <>
+            <IconButton>
+                <FilterListIcon color='primary' onClick={handleFilterEnable} />
+            </IconButton>
+            {filterEnabled && <div className='m-4'>
+                <div className='flex'>
+                    <SelectBox onChange={handleKeyChange} label="Filtrar por.." value={currentKey} options={filterWithoutDates} name="" valueKey={filterKey} text={filterText} size='small' className='mr-8 w-80 md:w-56' />
+                    <Autocomplete
+                        value={value}
+                        disablePortal
+                        size='small'
+                        className='mr-8 w-96 md:w-64'
+                        options={uniqueOptions}
+                        renderInput={(params) => <TextField {...params} label={labelTitle} InputLabelProps={{ shrink: true }} />}
+                        onChange={handleValueChange}
+
+                    />
+                </div>
+            </div>}
+        </>
     )
 }
 
