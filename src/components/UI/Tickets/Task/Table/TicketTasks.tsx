@@ -1,14 +1,16 @@
-import { Paper, Table, TableBody, TableContainer, TableFooter, Typography } from '@mui/material';
+import { IconButton, Paper, Table, TableBody, TableContainer, TableFooter, Typography } from '@mui/material';
 import { useCallback, useEffect, useState } from 'react';
 import { proyectsAPI } from '../../../../dev/URIs';
 import LoadingIndicator from '../../../../Loading/LoadingIndicator';
 import { Project } from '../../../../types/projectTypes';
 import { Resource } from '../../../../types/resourcesTypes';
 import { Order, Ticket } from '../../../../types/ticketTypes';
+import Filter from '../../../Table/Filter';
 import DefaultTableFooter from '../../../Table/DefaultTableFooter';
 import CreateTaskModal from '../Modals/CreateTaskModal';
 import EnhancedTaskTableHead from './EnhancedTaskTableHead';
 import TaskTableRow from './TaskTableRow';
+import FilterListIcon from '@mui/icons-material/FilterList'
 
 interface Data {
     code: number;
@@ -78,6 +80,9 @@ const TicketTasks = (props: TicketTasksProps) => {
     const [show, setShow] = useState(false)
     const [resources, setResources] = useState<Resource[]>([])
     const [projects, setProjects] = useState<Project[]>([])
+    const [filterKey, setFilterKey] = useState<string>('id')
+    const [filterValue, setFilterValue] = useState('')
+    const [filterEnabled, setFilterEnabled] = useState(false)
 
     const handleClose = () => {
         setShow(false)
@@ -88,6 +93,9 @@ const TicketTasks = (props: TicketTasksProps) => {
     }
 
 
+    const handleFilterEnable = () => {
+        setFilterEnabled(prev => !prev)
+    }
 
     const handleRequestSort = (event: React.MouseEvent<unknown>, property: keyof Data,) => {
         const isAsc = orderBy === property && order === 'asc';
@@ -111,6 +119,14 @@ const TicketTasks = (props: TicketTasksProps) => {
         gatherTasks(ticket?.id || 0)
         setLoading(false)
         handleClose()
+    }
+
+    const handleFilterKeyChange = (key: string) => {
+        setFilterKey(key)
+    }
+
+    const handleFilterValueChange = (value: string) => {
+        setFilterValue(value)
     }
 
     const sortFunction = (a: any, b: any) => {
@@ -171,8 +187,11 @@ const TicketTasks = (props: TicketTasksProps) => {
     }, [gatherEmployees]);
 
     useEffect(() => {
-       gatherTasks(ticket?.id || 0)
+        gatherTasks(ticket?.id || 0)
     }, [gatherTasks, ticket?.id]);
+
+
+    const fullTasks = loadedTask.filter((row: any) => filterKey in row ? row[filterKey]?.toString()?.toLowerCase()?.includes(filterValue?.toLowerCase()) : false)
 
     return (
         <LoadingIndicator show={loading} className="w-[95%] mb-10">
@@ -193,7 +212,10 @@ const TicketTasks = (props: TicketTasksProps) => {
                 </div>
             )}
             <TableContainer component={Paper} className="mt-10">
-
+                <IconButton>
+                    <FilterListIcon color='primary' onClick={handleFilterEnable} />
+                </IconButton>
+                {filterEnabled && <Filter data={fullTasks || []} currentKey={filterKey} value={filterValue} onKeyChange={handleFilterKeyChange} onValueChange={handleFilterValueChange} filterOptions={tableHeaders} filterKey="id" filterText='label' />}
                 <Table>
                     <EnhancedTaskTableHead order={order} orderBy={orderBy} onRequestSort={handleRequestSort} headers={tableHeaders} />
                     <TableBody>
@@ -202,7 +224,7 @@ const TicketTasks = (props: TicketTasksProps) => {
                                 .sort(sortFunction)
                                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                                 .map(row => (
-                                    <TaskTableRow row={row} resources={resources} proyectos={projects}/>
+                                    <TaskTableRow row={row} resources={resources} proyectos={projects} />
                                 ))}
                     </TableBody>
                     <TableFooter>

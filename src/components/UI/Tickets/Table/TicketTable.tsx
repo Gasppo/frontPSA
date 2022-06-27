@@ -1,10 +1,11 @@
-import { Paper, Table, TableBody, TableContainer, TableFooter } from '@mui/material'
+import FilterListIcon from '@mui/icons-material/FilterList'
+import { IconButton, Paper, Table, TableBody, TableContainer, TableFooter } from '@mui/material'
 import { useState } from 'react'
 import { Data, HeadCell, Order, Ticket, TicketProduct } from '../../../types/ticketTypes'
+import Filter from '../../Table/Filter'
+import DefaultTableFooter from '../../Table/DefaultTableFooter'
 import EnhancedTicketTableHead from './EnhancedTicketTableHead'
 import TicketTableRow from './TicketTableRow'
-import DefaultTableFooter from '../../Table/DefaultTableFooter'
-
 
 const tableHeaders = [
     { id: "id", label: "Codigo de identificacion", numeric: false },
@@ -49,12 +50,19 @@ const TicketTable = (props: TicketTableProps) => {
     const [orderBy, setOrderBy] = useState<keyof Data>('updatedAt');
     const [rowsPerPage, setRowsPerPage] = useState(5)
     const [page, setPage] = useState(0)
+    const [filterKey, setFilterKey] = useState<string>('id')
+    const [filterValue, setFilterValue] = useState('')
+    const [filterEnabled, setFilterEnabled] = useState(false)
 
     const handleRequestSort = (event: React.MouseEvent<unknown>, property: keyof Data,) => {
         const isAsc = orderBy === property && order === 'asc';
         setOrder(isAsc ? 'desc' : 'asc');
         setOrderBy(property);
     };
+
+    const handleFilterEnable = () => {
+        setFilterEnabled(prev => !prev)
+    }
 
     const handleChangePage = (event: React.MouseEvent<HTMLButtonElement> | null, newPage: number) => {
         setPage(newPage);
@@ -65,6 +73,13 @@ const TicketTable = (props: TicketTableProps) => {
         setPage(0);
     };
 
+    const handleFilterKeyChange = (key: string) => {
+        setFilterKey(key)
+    }
+
+    const handleFilterValueChange = (value: string) => {
+        setFilterValue(value)
+    }
 
     const sortFunction = (a: any, b: any) => {
         const currKey = headerTicket.find(el => el.headerId === orderBy)?.ticketId || "title"
@@ -78,20 +93,28 @@ const TicketTable = (props: TicketTableProps) => {
         return 0
     }
 
-
+    const fullTickets = loadedTickets
+        .map(row => ({ ...row, productName: products.find(el => el.id === row.productId)?.name || 'N/A', razonSocial: resources.find(el => el.id === row.authorId)?.razonSocial || 'N/A' }))
+        .filter((row: any) => filterKey in row ? row[filterKey]?.toString()?.toLowerCase()?.includes(filterValue?.toLowerCase()) : false)
+        
     return (
         <TableContainer component={Paper} className="mt-10"  >
+
+            <IconButton>
+                <FilterListIcon color='primary' onClick={handleFilterEnable} />
+            </IconButton>
+
+            {filterEnabled && <Filter data={fullTickets || []} currentKey={filterKey} value={filterValue} onKeyChange={handleFilterKeyChange} onValueChange={handleFilterValueChange} filterOptions={tableHeaders} filterKey="id" filterText='label' />}
             <Table>
                 <EnhancedTicketTableHead order={order} orderBy={orderBy} onRequestSort={handleRequestSort} headers={tableHeaders} />
                 <TableBody>
-                    {loadedTickets &&
-                        loadedTickets
+                    {fullTickets &&
+                        fullTickets
                             .sort(sortFunction)
+
                             .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                             .map(row => (
                                 <TicketTableRow
-                                    product={products.find(el => el.id === row.productId)}
-                                    client={resources.find(el => el.id === row.authorId)}
                                     refresh={onRefresh}
                                     row={row}
                                     key={row.id}
@@ -101,7 +124,7 @@ const TicketTable = (props: TicketTableProps) => {
                             ))}
                 </TableBody>
                 <TableFooter>
-                    <DefaultTableFooter colSpan={8} count={loadedTickets.length || 0} onPageChange={handleChangePage} onRowsPerPageChange={handleChangeRowsPerPage} page={page} rowsPerPage={rowsPerPage} />
+                    <DefaultTableFooter colSpan={8} count={fullTickets.length || 0} onPageChange={handleChangePage} onRowsPerPageChange={handleChangeRowsPerPage} page={page} rowsPerPage={rowsPerPage} />
                 </TableFooter>
             </Table>
         </TableContainer>
