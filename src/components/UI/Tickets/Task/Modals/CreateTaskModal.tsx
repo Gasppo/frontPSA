@@ -64,7 +64,6 @@ const CreateTaskModal = (props: CreateTaskModalProps) => {
         setInput(prev => ({ ...prev, [e.target.name]: e.target.value }))
     };
 
-
     const handleChangeInt = (e: any) => {
         setInput(prev => ({ ...prev, [e.target.name]: e.target.value }))
     };
@@ -74,7 +73,7 @@ const CreateTaskModal = (props: CreateTaskModalProps) => {
             setRunValidations(true)
             return
         }
-        onSubmit({...input, effort: input.priority})
+        onSubmit({...input, effort: input.priority, name: `Ticket #${ticketId} - ${input.name}`})
     }
 
 

@@ -79,7 +79,7 @@ const TicketTasks = (props: TicketTasksProps) => {
     const [show, setShow] = useState(false)
     const [resources, setResources] = useState<Resource[]>([])
     const [projects, setProjects] = useState<Project[]>([])
-    const [filterKey, setFilterKey] = useState<string>('id')
+    const [filterKey, setFilterKey] = useState<string>('code')
     const [filterValue, setFilterValue] = useState('')
 
     const handleClose = () => {
