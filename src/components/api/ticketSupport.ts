@@ -1,8 +1,9 @@
-import { ticketSupportURI } from "../dev/URIs"
-import { TicketProduct, TicketProductVersion } from "../types/ticketTypes"
+import { moduloRecursosURI, ticketSupportURI } from "../dev/URIs"
+import { Resource } from "../types/resourceType"
+import { Ticket, TicketProduct, TicketProductVersion } from "../types/ticketTypes"
 
 
-const productAndVersionsURI  = 'https://modulo-soporte-productos-psa.herokuapp.com'
+const productAndVersionsURI = 'https://modulo-soporte-productos-psa.herokuapp.com'
 
 export const addClientToSystem = async (razonSocial: string, nro_CUIT: string) => {
     const response = await fetch(`${ticketSupportURI}/ticketAuthors`, {
@@ -72,4 +73,32 @@ export const getProductName = async (productId: number) => {
     return await fetch(`${productAndVersionsURI}/product/${productId}`)
         .then(response => response.json())
         .then(json => { return json.product[0].name })
+}
+
+export const getTicketById = async (ticketId: number) => {
+    return await fetch(`${ticketSupportURI}/tickets/${ticketId}`)
+        .then(response => response.json())
+        .then(json => { return json.ticket })
+}
+
+export const getProductById = async (productId: number) => {
+    return await fetch(`${productAndVersionsURI}/product/${productId}`)
+        .then(response => response.json())
+        .then(json => { return json.product[0] })
+}
+
+export const getEmployeeById = async (employeeId: number) => {
+    return await fetch(`${moduloRecursosURI}/employees`)
+        .then(response => response.json())
+        .then(res => {
+            const employee = res.employees.find((employee: Resource) => employee.legajo === employeeId)
+            console.log();
+            return employee
+        })
+}
+
+export const getClientById = async (clientId: number) => {
+    return await fetch(`${productAndVersionsURI}/client`)
+        .then(response => response.json())
+        .then(json => json.clients.find((client: Ticket) => client.id === clientId))
 }
