@@ -273,6 +273,7 @@ const Proyecto = () => {
                                                 <TableCell align="left" style={{color: '#5C7067' }}>Prioridad</TableCell>
                                                 <TableCell align="left" style={{color: '#5C7067' }}>Recurso</TableCell>
                                                 <TableCell align="left" style={{color: '#5C7067' }}>Esfuerzo Estimado</TableCell>
+                                                <TableCell align="left" style={{color: '#5C7067' }}>Esfuerzo Real</TableCell>
                                                 <TableCell align="left" style={{color: '#5C7067' }}></TableCell>
                                                 <TableCell align="left" style={{color: '#5C7067' }}></TableCell>
                                                 <TableCell align="left" style={{color: '#5C7067' }}></TableCell>
@@ -281,7 +282,6 @@ const Proyecto = () => {
                                         <TableBody>
                                             {(projectTasks.sort((a, b) => b.priority - a.priority))
                                             .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                                            .map(row => <TaskTableRow refresh={getTasksByProject} row={row} code= {project.code} tasks = {projectTasks} key={row.code} projectResources={project.resources} />)}
                                             .map(row => <TaskTableRow refresh={getTasksByProject} row={row} code= {project.code} tasks = {projectTasks} key={row.code} projectResources={resources} />)}
                                         
                                         </TableBody>
@@ -305,7 +305,6 @@ const Proyecto = () => {
                                             </TableRow>
                                         </TableFooter>
                                     </Table>
-                                </TableContainer>
                             </>
                             )}
                         </LoadingIndicator>
@@ -338,7 +337,6 @@ const Proyecto = () => {
                             {expandedRecursos && 
                             <>
                                 <div style={{width: 400}}>
-                                    {project.resources.map(recurso =>  <div style={{display: 'flex', flexDirection: 'row', margin: 5, padding: 5, width: 120, height: 30, backgroundColor: "#E9EDEB", borderRadius: 5}}><AccountCircleIcon className= 'mr-1 h-5' style={{color: '#5C7067'}}/><Typography variant='caption' className='slate' >Legajo {recurso}</Typography></div>)}
                                     {resources.map(recurso =>  <div style={{display: 'flex', flexDirection: 'row', margin: 5, padding: 5, width: 150, height: 30, backgroundColor: "#E9EDEB", borderRadius: 5}}><AccountCircleIcon className= 'mr-1 h-5' style={{color: '#5C7067'}}/><Typography variant='caption' className='slate' >{recurso.Nombre} {recurso.Apellido}</Typography></div>)}
                                     <div style={{display: 'flex', flexDirection: 'row', margin: 5, padding: 5, width: 120, height: 30}}></div>
                                 </div>
