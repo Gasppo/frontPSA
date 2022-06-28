@@ -18,6 +18,7 @@ import ReportePorProyecto from '../pages/recursos/reportePorProyecto'
 import CargaDeLicencias from '../pages/recursos/cargaDeLicencias'
 import Proyectos from '../pages/proyectos/proyectos'
 import Proyecto from '../pages/proyecto/proyecto'
+import TicketDetailsPage from '../pages/soporte/ticketDetails'
 
 interface RouterProps {
     
@@ -39,6 +40,7 @@ const Router = (props: RouterProps) => {
             <Route path="proyectos" element={<Proyectos />} />
             <Route path="proyecto" element={<Proyecto/>} />
             <Route path='soporte/tickets' element={<Tickets />} />
+            <Route path='soporte/tickets/:ticketId' element={<TicketDetailsPage />} />
             <Route path='soporte/productsAndVersions' element={<ProductsAndVersions />} />
             <Route path='soporte/productsAndVersions/products' element={<Products />} />
             <Route path='soporte/productsAndVersions/licences' element={<Licences />} />
