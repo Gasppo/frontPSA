@@ -9,6 +9,7 @@ import LoadingIndicator from '../../../components/Loading/LoadingIndicator'
 import AddProductModal from '../../../components/UI/Products/AddProductModal'
 import EditProductModal from '../../../components/UI/Products/EditProductModal'
 import EnhancedTableHead from '../../../components/UI/Products/EnhacedTableHeader'
+import Filter from '../../../components/UI/Table/Filter'
 
 type Order = 'asc' | 'desc';
 interface Data {
@@ -44,6 +45,8 @@ const Products = () => {
   const [orderBy, setOrderBy] = useState<keyof Data>('name');
   const [rowsPerPage, setRowsPerPage] = useState(5)
   const [page, setPage] = useState(0)
+  const [filterKey, setFilterKey] = useState<string>('id')
+  const [filterValue, setFilterValue] = useState('')
 
   const handleAddOpen = () => {
       setShowAddModal(true)
@@ -64,6 +67,15 @@ const Products = () => {
       setShowAddModal(false)
       setShowEditModal(false)
   }
+
+  const handleFilterKeyChange = (key: string) => {
+    setFilterKey(key)
+    }
+
+    const handleFilterValueChange = (value: string) => {
+        setFilterValue(value)
+    }   
+
 
   const handleRequestSort = (event: React.MouseEvent<unknown>, property: keyof Data,) => {
       const isAsc = orderBy === property && order === 'asc';
@@ -94,6 +106,11 @@ const Products = () => {
               console.log(err)
           })
   }, [])
+
+  const fullProducts = loadedProducts
+    .filter((row: any) => filterKey in row ? row[filterKey]?.toString()?.toLowerCase()?.includes(filterValue?.toLowerCase()) : false)
+
+
 
   const sortFunction = (a: any, b: any) => {
       const currKey = headerProduct.find(el => el.headerId === orderBy)?.productId || "title"
@@ -135,11 +152,12 @@ const Products = () => {
                 <AddProductModal onSubmit={handleSubmit} onClose={handleClose} show={showAddModal} />
                 <EditProductModal onSubmit={handleSubmit} onClose={handleClose} show={showEditModal} currentId={currentId}/>
                 <TableContainer component={Paper} className="mt-10"  >
+                <Filter data={fullProducts || []} currentKey={filterKey} value={filterValue} onKeyChange={handleFilterKeyChange} onValueChange={handleFilterValueChange} filterOptions={tableHeaders} filterKey="id" filterText='label' />
                     <Table>
                         <EnhancedTableHead order={order} orderBy={orderBy} onRequestSort={handleRequestSort} headers={tableHeaders} />
                         <TableBody>
-                            {loadedProducts &&
-                                loadedProducts
+                            {fullProducts &&
+                                fullProducts
                                     .sort(sortFunction)
                                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                                     .map(row => <ProductTableRow refresh={gatherProducts} row={row} key={row.id} onEdit={handleEditOpen} />)}
@@ -149,7 +167,7 @@ const Products = () => {
                                 <TablePagination
                                     rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
                                     colSpan={8}
-                                    count={loadedProducts.length}
+                                    count={fullProducts.length}
                                     rowsPerPage={rowsPerPage}
                                     page={page}
                                     SelectProps={{
