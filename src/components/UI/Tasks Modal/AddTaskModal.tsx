@@ -27,11 +27,14 @@ const AddTaskModal = (props: AddTicketModalProps) => {
         effort: 0,
         resource: 1,
         description: " ",
+        effortUnit: "horas/hombre",
+        realEffort: 0,
     })
     const [runValidations, setRunValidations] = useState(false)
 
     const invalidFields = (!newTask?.name || newTask.resource==0 );
     const prioridades = [{ id: 1, valor: "Baja" }, { id: 2, valor: "Media" }, { id: 3, valor: "Alta" }, { id: 4, valor: "Critica" }];
+    const efforts = [{ id: 1, valor: "horas/hombre" }, { id: 2, valor: "dias/hombre" }, { id: 3, valor: "semanas/hombre" }, { id: 4, valor: "storyPoints" }];
 
     const generateTaskUsingAPI = async () => {
         const response = await fetch('https://modulo-proyectos-psa-2022.herokuapp.com/tasks', {
@@ -98,6 +101,10 @@ const AddTaskModal = (props: AddTicketModalProps) => {
         setNewTask(({ ...newTask, [event.target.name]: event.target.value }))
     };
 
+    const handleUnidadSelection = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setNewTask(({ ...newTask, [event.target.name]: event.target.value }))
+    };
+
     const getResources = () => {
         fetch('https://modulo-recursos-psa.herokuapp.com/employees',{
             method: 'GET',
@@ -142,9 +149,12 @@ const AddTaskModal = (props: AddTicketModalProps) => {
                 <Typography variant='h5' style={{marginTop: 70}} className={'m-10'}>Ingrese los datos para crear la tarea</Typography>
                 <div className='ml-10 flex flex-col items-center'>
 
-                <div className='flex mb-6  flex-row' style={{marginTop: 10}}>
+                <div className='mb-6 w-[42rem] mr-8' style={{marginTop: 10}}>
                     <ValidatingInput required validations={validations} name="name" className='mr-8 w-80' label="Nombre de la tarea" value={newTask?.name} onChange={handleChangeText} />
-                    <SelectBox required validations={validations} name="priority" className='mr-8 w-80' label="Seleccione la prioridad" onChange={handlePrioridadSelection} valueKey="id" value={newTask?.priority} options={prioridades} text="valor" />
+                </div>
+                <div className='flex mb-6  flex-row' style={{marginTop: 10}}>
+                    <SelectBox required validations={validations} name="priority" className='mr-8 w-80' label="Prioridad" onChange={handlePrioridadSelection} valueKey="id" value={newTask?.priority} options={prioridades} text="valor" />
+                    <SelectBox required validations={validations} name="effortUnit" className='mr-8 w-80' label="Unidad de esfuerzo" onChange={handleUnidadSelection} valueKey="valor" value={newTask?.effortUnit} options={efforts} text="valor" />
                 </div>
                 <div className='flex mb-6 flex-row'>
                     <Autocomplete
@@ -161,7 +171,6 @@ const AddTaskModal = (props: AddTicketModalProps) => {
                     />
                     <ValidatingInput required validations={validations} name="effort" className='mr-8 w-80' label="Esfuerzo Estimado" value={newTask?.effort} onChange={handleChangeInt} />
                 </div>
-                <div className='flex mb-6 flex-row' ></div>
                 <TextField id="outlined-basic" className='mb-6 w-[42rem] mr-8' name='description' label="Descripcion" multiline rows={3} InputLabelProps={{ shrink: true }} variant="outlined" onChange={handleChangeText} />
                 <div className="flex flex-row" >
                     <div className="text-center mr-8 mb-6 w-52 border-2 border-slate-400  rounded-xl shadow-lg font-bold text-slate-800 hover:border-teal-600 hover:border-1 hover:bg-gray-200 hover:text-teal-600 transition-all duration-300 cursor-pointer" onClick={onCloseCreateProjectModal} >
