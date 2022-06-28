@@ -12,4 +12,6 @@ export type Task = {
     isCompleted: number,
     description: string | null;
     ticket: number
+    effortUnity: string
+    realEffort: number,
 }
