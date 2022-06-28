@@ -244,6 +244,7 @@ const Proyecto = () => {
                                                 <TableCell align="left" style={{color: '#5C7067' }}>Código</TableCell>
                                                 <TableCell align="left" style={{color: '#5C7067' }}>Nombre</TableCell>
                                                 <TableCell align="left" style={{color: '#5C7067' }}>Prioridad</TableCell>
+                                                <TableCell align="left" style={{color: '#5C7067' }}>Recurso</TableCell>
                                                 <TableCell align="left" style={{color: '#5C7067' }}>Esfuerzo Estimado</TableCell>
                                                 <TableCell align="left" style={{color: '#5C7067' }}></TableCell>
                                                 <TableCell align="left" style={{color: '#5C7067' }}></TableCell>

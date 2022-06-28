@@ -118,6 +118,7 @@ const  TaskTableRow = (props:  TaskTableRowProps) => {
                 <TableCell align="left" onClick={openTaskDetailsModal}>{row.code}</TableCell>
                 <TableCell align="left" onClick={openTaskDetailsModal}>{row.name}</TableCell>
                 <TableCell align="left" onClick={openTaskDetailsModal}>{priorityValue}</TableCell>
+                <TableCell align="left" onClick={openTaskDetailsModal}>{row.resource}</TableCell>
                 <TableCell align="left" onClick={openTaskDetailsModal}>{row.effort}</TableCell>
                 <TableCell className = 'group'>
                     <Circle style={{ alignSelf: 'left', color: stateTagColor, height: '4vh' }}></Circle>
