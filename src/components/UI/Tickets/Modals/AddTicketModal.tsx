@@ -10,12 +10,12 @@ interface AddTicketModalProps {
     onClose: () => void
     onSubmit: () => void
     show: boolean
-    resources: Resource[]
+    clients: Resource[]
     products: TicketProduct[]
 }
 
 const AddTicketModal = (props: AddTicketModalProps) => {
-    const { onSubmit, onClose, show, resources, products } = props
+    const { onSubmit, onClose, show, clients, products } = props
 
     const [runValidations, setRunValidations] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
@@ -99,7 +99,7 @@ const AddTicketModal = (props: AddTicketModalProps) => {
     return (
         <CenteredModal isLoading={isLoading} onClose={onClose} show={show} onSubmit={handleSubmit} label="Crear Ticket" addbuttonLabel="Crear" disableSubmit={disabled}>
             <div className='flex mb-6  flex-row'>
-                <SelectBox required name="authorId" validations={validations} className='mr-8 w-[42rem]' label="Nombre de Cliente" onChange={handleChangeInt} valueKey="id" value={input?.authorId} options={resources} text="razonSocial" />
+                <SelectBox required name="authorId" validations={validations} className='mr-8 w-[42rem]' label="Nombre de Cliente" onChange={handleChangeInt} valueKey="id" value={input?.authorId} options={clients} text="razonSocial" />
             </div>
             <div className='flex mb-6 flex-row'>
                 <ValidatingInput required validations={validations} name="title" className='mr-8 w-80' label="Titulo" value={input?.title} onChange={handleChangeText} />

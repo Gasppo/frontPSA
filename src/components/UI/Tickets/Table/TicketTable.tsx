@@ -1,5 +1,6 @@
 import { Paper, Table, TableBody, TableContainer, TableFooter } from '@mui/material'
 import { useState } from 'react'
+import { Resource } from '../../../types/resourcesTypes'
 import { Data, HeadCell, Order, Ticket, TicketProduct } from '../../../types/ticketTypes'
 import DefaultTableFooter from '../../Table/DefaultTableFooter'
 import Filter from '../../Table/Filter'
@@ -11,6 +12,7 @@ const tableHeaders = [
     { id: "title", label: "Titulo", numeric: false },
     { id: "razonSocial", label: "Cliente", numeric: false },
     { id: "productName", label: "Producto", numeric: false },
+    { id: "asigneeName", label: "Soporte Asignado", numeric: false },
     { id: "createdAt", label: "Fecha de creacion", numeric: false },
     { id: "updatedAt", label: "Ultima Modificacion", numeric: false },
     { id: "status", label: "Estado", numeric: false },
@@ -21,6 +23,7 @@ const headerTicket = [
     { headerId: "title", ticketId: "title" },
     { headerId: "razonSocial", ticketId: "authorId" },
     { headerId: "productName", ticketId: "productId" },
+    { headerId: "asigneeName", ticketId: "asigneeId" },
     { headerId: "createdAt", ticketId: "createdAt" },
     { headerId: "updatedAt", ticketId: "updatedAt" },
     { headerId: "status", ticketId: "status" },
@@ -29,21 +32,23 @@ const headerTicket = [
 
 interface TicketTableProps {
     loadedTickets: Ticket[],
-    resources: {
+    clients: {
         id: number;
         CUIT: string;
         razonSocial: string;
     }[],
+    resources: Resource[]
     products: TicketProduct[]
     onRefresh: () => void
     onTicketEdit: (id: number) => void
     onTicketView: (id: number) => void
+    onTicketAssign: (id: number) => void
 }
 
 
 const TicketTable = (props: TicketTableProps) => {
 
-    const { loadedTickets, resources, products, onRefresh, onTicketEdit, onTicketView } = props
+    const { loadedTickets, clients, products, onRefresh, onTicketEdit, onTicketView, onTicketAssign, resources } = props
 
     const [order, setOrder] = useState<Order>('asc');
     const [orderBy, setOrderBy] = useState<keyof Data>('updatedAt');
@@ -87,8 +92,18 @@ const TicketTable = (props: TicketTableProps) => {
         return 0
     }
 
+    const findAsigneeName = (row: Ticket) => {
+        const asignee = row.asigneeId ? resources.find(el => el.legajo === row.asigneeId) : undefined
+        return (asignee?.Nombre && asignee?.Apellido) ? `${asignee?.Nombre} ${asignee?.Apellido}` : `Sin asignar`
+    }
+
     const fullTickets = loadedTickets
-        .map(row => ({ ...row, productName: products.find(el => el.id === row.productId)?.name || 'N/A', razonSocial: resources.find(el => el.id === row.authorId)?.razonSocial || 'N/A' }))
+        .map(row => ({
+            ...row,
+            productName: products.find(el => el.id === row.productId)?.name || 'N/A',
+            razonSocial: clients.find(el => el.id === row.authorId)?.razonSocial || 'N/A',
+            asigneeName: findAsigneeName(row),
+        }))
         .filter((row: any) => filterKey in row ? row[filterKey]?.toString()?.toLowerCase()?.includes(filterValue?.toLowerCase()) : false)
 
     return (
@@ -109,11 +124,12 @@ const TicketTable = (props: TicketTableProps) => {
                                     key={row.id}
                                     onEdit={onTicketEdit}
                                     onView={onTicketView}
+                                    onAssign={onTicketAssign}
                                 />
                             ))}
                 </TableBody>
                 <TableFooter>
-                    <DefaultTableFooter colSpan={8} count={fullTickets.length || 0} onPageChange={handleChangePage} onRowsPerPageChange={handleChangeRowsPerPage} page={page} rowsPerPage={rowsPerPage} />
+                    <DefaultTableFooter colSpan={9} count={fullTickets.length || 0} onPageChange={handleChangePage} onRowsPerPageChange={handleChangeRowsPerPage} page={page} rowsPerPage={rowsPerPage} />
                 </TableFooter>
             </Table>
         </TableContainer>

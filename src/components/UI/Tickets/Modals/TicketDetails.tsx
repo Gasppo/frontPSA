@@ -1,5 +1,6 @@
 import { Typography } from '@mui/material'
 import React from 'react'
+import { Resource } from '../../../types/resourceType'
 import { Ticket, TicketProduct } from '../../../types/ticketTypes'
 import TitleAndSpan from '../../Inputs/TitleAndSpan'
 
@@ -11,12 +12,12 @@ interface TicketDetailsProps {
         CUIT: string;
         razonSocial: string;
     } | undefined
-
+    asignee: Resource
 }
 
 const TicketDetails = (props: TicketDetailsProps) => {
 
-    const { cliente, producto, ticket } = props
+    const { cliente, producto, ticket, asignee } = props
 
     const updateDate = new Date(ticket?.updatedAt ? ticket.updatedAt : '')?.toLocaleString('es-AR')
     const createDate = new Date(ticket?.createdAt ? ticket.createdAt : '')?.toLocaleString('es-AR')
@@ -26,6 +27,7 @@ const TicketDetails = (props: TicketDetailsProps) => {
         { title: "Descripcion", info: ticket?.description || 'N/A' },
         { title: "Cliente", info: cliente?.razonSocial || 'N/A' },
         { title: "Producto", info: producto?.name || 'N/A' },
+        { title: "Soporte Asignado", info: `${asignee.Nombre} ${asignee.Apellido}` },
         { title: "Estado", info: ticket?.status || 'N/A' },
         { title: "Fecha de creacion", info: createDate },
         { title: "Ultima modificacion", info: updateDate },

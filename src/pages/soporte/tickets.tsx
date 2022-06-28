@@ -1,6 +1,6 @@
 import { Typography } from '@mui/material'
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { getExternalResources, getProducts } from '../../components/api/ticketSupport'
+import { getExternalResources, getInternalResources, getProducts } from '../../components/api/ticketSupport'
 import { ticketSupportURI } from '../../components/dev/URIs'
 import LoadingIndicator from '../../components/Loading/LoadingIndicator'
 import { Ticket, TicketProduct } from '../../components/types/ticketTypes'
@@ -11,6 +11,8 @@ import EditTicketModal from '../../components/UI/Tickets/Modals/EditTicketModal'
 import TicketDetailsModal from '../../components/UI/Tickets/Modals/TicketDetailsModal'
 import PageLinker from '../../components/UI/Inputs/PageLinker'
 import TicketTable from '../../components/UI/Tickets/Table/TicketTable'
+import AssignSupportModal from '../../components/UI/Tickets/Modals/AssignSupportModal'
+import { Resource } from '../../components/types/resourcesTypes'
 
 interface TicketsProps {
 
@@ -24,8 +26,10 @@ const Tickets = (props: TicketsProps) => {
     const [isLoading, setLoading] = useState<boolean>(false)
     const [showAddModal, setShowAddModal] = useState(false)
     const [showEditModal, setShowEditModal] = useState(false)
+    const [showAsignModal, setShowAsignModal] = useState(false)
     const [currentId, setCurrentID] = useState<number>(0)
-    const [resources, setResources] = useState([emptyAuthor])
+    const [clients, setClients] = useState([emptyAuthor])
+    const [resources, setResources] = useState<Resource[]>([])
     const [products, setProducts] = useState<TicketProduct[]>([{ id: 0, name: "" }])
     const [showCurrTicket, setShowCurrTicket] = useState<boolean>(false)
 
@@ -39,6 +43,11 @@ const Tickets = (props: TicketsProps) => {
         setShowEditModal(true)
     }
 
+    const handleAsignOpen = (id: number) => {
+        setCurrentID(id)
+        setShowAsignModal(true)
+    }
+
     const handleTicketOpen = (id: number) => {
         setCurrentID(id)
         setShowCurrTicket(true)
@@ -47,6 +56,7 @@ const Tickets = (props: TicketsProps) => {
     const handleClose = () => {
         setShowAddModal(false)
         setShowEditModal(false)
+        setShowAsignModal(false)
         setShowCurrTicket(false)
 
     }
@@ -54,13 +64,19 @@ const Tickets = (props: TicketsProps) => {
     const handleSubmit = () => {
         gatherTickets()
         setShowAddModal(false)
+        setShowAsignModal(false)
         setShowEditModal(false)
     }
 
 
-    const gatherResources = async () => {
+    const gatherClients = async () => {
         const extResources = await getExternalResources()
-        setResources(extResources?.clients || [])
+        setClients(extResources?.clients || [])
+    }
+
+    const gatherResoruces = async () => {
+        const internalResources = await getInternalResources()
+        setResources(internalResources || [])
     }
 
     const gatherProducts = async () => {
@@ -84,15 +100,20 @@ const Tickets = (props: TicketsProps) => {
 
     useEffect(() => {
         setLoading(true)
-        gatherResources()
+        gatherClients()
         gatherProducts()
         gatherTickets()
+        gatherResoruces()
     }, [gatherTickets]);
 
     const links = [
         { label: "Inicio", href: "/" },
         { label: "Soporte", href: "/soporte" },
     ]
+
+    useEffect(() => {
+        console.log(resources)
+    }, [resources]);
 
     return (
         <>
@@ -102,10 +123,11 @@ const Tickets = (props: TicketsProps) => {
             <Typography variant='h5' className={'mb-10'}>Tickets</Typography>
             <LoadingIndicator show={isLoading} className={`flex flex-col items-start  transition-all duration-200`} >
                 <CreateTicketButton onClick={handleAddOpen} />
-                <AddTicketModal onSubmit={handleSubmit} onClose={handleClose} show={showAddModal} resources={resources} products={products} />
-                <EditTicketModal onSubmit={handleSubmit} onClose={handleClose} show={showEditModal} currentId={currentId} resources={resources} products={products} />
-                {showCurrTicket && <TicketDetailsModal currTicket={loadedTickets.find(ticket => ticket.id === currentId)} onClose={handleClose} show={showCurrTicket} resources={resources} products={products} />}
-                <TicketTable loadedTickets={loadedTickets} onRefresh={gatherProducts} onTicketEdit={handleEditOpen} onTicketView={handleTicketOpen} products={products} resources={resources} />
+                <AddTicketModal onSubmit={handleSubmit} onClose={handleClose} show={showAddModal} clients={clients} products={products} />
+                <EditTicketModal onSubmit={handleSubmit} onClose={handleClose} show={showEditModal} currentId={currentId} clients={clients} products={products} />
+                <AssignSupportModal onSubmit={handleSubmit} resources={resources} show={showAsignModal} onClose={handleClose} currentId={currentId} />
+                {showCurrTicket && <TicketDetailsModal currTicket={loadedTickets.find(ticket => ticket.id === currentId)} onClose={handleClose} show={showCurrTicket} resources={resources} clients={clients} products={products} />}
+                <TicketTable onTicketAssign={handleAsignOpen} loadedTickets={loadedTickets} onRefresh={gatherProducts} onTicketEdit={handleEditOpen} onTicketView={handleTicketOpen} products={products} clients={clients} resources={resources} />
             </LoadingIndicator>
         </>
     )

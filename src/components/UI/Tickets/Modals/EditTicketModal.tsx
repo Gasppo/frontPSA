@@ -13,14 +13,14 @@ interface EditTicketModalProps {
     onSubmit: () => void
     show: boolean,
     currentId: number | null
-    resources: Resource[]
+    clients: Resource[]
     products: TicketProduct[]
 }
 
 
 
 const EditTicketModal = (props: EditTicketModalProps) => {
-    const { onSubmit, onClose, show, currentId, resources, products } = props
+    const { onSubmit, onClose, show, currentId, clients, products } = props
 
     const ticketURL = useMemo(() => `${ticketSupportURI}/tickets/${currentId || 0}`, [currentId])
 
@@ -156,7 +156,7 @@ const EditTicketModal = (props: EditTicketModalProps) => {
     return (
         <CenteredModal isLoading={isLoading} onClose={onClose} show={show} onSubmit={handleSubmit} label="Actualizar Ticket" addbuttonLabel="Actualizar" disableSubmit={disabled}>
             <div className='flex mb-6  flex-row'>
-                <SelectBox required validations={validations} name="authorId" className='mr-8 w-80' label="Nombre de Cliente" onChange={handleChangeInt} disabled={false} valueKey="id" value={input?.authorId} options={resources} text="razonSocial" />
+                <SelectBox required validations={validations} name="authorId" className='mr-8 w-80' label="Nombre de Cliente" onChange={handleChangeInt} disabled={false} valueKey="id" value={input?.authorId} options={clients} text="razonSocial" />
                 <SelectBox required validations={validations} name="status" className='mr-8 w-80' label="Estado del Ticket" onChange={handleChangeText} valueKey="id" value={input?.status} options={statuses} text="id" />
             </div>
             <div className='flex mb-6 flex-row'>
