@@ -1,5 +1,6 @@
 import { Box, Tab, Tabs } from '@mui/material'
 import { useState } from 'react'
+import { Resource } from '../../../types/resourcesTypes'
 import { Ticket, TicketProduct } from '../../../types/ticketTypes'
 import CenteredModal from '../../Modal/CenteredModal'
 import TicketTasks from '../Task/Table/TicketTasks'
@@ -9,8 +10,9 @@ interface TicketDetailsModalProps {
     onClose: () => void
     show: boolean
     currTicket?: Ticket
+    resources: Resource[]
     products: TicketProduct[]
-    resources: {
+    clients: {
         id: number;
         CUIT: string;
         razonSocial: string;
@@ -18,15 +20,16 @@ interface TicketDetailsModalProps {
 }
 
 const TicketDetailsModal = (props: TicketDetailsModalProps) => {
-    const { show, onClose, currTicket, products, resources } = props
+    const { show, onClose, currTicket, products, clients, resources } = props
     const [value, setValue] = useState(0);
 
     const handleChange = (event: React.SyntheticEvent, newValue: number) => {
         setValue(newValue);
     };
 
+    const asignee = resources.find( el => el.legajo === currTicket?.asigneeId) || {Apellido: 'asignar', Nombre: 'Sin', legajo: 0}
     const producto = products.find(el => el.id === currTicket?.productId)
-    const cliente = resources.find(el => el.id === currTicket?.authorId)
+    const cliente = clients.find(el => el.id === currTicket?.authorId)
 
     return (
         <CenteredModal closeButton isLoading={false} onClose={onClose} show={show} onSubmit={() => { console.log('hi') }} label={`Ticket #${currTicket?.id}`} hideButtons itemPosition='items-start' minHeight='min-h-[70vh]'>
@@ -36,7 +39,7 @@ const TicketDetailsModal = (props: TicketDetailsModalProps) => {
                     <Tab label="Tareas" />
                 </Tabs>
             </Box>
-            {value === 0 && <TicketDetails cliente={cliente} producto={producto} ticket={currTicket} />}
+            {value === 0 && <TicketDetails asignee={asignee} cliente={cliente} producto={producto} ticket={currTicket} />}
             {value === 1 && <TicketTasks ticket={currTicket} /> }
         </CenteredModal >
     )

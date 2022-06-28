@@ -14,6 +14,11 @@ interface FilterProps {
     value: string
 }
 
+const unique = (value: string, index: number, self: string[]) => {
+    return self.indexOf(value) === index
+  }
+
+
 const Filter = (props: FilterProps) => {
     const { filterOptions = [], onKeyChange, onValueChange, filterKey, filterText, currentKey, data, value } = props
     const [filterEnabled, setFilterEnabled] = useState(false)
@@ -36,9 +41,9 @@ const Filter = (props: FilterProps) => {
     const filterWithoutDates = filterOptions.filter(el => el.id !== 'createdAt' && el.id !== 'updatedAt')
 
     const labelTitle = filterWithoutDates.find(el => el?.[filterKey] === currentKey)?.[filterText] || 'Filtro'
-    const options = data.map(el => el?.[currentKey]?.toString() || '')
+    const options: string[] = data.map(el => el?.[currentKey]?.toString() || '')
 
-    const uniqueOptions = [...new Set(options)]
+    const uniqueOptions = options.filter(unique)
 
     return (
         <>

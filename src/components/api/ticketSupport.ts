@@ -2,7 +2,7 @@ import { ticketSupportURI } from "../dev/URIs"
 import { TicketProduct, TicketProductVersion } from "../types/ticketTypes"
 
 
-const productAndVersionsURI  = 'https://modulo-soporte-productos-psa.herokuapp.com'
+const productAndVersionsURI = 'https://modulo-soporte-productos-psa.herokuapp.com'
 
 export const addClientToSystem = async (razonSocial: string, nro_CUIT: string) => {
     const response = await fetch(`${ticketSupportURI}/ticketAuthors`, {
@@ -72,4 +72,14 @@ export const getProductName = async (productId: number) => {
     return await fetch(`${productAndVersionsURI}/product/${productId}`)
         .then(response => response.json())
         .then(json => { return json.product[0].name })
+}
+
+
+export const getInternalResources = async () => {
+    return await fetch(`https://modulo-recursos-psa.herokuapp.com/employees`).then(response => response.json())
+}
+
+
+export const getTickets = async () => {
+    return await fetch(`${ticketSupportURI}/tickets`).then(response => response.json()).then( res => res.tickets)
 }
