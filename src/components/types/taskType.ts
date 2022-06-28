@@ -9,4 +9,5 @@ export type Task = {
     resource: number;
     isCompleted: number,
     description: string | null;
+    ticket: number
 }

@@ -17,30 +17,32 @@ interface TicketDetailsModalProps {
         CUIT: string;
         razonSocial: string;
     }[]
+    viewMode?: boolean
 }
 
 const TicketDetailsModal = (props: TicketDetailsModalProps) => {
-    const { show, onClose, currTicket, products, clients, resources } = props
+    const { show, onClose, currTicket, products, clients, resources, viewMode } = props
     const [value, setValue] = useState(0);
 
     const handleChange = (event: React.SyntheticEvent, newValue: number) => {
         setValue(newValue);
     };
 
-    const asignee = resources.find( el => el.legajo === currTicket?.asigneeId) || {Apellido: 'asignar', Nombre: 'Sin', legajo: 0}
+    const asignee = resources.find(el => el.legajo === currTicket?.asigneeId) || { Apellido: 'asignar', Nombre: 'Sin', legajo: 0 }
     const producto = products.find(el => el.id === currTicket?.productId)
     const cliente = clients.find(el => el.id === currTicket?.authorId)
 
     return (
         <CenteredModal closeButton isLoading={false} onClose={onClose} show={show} onSubmit={() => { console.log('hi') }} label={`Ticket #${currTicket?.id}`} hideButtons itemPosition='items-start' minHeight='min-h-[70vh]'>
-            <Box sx={{ borderBottom: 1, borderColor: 'divider', width: '95%', marginBottom: 6 }}>
+            {!viewMode && <Box sx={{ borderBottom: 1, borderColor: 'divider', width: '95%', marginBottom: 6 }}>
                 <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
                     <Tab label="Detalles" />
                     <Tab label="Tareas" />
                 </Tabs>
             </Box>
+            }
             {value === 0 && <TicketDetails asignee={asignee} cliente={cliente} producto={producto} ticket={currTicket} />}
-            {value === 1 && <TicketTasks ticket={currTicket} /> }
+            {value === 1 && <TicketTasks ticket={currTicket} />}
         </CenteredModal >
     )
 }
