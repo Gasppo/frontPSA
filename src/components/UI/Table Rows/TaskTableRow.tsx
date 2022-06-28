@@ -26,7 +26,7 @@ const  TaskTableRow = (props:  TaskTableRowProps) => {
     const [stateTagColor, setStateTagColor] = useState('#F9A620');
     const [stateValue, setStateValue] = useState('Pendiente');
     const estimatedEffortWithUnit = row.effort.toString()+' '+row.effortUnit;
-
+    console.log(row);
     
     const handleDeleteConfirmation = () =>{
         deleteTask();

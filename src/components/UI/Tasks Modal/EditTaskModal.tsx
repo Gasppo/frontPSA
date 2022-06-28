@@ -49,7 +49,7 @@ const EditTaskModal = (props: EditTaskModalProps) => {
         if (invalidFields) {
             setRunValidations(true);
         }
-        if(newTask.isCompleted == 2){
+        if(newTask.isCompleted == 2 && !newTask.realEffort){
             setRealEffortModal(true);
         }else{
             updateTaskUsingAPI();
@@ -124,26 +124,27 @@ const EditTaskModal = (props: EditTaskModalProps) => {
             <div className='absolute bg-gray-200  text-slate-800 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[105vh] h-[85vh] rounded-xl shadow-lg'>
 
             <Modal onClose={onCloseRealEffortModal} open={showRealEffortModal}>
-                    <div className='absolute bg-gray-200  text-slate-800 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[70vh] h-[55vh] rounded-xl shadow-lg'>
+                    <div className='absolute bg-gray-200  text-slate-800 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[70vh] h-[50vh] rounded-xl shadow-lg'>
                         <Typography variant='h5' className={'m-10'}>Ingrese el esfuerzo real de la tarea</Typography>
-                        <div className='flex mb-6 flex-row ml-[6vh]'> 
+                        <div className='flex flex-col items-center mt-[9vh]'>
+                        <div className='flex mb-6 flex-row ml-[5vh]'> 
                         <TextField 
                             disabled
                             type='text' 
                             label="Esfuerzo estimado de la tarea"
                             defaultValue={newTask.effort}
-                            className='mr-8 w-70'
+                            className='mr-8 w-75'
                         />
                         <TextField 
-                            
+                            disabled
                             type='text' 
                             label="Unidad de esfuerzo"
                             defaultValue={newTask.effortUnit}
-                            className='mr-8 w-70'
+                            className='mr-8 w-75'
                         />
                       </div>
                         <div className='flex mb-6 flex-row ml-[6vh]'> 
-                                <ValidatingInput  validations={validations} name="realEffort" className='mr-8 w-80' label="Esfuerzo real de la tarea" value={newTask?.realEffort} onChange={handleChangeInt} />
+                                <ValidatingInput  validations={validations} name="realEffort" className='mr-8 w-75' label="Esfuerzo real de la tarea" value={newTask?.realEffort} onChange={handleChangeInt} />
                         </div>
                         <div className='flex mb-6 flex-row ml-[6vh]'>  </div>
                         <div className="flex flex-row ml-[6vh]" >
@@ -155,7 +156,7 @@ const EditTaskModal = (props: EditTaskModalProps) => {
                                 <div className="m-4" > Siguiente</div>
                         </div>
                     </div>
-
+                    </div>
                     </div>
                 </Modal>
 
@@ -164,14 +165,7 @@ const EditTaskModal = (props: EditTaskModalProps) => {
                 <div className='ml-10 flex flex-col items-center'>
 
                 <div className='flex mb-6  flex-row' style={{marginTop: 10}}>
-                    <ValidatingInput  validations={validations} name="name" className='mr-8 w-80' label="Nombre de la tarea" value={newTask.name} onChange={handleChangeText} />
-                    <div className='mr-8 w-80'></div>
-                </div>
-                <div className='flex mb-6  flex-row' style={{marginTop: 10}}>
-                    <SelectBox  validations={validations} name="isCompleted" className='mr-8 w-80' label="Modifique el estado" onChange={handleStateSelection} valueKey="id" value={newTask?.isCompleted} options={estados} text="valor" />
-                    <SelectBox  validations={validations} name="priority" className='mr-8 w-80' label="Modifique la prioridad" onChange={handlePrioridadSelection} valueKey="id" value={newTask?.priority} options={prioridades} text="valor" />
-                </div>
-                <div className='flex mb-6 flex-row'>
+                    <ValidatingInput  validations={validations} name="name" className='mr-8 w-80' label="Nombre" value={newTask.name} onChange={handleChangeText} />
                     <Autocomplete
                             disablePortal
                             className='mr-8 w-80'
@@ -179,11 +173,15 @@ const EditTaskModal = (props: EditTaskModalProps) => {
                             defaultValue={newTask.resource}
                             options={projectResources}
                             sx={{ width: 300 }}
-                            renderInput={(params: JSX.IntrinsicAttributes & TextFieldProps) => <TextField {...params} name= 'resource' label="Modifique el responsable" variant="outlined" color='primary' />}
+                            renderInput={(params: JSX.IntrinsicAttributes & TextFieldProps) => <TextField {...params} name= 'resource' label="Responsable" variant="outlined" color='primary' />}
                             onChange={(event: any, newValue: any) => {
                                 setNewTask(({ ...newTask, resource: newValue }))
                             }}
                     />
+                </div>
+                <div className='flex mb-6  flex-row' style={{marginTop: 10}}>
+                    <SelectBox  validations={validations} name="isCompleted" className='mr-8 w-80' label="Estado" onChange={handleStateSelection} valueKey="id" value={newTask?.isCompleted} options={estados} text="valor" />
+                    <SelectBox  validations={validations} name="priority" className='mr-8 w-80' label="Prioridad" onChange={handlePrioridadSelection} valueKey="id" value={newTask?.priority} options={prioridades} text="valor" />
                 </div>
                 <div className='flex mb-6 flex-row' ></div>
                 <TextField id="outlined-basic" className='mb-6 w-[42rem] mr-8' name='description' label="Descripcion" value={newTask?.description} multiline rows={3} InputLabelProps={{ shrink: true }} variant="outlined" onChange={handleChangeText} />
