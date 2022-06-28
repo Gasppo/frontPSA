@@ -7,13 +7,14 @@ import EditIcon from '@mui/icons-material/Edit';
 import ConfirmModal from '../Modal/confirmationModal';
 import EditTaskModal from '../Tasks Modal/EditTaskModal';
 import VerTareaModal from '../Tasks Modal/VerTareaModal';
+import{Resource} from '../../types/resourceType'
 
 interface  TaskTableRowProps {
     row: Task,
     code: number,
     tasks: Task[],
     refresh: () => void,
-    projectResources: number[]
+    projectResources: Resource[]
 }
 
 
