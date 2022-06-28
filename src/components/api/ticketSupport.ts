@@ -92,7 +92,6 @@ export const getEmployeeById = async (employeeId: number) => {
         .then(response => response.json())
         .then(res => {
             const employee = res.employees.find((employee: Resource) => employee.legajo === employeeId)
-            console.log();
             return employee
         })
 }

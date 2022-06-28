@@ -18,7 +18,7 @@ const VerTareaModal = (props: VerTareaModalProps) => {
     const [stateTagColor, setStateTagColor] = useState('#F9A620');
     const [stateValue, setStateValue] = useState('Pendiente');
     const [value, setValue] = useState(0);
-    const {client, currentTicket,  product} = useTicketInfo(props.currentTask.ticket)
+    const {client, currentTicket,  product, asignee} = useTicketInfo(props.currentTask.ticket)
 
     const handleChange = (event: React.SyntheticEvent, newValue: number) => {
         setValue(newValue);
@@ -104,7 +104,7 @@ const VerTareaModal = (props: VerTareaModalProps) => {
                     </div>)}
                 {value === 1 && (
                     <div className='m-6'>
-                        <TicketDetails cliente={client} producto={product} ticket={currentTicket} />
+                        <TicketDetails asignee={asignee} cliente={client} producto={product} ticket={currentTicket} />
                     </div>
                 )}
             </div>

@@ -12,7 +12,7 @@ interface TicketDetailsProps {
         CUIT: string;
         razonSocial: string;
     } | undefined
-    asignee: Resource
+    asignee: Resource | undefined
 }
 
 const TicketDetails = (props: TicketDetailsProps) => {
@@ -27,7 +27,7 @@ const TicketDetails = (props: TicketDetailsProps) => {
         { title: "Descripcion", info: ticket?.description || 'N/A' },
         { title: "Cliente", info: cliente?.razonSocial || 'N/A' },
         { title: "Producto", info: producto?.name || 'N/A' },
-        { title: "Soporte Asignado", info: `${asignee.Nombre} ${asignee.Apellido}` },
+        { title: "Soporte Asignado", info: `${asignee?.Nombre || 'Sin'} ${asignee?.Apellido || 'asignar'}` },
         { title: "Estado", info: ticket?.status || 'N/A' },
         { title: "Fecha de creacion", info: createDate },
         { title: "Ultima modificacion", info: updateDate },
