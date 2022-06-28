@@ -204,6 +204,7 @@ const AddProjectModal = (props: AddTicketModalProps) => {
         <Modal onClose={onClose} open={show} >
             <div className='absolute bg-gray-200  text-slate-800 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[100vh] h-[75vh] rounded-xl shadow-lg'>
 
+
                 <Modal onClose={onCloseProductoModal} open={showProductModal}>
                     <div className='absolute bg-gray-200  text-slate-800 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[70vh] h-[55vh] rounded-xl shadow-lg'>
                         <Typography variant='h5' className={'m-10'}>Ingrese el poducto correspondiente al proyecto de desarrollo</Typography>
