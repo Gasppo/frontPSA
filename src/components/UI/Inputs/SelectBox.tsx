@@ -20,7 +20,7 @@ interface SelectProps {
 
 const SelectBox = (props: SelectProps) => {
 
-    const { value, onChange, options, valueKey, text, name, className, label, disabled, validations = [], required, disabledText = 'Disabled',size } = props
+    const { value, onChange, options, valueKey, text, name, className, label, disabled, validations = [], required, disabledText, size } = props
 
     const errorMessage = validations.reduce((prev, validation) => {
         const newError = validation(value)
@@ -31,7 +31,7 @@ const SelectBox = (props: SelectProps) => {
         return prev
     }, "")
 
-    const renderText = () => disabled ? disabledText : options.find(el => el?.[valueKey] === value)?.[text] || ''
+    const renderText = () => (disabled && disabledText) ? disabledText : options.find(el => el?.[valueKey] === value)?.[text] || ''
 
     return (
         <FormControl error={!!errorMessage} required={required}>
