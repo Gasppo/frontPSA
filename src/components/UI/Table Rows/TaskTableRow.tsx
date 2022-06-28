@@ -26,6 +26,7 @@ const  TaskTableRow = (props:  TaskTableRowProps) => {
     const [isTaskDetailsModalOpen, setIsOpenTaskDetailsModal]=useState(false);
     const [stateTagColor, setStateTagColor] = useState('#F9A620');
     const [stateValue, setStateValue] = useState('Pendiente');
+    const taskResource = projectResources.find(resource => resource.legajo === row.resource);
     const estimatedEffortWithUnit = row.effort.toString()+' '+row.effortUnit;
 
     
@@ -112,6 +113,7 @@ const  TaskTableRow = (props:  TaskTableRowProps) => {
         determinePriorityValue();
     }, [stateTagColor, priorityValue]);
 
+
     return (
         <>
             <VerTareaModal onClose={handleTaskDetailsClose} show={isTaskDetailsModalOpen} currentTask={row}/>
@@ -121,7 +123,7 @@ const  TaskTableRow = (props:  TaskTableRowProps) => {
                 <TableCell align="left" onClick={openTaskDetailsModal}>{row.code}</TableCell>
                 <TableCell align="left" onClick={openTaskDetailsModal}>{row.name}</TableCell>
                 <TableCell align="left" onClick={openTaskDetailsModal}>{priorityValue}</TableCell>
-                <TableCell align="left" onClick={openTaskDetailsModal}>{row.resource}</TableCell>
+                <TableCell align="left" onClick={openTaskDetailsModal}>{taskResource?.Nombre} {taskResource?.Apellido}</TableCell>
                 <TableCell align="left" onClick={openTaskDetailsModal}>{estimatedEffortWithUnit}</TableCell>
                 { row.isCompleted!=2 && <TableCell align="left" onClick={openTaskDetailsModal}>-</TableCell>}
                 { row.isCompleted== 2 && <TableCell align="left" onClick={openTaskDetailsModal}>{row.realEffort} {row.effortUnit}</TableCell>}
