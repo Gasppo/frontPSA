@@ -3,7 +3,8 @@ import useIsDirty from '../../../../hooks/useIsDirty'
 import { getClientLicenses, getProductVersions, updateTicket } from '../../../api/ticketSupport'
 import { defaultTicketData, prioridades } from '../../../dev/dummyData'
 import { ticketSupportURI } from '../../../dev/URIs'
-import { Resource, TicketLicense, TicketProduct, TicketProductVersion } from '../../../types/ticketTypes'
+import { Client } from '../../../types/clientTypes'
+import { TicketLicense, TicketProduct, TicketProductVersion } from '../../../types/ticketTypes'
 import SelectBox from '../../Inputs/SelectBox'
 import ValidatingInput from '../../Inputs/ValidatingInput'
 import CenteredModal from '../../Modal/CenteredModal'
@@ -13,7 +14,7 @@ interface EditTicketModalProps {
     onSubmit: () => void
     show: boolean,
     currentId: number | null
-    clients: Resource[]
+    clients: Client[]
     products: TicketProduct[]
 }
 

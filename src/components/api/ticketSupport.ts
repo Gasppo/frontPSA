@@ -78,3 +78,8 @@ export const getProductName = async (productId: number) => {
 export const getInternalResources = async () => {
     return await fetch(`https://modulo-recursos-psa.herokuapp.com/employees`).then(response => response.json())
 }
+
+
+export const getTickets = async () => {
+    return await fetch(`${ticketSupportURI}/tickets`).then(response => response.json()).then( res => res.tickets)
+}

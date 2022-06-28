@@ -9,7 +9,6 @@ interface TicketTableRowProps {
         razonSocial: string;
         asigneeName: string;
     }
-    refresh: () => void
     onEdit: (id: number) => void
     onView: (id: number) => void
     onAssign: (id: number) => void

@@ -39,7 +39,6 @@ interface TicketTableProps {
     }[],
     resources: Resource[]
     products: TicketProduct[]
-    onRefresh: () => void
     onTicketEdit: (id: number) => void
     onTicketView: (id: number) => void
     onTicketAssign: (id: number) => void
@@ -48,7 +47,7 @@ interface TicketTableProps {
 
 const TicketTable = (props: TicketTableProps) => {
 
-    const { loadedTickets, clients, products, onRefresh, onTicketEdit, onTicketView, onTicketAssign, resources } = props
+    const { loadedTickets, clients, products, onTicketEdit, onTicketView, onTicketAssign, resources } = props
 
     const [order, setOrder] = useState<Order>('asc');
     const [orderBy, setOrderBy] = useState<keyof Data>('updatedAt');
@@ -119,7 +118,6 @@ const TicketTable = (props: TicketTableProps) => {
                             .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                             .map(row => (
                                 <TicketTableRow
-                                    refresh={onRefresh}
                                     row={row}
                                     key={row.id}
                                     onEdit={onTicketEdit}
