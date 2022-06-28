@@ -130,16 +130,24 @@ const  TaskTableRow = (props:  TaskTableRowProps) => {
                         {stateValue.toUpperCase()}
                     </span>
                 </TableCell>                   
-                <TableCell align="right">
+                {!(row.isCompleted=== 2) && <TableCell align="right">
                     <div className='hover:text-teal-600 text-slate-600 cursor-pointer' onClick={openConfirmationDeleteModal}>
                         <DeleteIcon />
                     </div>
-                </TableCell>
-                <TableCell align="right">
+                </TableCell>}
+                {(row.isCompleted=== 2) && <TableCell align="right">
+                    <div className='hover:text-teal-600 text-slate-600 cursor-pointer'>
+                    </div>
+                </TableCell>}
+                {!(row.isCompleted=== 2) && <TableCell align="right">
                     <div className='hover:text-teal-600 text-slate-600 cursor-pointer' onClick={openEditTaskModal}>
                         <EditIcon />
                     </div>
-                </TableCell>
+                </TableCell>}
+                {(row.isCompleted=== 2) && <TableCell align="right">
+                    <div className='hover:text-teal-600 text-slate-600 cursor-pointer'>
+                    </div>
+                </TableCell>}
         </TableRow></>
     )
 }
