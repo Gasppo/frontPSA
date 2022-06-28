@@ -19,6 +19,7 @@ import CargaDeLicencias from '../pages/recursos/cargaDeLicencias'
 import Proyectos from '../pages/proyectos/proyectos'
 import Proyecto from '../pages/proyecto/proyecto'
 import TicketDetailsPage from '../pages/soporte/ticketDetails'
+import Tarea from '../pages/proyecto/task'
 
 interface RouterProps {
     
@@ -38,7 +39,8 @@ const Router = (props: RouterProps) => {
             <Route path="recursos/horasSemanales/carga/seleccion" element={<CargaDeHoras />} />
             <Route path="soporte" element={<Soporte />} />
             <Route path="proyectos" element={<Proyectos />} />
-            <Route path="proyecto" element={<Proyecto/>} />
+            <Route path="proyectos/:proyectoId" element={<Proyecto/>} />
+            <Route path="proyectos/:proyectoId/:taskId" element={<Tarea />} />
             <Route path='soporte/tickets' element={<Tickets />} />
             <Route path='soporte/tickets/:ticketId' element={<TicketDetailsPage />} />
             <Route path='soporte/productsAndVersions' element={<ProductsAndVersions />} />

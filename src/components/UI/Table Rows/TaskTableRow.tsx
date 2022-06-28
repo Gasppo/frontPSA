@@ -7,6 +7,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import ConfirmModal from '../Modal/confirmationModal';
 import EditTaskModal from '../Tasks Modal/EditTaskModal';
 import VerTareaModal from '../Tasks Modal/VerTareaModal';
+import { Link, useNavigate } from 'react-router-dom';
 
 interface  TaskTableRowProps {
     row: Task,
@@ -115,10 +116,10 @@ const  TaskTableRow = (props:  TaskTableRowProps) => {
             <EditTaskModal onSubmit={handleEditTaskSubmit} onClose={handleEditTaskClose} show={isOpenEditTaskModal} currentTask={row} projectResources={props.projectResources}/>
             <ConfirmModal onSubmit={handleDeleteConfirmation} onClose={handleNotConfirmation} show={showCofirmationModal} txt="Seguro que desea elimiar la tarea"/>
             <TableRow hover key={row.code}>
-                <TableCell align="left" onClick={openTaskDetailsModal}>{row.code}</TableCell>
-                <TableCell align="left" onClick={openTaskDetailsModal}>{row.name}</TableCell>
-                <TableCell align="left" onClick={openTaskDetailsModal}>{priorityValue}</TableCell>
-                <TableCell align="left" onClick={openTaskDetailsModal}>{row.effort}</TableCell>
+                <TableCell align="left" ><Link to={`/proyectos/${code}/${row.code}`} state={{ currentTask: row, projectResources: projectResources }}>{row.code}</Link></TableCell>
+                <TableCell align="left" ><Link to={`/proyectos/${code}/${row.code}`} state={{ currentTask: row, projectResources: projectResources}}>{row.name}</Link></TableCell>
+                <TableCell align="left" ><Link to={`/proyectos/${code}/${row.code}`} state={{ currentTask: row,projectResources: projectResources }}>{priorityValue}</Link></TableCell>
+                <TableCell align="left" ><Link to={`/proyectos/${code}/${row.code}`} state={{ currentTask: row, projectResources: projectResources }}>{row.effort}</Link></TableCell>
                 <TableCell className = 'group'>
                     <Circle style={{ alignSelf: 'left', color: stateTagColor, height: '4vh' }}></Circle>
                     <span className="task-state-tooltip group-hover:scale-100" >
