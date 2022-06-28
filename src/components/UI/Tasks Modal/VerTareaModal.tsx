@@ -89,12 +89,12 @@ const VerTareaModal = (props: VerTareaModalProps) => {
                                 </div>
                             </div>
                         </div>
-                        <div style={{ display: 'flex', flexDirection: 'column', width: '40vh', marginLeft: 60 }} >
-                            <div className='hover:bg-gray-100' style={{ padding: 15, display: 'flex', flexDirection: 'column', borderColor: "#B0BFB8", borderRadius: 15, borderWidth: '1px', marginRight: '5vh' }}>
+                        <div style={{ display: 'flex', flexDirection: 'column', width: '50vh', marginLeft: 50 }} >
+                            <div className='hover:bg-gray-100' style={{ padding: 10, display: 'flex', flexDirection: 'column', borderColor: "#B0BFB8", borderRadius: 15, borderWidth: '1px', marginRight: '5vh' }}>
                                 <div style={{ borderBottomColor: "#B0BFB8", paddingBottom: 10, marginBottom: 10, display: 'flex', flexDirection: 'row', color: '#5C7067', borderBottomWidth: '1px' }}><Typography variant='body2' className='w-[30vh] ml-5' style={{ fontWeight: 'bold' }}>Detalles </Typography></div>
 
                                 <div style={{ marginBottom: 10, display: 'flex', flexDirection: 'row', color: '#5C7067' }}><Typography variant='body2' className='w-[27vh]  ml-5'>Prioridad: </Typography><Typography variant='body2' className={'slate'}>{props.currentTask.priority}</Typography></div>
-                                <div style={{ marginBottom: 10, display: 'flex', flexDirection: 'row', color: '#5C7067' }}><Typography variant='body2' className='w-[27vh]  ml-5'>Esfuerzo Estimado: </Typography><Typography variant='body2' className={'slate'}>{props.currentTask.effort}</Typography></div>
+                                <div style={{ marginBottom: 10, display: 'flex', flexDirection: 'row', color: '#5C7067' }}><Typography variant='body2' className='w-[27vh]  ml-5'>Esfuerzo Estimado: </Typography><Typography variant='body2' className={'slate'}>{props.currentTask.effort} {props.currentTask.effortUnit}</Typography></div>
                                 <div style={{ marginBottom: 10, display: 'flex', flexDirection: 'row', color: '#5C7067' }}>
                                     <Typography variant='body2' className='w-[27vh]  ml-5'>Responsable: </Typography>
                                     <div style={{ display: 'flex', flexDirection: 'row', margin: 5, padding: 5, width: 120, height: 30, backgroundColor: "#E9EDEB", borderRadius: 5 }}><AccountCircleIcon className='mr-1 h-5' style={{ color: '#5C7067' }} /><Typography variant='caption' className='slate' >ID-{props.currentTask.resource}</Typography></div>
