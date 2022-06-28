@@ -1,9 +1,7 @@
 import { Typography } from '@mui/material'
-import { useCallback, useEffect, useState } from 'react'
+import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { ticketSupportURI } from '../../components/dev/URIs'
 import LoadingIndicator from '../../components/Loading/LoadingIndicator'
-import { Ticket } from '../../components/types/ticketTypes'
 import PageTitle from '../../components/UI/Dashboard/PageTitle'
 import PageLinker from '../../components/UI/Inputs/PageLinker'
 import AddTicketModal from '../../components/UI/Tickets/Modals/AddTicketModal'
@@ -20,8 +18,6 @@ interface TicketsProps {
 
 
 const Tickets = (props: TicketsProps) => {
-    const [loadedTickets, setLoadedTickets] = useState<Ticket[]>([])
-    const [isLoading, setLoading] = useState<boolean>(false)
     const [showAddModal, setShowAddModal] = useState(false)
     const [showEditModal, setShowEditModal] = useState(false)
     const [showAsignModal, setShowAsignModal] = useState(false)
@@ -29,7 +25,7 @@ const Tickets = (props: TicketsProps) => {
     const [showCurrTicket, setShowCurrTicket] = useState<boolean>(false)
 
 
-    const { clients, products, resources, loading } = useServiceData()
+    const { clients, products, resources, loading, tickets: loadedTickets, refreshData } = useServiceData()
 
     const navigate = useNavigate()
 
@@ -60,30 +56,12 @@ const Tickets = (props: TicketsProps) => {
     }
 
     const handleSubmit = () => {
-        gatherTickets()
+        refreshData()
         setShowAddModal(false)
         setShowAsignModal(false)
         setShowEditModal(false)
     }
 
-
-    const gatherTickets = useCallback(() => {
-        fetch(`${ticketSupportURI}/tickets`)
-            .then(res => res.json())
-            .then(res => {
-                setLoadedTickets(res.tickets)
-                setLoading(false)
-            })
-            .catch(err => {
-                setLoading(false)
-                console.log(err)
-            })
-    }, [])
-
-    useEffect(() => {
-        setLoading(true)
-        gatherTickets()
-    }, [gatherTickets]);
 
     const links = [
         { label: "Inicio", href: "/" },
@@ -96,7 +74,7 @@ const Tickets = (props: TicketsProps) => {
                 <PageLinker links={links} />
             </PageTitle>
             <Typography variant='h5' className={'mb-10'}>Tickets</Typography>
-            <LoadingIndicator show={loading || isLoading} className={`flex flex-col items-start  transition-all duration-200`} >
+            <LoadingIndicator show={loading} className={`flex flex-col items-start  transition-all duration-200`} >
                 <CreateTicketButton onClick={handleAddOpen} />
                 <AddTicketModal onSubmit={handleSubmit} onClose={handleClose} show={showAddModal} clients={clients} products={products} />
                 <EditTicketModal onSubmit={handleSubmit} onClose={handleClose} show={showEditModal} currentId={currentId} clients={clients} products={products} />

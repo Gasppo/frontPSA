@@ -40,5 +40,13 @@ export const useServiceData = () => {
         gatherResoruces()
     }, []);
 
-    return { clients, resources, products, tickets,  loading }
+    const refreshData = () => {
+        setLoading(true)
+        gatherClients()
+        gatherProducts()
+        gatherTickets()
+        gatherResoruces()
+    }
+
+    return { clients, resources, products, tickets, loading, refreshData }
 }
