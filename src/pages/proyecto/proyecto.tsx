@@ -237,7 +237,7 @@ const Proyecto = () => {
                     <Typography variant='body2' className='w-[27vh]' style={{fontWeight: 'bold', color: '#5C7067'}}>Tareas: </Typography>
                         <LoadingIndicator show={isLoading} className={`flex flex-col items-start  transition-all duration-200`} >
                             {!isLoading && (<> 
-                                <TableContainer component={Paper} className="mt-5 ml-100 mr-100" style = {{width: 700, borderColor: "#B0BFB8", borderRadius: 15, borderWidth: '0.5px'}}  >
+                                <TableContainer component={Paper} className="mt-5 ml-100 mr-100" style = {{width: 800, borderColor: "#B0BFB8", borderRadius: 15, borderWidth: '0.5px'}}  >
                                     <Table className='ml-100 mr-100'>
                                         <TableHead >
                                             <TableRow>

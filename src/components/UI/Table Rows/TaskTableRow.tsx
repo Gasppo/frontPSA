@@ -25,6 +25,7 @@ const  TaskTableRow = (props:  TaskTableRowProps) => {
     const [isTaskDetailsModalOpen, setIsOpenTaskDetailsModal]=useState(false);
     const [stateTagColor, setStateTagColor] = useState('#F9A620');
     const [stateValue, setStateValue] = useState('Pendiente');
+    const estimatedEffortWithUnit = row.effort.toString()+' '+row.effortUnit;
 
     
     const handleDeleteConfirmation = () =>{
@@ -119,7 +120,7 @@ const  TaskTableRow = (props:  TaskTableRowProps) => {
                 <TableCell align="left" onClick={openTaskDetailsModal}>{row.name}</TableCell>
                 <TableCell align="left" onClick={openTaskDetailsModal}>{priorityValue}</TableCell>
                 <TableCell align="left" onClick={openTaskDetailsModal}>{row.resource}</TableCell>
-                <TableCell align="left" onClick={openTaskDetailsModal}>{row.effort}</TableCell>
+                <TableCell align="left" onClick={openTaskDetailsModal}>{estimatedEffortWithUnit}</TableCell>
                 <TableCell className = 'group'>
                     <Circle style={{ alignSelf: 'left', color: stateTagColor, height: '4vh' }}></Circle>
                     <span className="task-state-tooltip group-hover:scale-100" >
