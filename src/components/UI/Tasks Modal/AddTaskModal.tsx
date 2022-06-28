@@ -27,7 +27,7 @@ const AddTaskModal = (props: AddTicketModalProps) => {
         effort: 0,
         resource: 1,
         description: " ",
-        effortUnit: " ",
+        effortUnit: "horas/hombre",
         realEffort: 0,
     })
     const [runValidations, setRunValidations] = useState(false)
