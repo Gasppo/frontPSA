@@ -108,7 +108,7 @@ const EditTicketModal = (props: EditTicketModalProps) => {
         const currentLicense = input.productLicenseId
 
         if (clientLicenses.find(el => el.id === currentLicense)?.productId === currProductId) {
-            setInput(prev => ({ ...prev, productLicenseId: 0, productId: 0 }))
+            setInput(prev => ({ ...prev, productLicenseId: 0}))
         }
     }
 
@@ -116,7 +116,6 @@ const EditTicketModal = (props: EditTicketModalProps) => {
 
     useEffect(() => {
         gatherLicenses(input?.authorId)
-        setInput(prev => ({ ...prev, productLicenseId: 0, productId: 0 }))
     }, [input?.authorId])
 
     useEffect(() => {
@@ -150,18 +149,18 @@ const EditTicketModal = (props: EditTicketModalProps) => {
     const noAuthorSelected = (!input?.authorId && input?.authorId === 0)
     const noProductSelected = input?.productId <= 0
     const disableClientInput = noAuthorSelected || enabledProducts.length === 0
-    const disabledVersionInput = noAuthorSelected || noProductSelected
+    const disabledVersionInput = noAuthorSelected || noProductSelected || enabledProducts.length === 0
     const productDisabledText = `${!noAuthorSelected && enabledProducts.length === 0 ? 'El cliente no tiene licencias activas' : 'Primero ingrese un cliente...'}`
     const versionDisabledText = `${!noAuthorSelected && enabledProducts.length === 0 ? 'El cliente no tiene licencias activas' : 'Primero ingrese un producto...'}`
 
     return (
         <CenteredModal isLoading={isLoading} onClose={onClose} show={show} onSubmit={handleSubmit} label="Actualizar Ticket" addbuttonLabel="Actualizar" disableSubmit={disabled}>
             <div className='flex mb-6  flex-row'>
-                <SelectBox required validations={validations} name="authorId" className='mr-8 w-80' label="Nombre de Cliente" onChange={handleChangeInt} disabled={false} valueKey="id" value={input?.authorId} options={clients} text="razonSocial" />
+                <SelectBox required validations={validations} name="authorId" className='mr-8 w-80' label="Nombre de Cliente" onChange={handleChangeInt} disabled valueKey="id" value={input?.authorId} options={clients} text="razonSocial" />
                 <SelectBox required validations={validations} name="status" className='mr-8 w-80' label="Estado del Ticket" onChange={handleChangeText} valueKey="id" value={input?.status} options={statuses} text="id" />
             </div>
             <div className='flex mb-6 flex-row'>
-                <ValidatingInput required validations={validations} name="title" className='mr-8 w-80' label="Titulo" value={input?.title} onChange={handleChangeText} />
+                <ValidatingInput disabled required validations={validations} name="title" className='mr-8 w-80' label="Titulo" value={input?.title} onChange={handleChangeText} />
                 <SelectBox required validations={validations} name="priority" className='mr-8 w-80' disabled={input?.authorId === 0} label="Prioridad" onChange={handleChangeInt} valueKey="id" value={input?.priority} options={prioridades} text="valor" />
             </div>
             <div className='flex mb-6 flex-row'>
