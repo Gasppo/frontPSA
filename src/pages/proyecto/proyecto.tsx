@@ -343,8 +343,7 @@ const Proyecto = () => {
                         </div>
                     </div>
                     {expandedRecursos && <AddCircleIcon style={{marginLeft:290, color: '#C5D0CB', zIndex:4, marginTop: -50}} className='hover:teal-600' onClick={handleOpenModalAddResources}/>}
-                    {expandedRecursos && <AddCircleIcon style={{marginLeft:320, color: '#C5D0CB', zIndex:4, marginTop: -50}} className='hover:teal-600' onClick={handleOpenModalAddResources}/>}
-                    <div className='hover:bg-gray-100' style={{marginTop: expandedRecursos? 35:10, padding: 15, display: 'flex', flexDirection: 'column', borderColor: "#B0BFB8", borderRadius: 15, borderWidth: '1px',marginRight: '5vh'}} onClick={changeexpandedDatesSetUp}>
+                   <div className='hover:bg-gray-100' style={{marginTop: expandedRecursos? 35:10, padding: 15, display: 'flex', flexDirection: 'column', borderColor: "#B0BFB8", borderRadius: 15, borderWidth: '1px',marginRight: '5vh'}} onClick={changeexpandedDatesSetUp}>
                         <div style={{ borderBottomColor: expandedDates ? "#B0BFB8":'transparent', paddingBottom: expandedDates ? 10:0, marginBottom:expandedDates ? 10:0, display: 'flex', flexDirection: 'row',color: '#5C7067', borderBottomWidth: '1px'}}><Typography variant='body2' className='w-[30vh] ml-5' style={{fontWeight: 'bold'}}>Actividad </Typography>
                             {expandedDates && <KeyboardArrowUpIcon className='ml-7' style={{color: '#5C7067'}}/>}
                             {!expandedDates && <KeyboardArrowDownIcon className='ml-7' style={{color: '#5C7067'}}/>}
