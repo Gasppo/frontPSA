@@ -13,6 +13,7 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import EditProjectModal from '../../components/UI/Projects Modal/editProjectModal';
 import { Link, useNavigate } from 'react-router-dom';
+import{Resource} from '../../components/types/resourceType';
 
 interface VerTareaProps {
     currentTask: Task,
@@ -34,7 +35,10 @@ const Tarea = () => {
     const [stateValue, setStateValue] = useState('Pendiente');
     const [value, setValue] = useState(0);
     const [expandedTicket, setExpandedTicket] = useState(false);
+    const [resources, setLoadedResources] = useState<Resource []>([]);
+    const [flag, setFlag] = useState(true);
     const [expandedDetails, setexpandedDetails] = useState(false);
+    const [taskResource, setTaskResource] = useState<Resource []>([])
     const {client, currentTicket,  product, asignee} = useTicketInfo(currentTask.ticket)
 
     //Agregar lo de ESFUERZO ESTIMADO REAL
@@ -43,6 +47,20 @@ const Tarea = () => {
         setValue(newValue);
     };
 
+    const getResources = () => {
+        fetch('https://modulo-recursos-psa.herokuapp.com/employees',{
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+            .then((response) => {
+                return response.json()})
+            .then((myJson) => {
+                setLoadedResources(Object.values(JSON.parse(JSON.stringify(myJson))));
+            })
+            .catch(err => console.log(err))
+    }
 
     const determinePrioriryValue = () => {
         if (currentTask.priority == 1) {
@@ -77,14 +95,17 @@ const Tarea = () => {
         setIsOpenEditTaskModal(false);
     };
 
+    const filterResources = () => {
+        setTaskResource(resources.filter(resource => currentTask.resource === resource.legajo))
+    };
+
     const changeexpandedDetailsSetUp = () =>{
         setexpandedDetails(!expandedDetails);
+        filterResources()
     }
-
     const handleModalOpen = () => {
         setIsOpenEditTaskModal(true)
     };
-
     const changeexpandedTicketSetUp = () =>{
         setExpandedTicket(!expandedTicket);
     }
@@ -102,6 +123,12 @@ const Tarea = () => {
         determinePrioriryValue();
     }, []);
 
+    useEffect(() => {
+        if (flag) {
+            getResources();
+            setFlag(false)
+        }
+    }, []);
 
     useEffect(() => {
         setValue(0)
@@ -153,7 +180,7 @@ const Tarea = () => {
                                 { (currentTask.isCompleted == 2) && <div style={{ marginBottom: 10, display: 'flex', flexDirection: 'row', color: '#5C7067' }}><Typography variant='body2' className='w-[27vh]  ml-15'>Esfuerzo Estimado: </Typography><Typography variant='body2' className={'slate'}>{currentTask.realEffort} {currentTask.effortUnit}</Typography></div>}
                                 <div style={{ marginBottom: 10, display: 'flex', flexDirection: 'row', color: '#5C7067' }}>
                                     <Typography variant='body2' className='w-[27vh]  ml-15'>Responsable: </Typography>
-                                    <div style={{ display: 'flex', flexDirection: 'row', margin: 5, padding: 5, width: 120, height: 30, backgroundColor: "#E9EDEB", borderRadius: 5 }}><AccountCircleIcon className='mr-1 h-5' style={{ color: '#5C7067' }} /><Typography variant='caption' className='slate' >ID-{currentTask.resource}</Typography></div>
+                                    <div style={{ display: 'flex', flexDirection: 'row', margin: 5, padding: 5, width: 120, height: 30, backgroundColor: "#E9EDEB", borderRadius: 5 }}><AccountCircleIcon className='mr-1 h-5' style={{ color: '#5C7067' }} /><Typography variant='caption' className='slate' >{taskResource[0].Nombre} {taskResource[0].Apellido}</Typography></div>
                                 </div>
                             </>}
                     </div>

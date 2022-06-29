@@ -253,7 +253,6 @@ const Proyecto = () => {
                 </Popup>
             </div>
             <div style={{display: 'flex', flexDirection: 'row', marginLeft: 85}}> 
-                <div style={{display: 'flex', flexDirection: 'column', marginTop: -10, width:'110vh'}}>
                     <div style={{padding: 5, width: 110, height: 30, display: 'flex', flexDirection: 'row', backgroundColor: getColor(), borderRadius: 5}}><Typography variant='body2' style= {{color: '#F4F6F5', fontWeight: 'bold'}}>{project.state.toUpperCase()}</Typography></div>
                     <div style={{alignSelf:'left', marginTop: 25}}>
                         <Typography variant='body2' className='w-[27vh]' style={{fontWeight: 'bold', color: '#5C7067'}}>Descripción: </Typography>
@@ -262,10 +261,8 @@ const Proyecto = () => {
                         </div>
                     </div>
                     <div style={{marginTop: 25}}>
-                    <Typography variant='body2' className='w-[55vh]' style={{fontWeight: 'bold', color: '#5C7067'}}>Tareas: </Typography>
                         <LoadingIndicator show={isLoading} className={`flex flex-col items-start  transition-all duration-200`} >
                             {!isLoading && (<> 
-                                    <Table className='ml-100 mr-100' style={{width: 1000}}>
                                         <TableHead >
                                             <TableRow>
                                                 <TableCell align="left" style={{color: '#5C7067' }}>Código</TableCell>
