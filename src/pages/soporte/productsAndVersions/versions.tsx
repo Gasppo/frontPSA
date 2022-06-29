@@ -9,6 +9,7 @@ import AddVersionModal from '../../../components/UI/Versions/AddVersionModal'
 import EditVersionModal from '../../../components/UI/Versions/EditVersionModal'
 import EnhancedTableHead from '../../../components/UI/Versions/EnhacedTableHeader'
 import VersionTableRow from '../../../components/UI/Versions/VersionTableRow'
+import Filter from '../../../components/UI/Table/Filter'
 
 interface LocationState {
       productId: number,
@@ -54,6 +55,8 @@ const Versions = () => {
     const [orderBy, setOrderBy] = useState<keyof Data>('name');
     const [rowsPerPage, setRowsPerPage] = useState(5)
     const [page, setPage] = useState(0)
+    const [filterKey, setFilterKey] = useState<string>('id')
+    const [filterValue, setFilterValue] = useState('')
   
     const handleAddOpen = () => {
         setShowAddModal(true)
@@ -74,6 +77,14 @@ const Versions = () => {
         setShowAddModal(false)
         setShowEditModal(false)
     }
+
+    const handleFilterKeyChange = (key: string) => {
+        setFilterKey(key)
+        }
+    
+    const handleFilterValueChange = (value: string) => {
+        setFilterValue(value)
+    } 
   
     const handleRequestSort = (event: React.MouseEvent<unknown>, property: keyof Data,) => {
         const isAsc = orderBy === property && order === 'asc';
@@ -116,6 +127,10 @@ const Versions = () => {
         if (a?.[currKey] > b?.[currKey]) return 1
         return 0
     }
+
+    const fullVersions = loadedVersions
+    .filter((row: any) => filterKey in row ? row[filterKey]?.toString()?.toLowerCase()?.includes(filterValue?.toLowerCase()) : false)
+
   
     useEffect(() => {
         gatherVersions()
@@ -149,11 +164,12 @@ const Versions = () => {
                 <AddVersionModal onSubmit={handleSubmit} onClose={handleClose} show={showAddModal} product={productId}/>
                 <EditVersionModal onSubmit={handleSubmit} onClose={handleClose} show={showEditModal} currentId={currentId}/>
                 <TableContainer component={Paper} className="mt-10"  >
+                <Filter data={fullVersions || []} currentKey={filterKey} value={filterValue} onKeyChange={handleFilterKeyChange} onValueChange={handleFilterValueChange} filterOptions={tableHeaders} filterKey="id" filterText='label' />
                     <Table>
                         <EnhancedTableHead order={order} orderBy={orderBy} onRequestSort={handleRequestSort} headers={tableHeaders} />
                         <TableBody>
-                            {loadedVersions &&
-                                loadedVersions
+                            {fullVersions &&
+                                fullVersions
                                     .sort(sortFunction)
                                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                                     .map(row => <VersionTableRow refresh={gatherVersions} row={row} key={row.id} onEdit={handleEditOpen} />)}
@@ -163,7 +179,7 @@ const Versions = () => {
                                 <TablePagination
                                     rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
                                     colSpan={8}
-                                    count={loadedVersions?.length || 0}
+                                    count={fullVersions?.length || 0}
                                     rowsPerPage={rowsPerPage}
                                     page={page}
                                     SelectProps={{

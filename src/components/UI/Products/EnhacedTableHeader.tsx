@@ -49,7 +49,6 @@ const EnhancedTableHead = (props: EnhancedTableHeadProps) => {
                         </TableSortLabel>}
                     </TableCell>
                 ))}
-                <TableCell align="right">Accciones</TableCell>
             </TableRow>
         </TableHead>
     );
