@@ -5,13 +5,14 @@ import SelectBox from '../Inputs/SelectBox'
 import {Task} from '../../types/taskType'
 import{Resource} from '../../types/resourceType';
 import Autocomplete from '@mui/material/Autocomplete';
+import { getValue } from '@testing-library/user-event/dist/utils';
 
 interface EditTaskModalProps {
     onSubmit: () => void
     onClose: () => void
     show: boolean
     currentTask: Task
-    projectResources: number[]
+    projectResources: Resource[]
 }
 
 const EditTaskModal = (props: EditTaskModalProps) => {
@@ -68,6 +69,10 @@ const EditTaskModal = (props: EditTaskModalProps) => {
     const onCloseCreateProjectModal = () =>{
         setNewTask(({ ...newTask, name: "", effort: 0, resource: 0, description: "",}));   
         onClose();
+    };
+
+    const getValue = () =>{
+        return projectResources.find(resource => resource.legajo === newTask.resource)
     };
 
     useEffect(() => {
@@ -170,12 +175,13 @@ const EditTaskModal = (props: EditTaskModalProps) => {
                             disablePortal
                             className='mr-8 w-80'
                             id="combo-box-demo"
-                            defaultValue={newTask.resource}
+                            defaultValue={getValue()}
                             options={projectResources}
+                            getOptionLabel={(option) => `${option.Nombre} ${option.Apellido}`}
                             sx={{ width: 300 }}
                             renderInput={(params: JSX.IntrinsicAttributes & TextFieldProps) => <TextField {...params} name= 'resource' label="Responsable" variant="outlined" color='primary' />}
                             onChange={(event: any, newValue: any) => {
-                                setNewTask(({ ...newTask, resource: newValue }))
+                                setNewTask(({ ...newTask, resource: newValue.id }))
                             }}
                     />
                 </div>

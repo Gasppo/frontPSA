@@ -6,6 +6,7 @@ import { Circle } from '@mui/icons-material';
 import EditIcon from '@mui/icons-material/Edit';
 import ConfirmModal from '../Modal/confirmationModal';
 import EditTaskModal from '../Tasks Modal/EditTaskModal';
+import{Resource} from '../../types/resourceType'
 import { Link, useNavigate } from 'react-router-dom';
 
 interface  TaskTableRowProps {
@@ -13,7 +14,7 @@ interface  TaskTableRowProps {
     code: number,
     tasks: Task[],
     refresh: () => void,
-    projectResources: number[]
+    projectResources: Resource[]
 }
 
 
@@ -24,6 +25,7 @@ const  TaskTableRow = (props:  TaskTableRowProps) => {
     const [priorityValue, setPriorityValue] = useState('Baja');
     const [stateTagColor, setStateTagColor] = useState('#F9A620');
     const [stateValue, setStateValue] = useState('Pendiente');
+    const taskResource = projectResources.find(resource => resource.legajo === row.resource);
     const estimatedEffortWithUnit = row.effort.toString()+' '+row.effortUnit;
 
     
@@ -103,6 +105,7 @@ const  TaskTableRow = (props:  TaskTableRowProps) => {
         determinePriorityValue();
     }, [stateTagColor, priorityValue]);
 
+
     return (
         <>
             <EditTaskModal onSubmit={handleEditTaskSubmit} onClose={handleEditTaskClose} show={isOpenEditTaskModal} currentTask={row} projectResources={props.projectResources}/>
@@ -111,10 +114,10 @@ const  TaskTableRow = (props:  TaskTableRowProps) => {
                 <TableCell align="left" ><Link to={`/proyectos/${code}/${row.code}`} state={{ currentTask: row, projectResources: projectResources }}>{row.code}</Link></TableCell>
                 <TableCell align="left" ><Link to={`/proyectos/${code}/${row.code}`} state={{ currentTask: row, projectResources: projectResources}}>{row.name}</Link></TableCell>
                 <TableCell align="left" ><Link to={`/proyectos/${code}/${row.code}`} state={{ currentTask: row,projectResources: projectResources }}>{priorityValue}</Link></TableCell>
-                <TableCell align="left" ><Link to={`/proyectos/${code}/${row.code}`} state={{ currentTask: row, projectResources: projectResources }}>{row.effort}</Link></TableCell>
-                <TableCell align="left"><Link to={`/proyectos/${code}/${row.code}`} state={{ currentTask: row, projectResources: projectResources }}>{estimatedEffortWithUnit}</Link></TableCell>
-                { row.isCompleted!=2 && <TableCell align="left"><Link to={`/proyectos/${code}/${row.code}`} state={{ currentTask: row, projectResources: projectResources }}>-</Link></TableCell>}
-                { row.isCompleted== 2 && <TableCell align="left">{row.realEffort} {row.effortUnit}</TableCell>}
+                <TableCell align="left"><Link to={`/proyectos/${code}/${row.code}`} state={{ currentTask: row,projectResources: projectResources }}>{taskResource?.Nombre} {taskResource?.Apellido}</Link></TableCell>
+                <TableCell align="left"><Link to={`/proyectos/${code}/${row.code}`} state={{ currentTask: row,projectResources: projectResources }}>{estimatedEffortWithUnit}</Link></TableCell>
+                { row.isCompleted!=2 && <TableCell align="left"><Link to={`/proyectos/${code}/${row.code}`} state={{ currentTask: row,projectResources: projectResources }}>-</Link></TableCell>}
+                { row.isCompleted== 2 && <TableCell align="left"><Link to={`/proyectos/${code}/${row.code}`} state={{ currentTask: row,projectResources: projectResources }}>{row.realEffort} {row.effortUnit}</Link></TableCell>}
                 <TableCell className = 'group'>
                     <Circle style={{ alignSelf: 'left', color: stateTagColor, height: '4vh' }}></Circle>
                     <span className="task-state-tooltip group-hover:scale-100" >

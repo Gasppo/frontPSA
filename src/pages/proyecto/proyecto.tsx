@@ -16,6 +16,7 @@ import AddTaskModal from '../../components/UI/Tasks Modal/AddTaskModal';
 import EditProjectModal from '../../components/UI/Projects Modal/editProjectModal';
 import { Task } from '../../components/types/taskType'
 import AddResourcesModal from '../../components/UI/Projects Modal/AddResourcesModal'
+import{Resource} from '../../components/types/resourceType';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 
 interface ProyectProps {
@@ -45,6 +46,8 @@ const Proyecto = () => {
     const [expandedRecursos, setexpandedRecursos] = useState(false);
     const [expandedDates, setexpandedDates] = useState(false);
     const [expandedDetails, setexpandedDetails] = useState(false);
+    const [resources, setLoadedResources] = useState<Resource []>([]);
+    const [flag, setFlag] = useState(true);
     const navigate = useNavigate();
     const [isADevelopmentProject, setIfItIsADevelomentProject]= useState(false);
 
@@ -111,6 +114,7 @@ const Proyecto = () => {
     }
 
     const changeexpandedRecursosSetUp = () =>{
+        filterResources()
         setexpandedRecursos(!expandedRecursos);
     }
 
@@ -146,6 +150,21 @@ const Proyecto = () => {
         setIsOpenNewTaskModal(false);
     };
 
+    const getResources = () => {
+        fetch('https://modulo-recursos-psa.herokuapp.com/employees',{
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+            .then((response) => {
+                return response.json()})
+            .then((myJson) => {
+                setLoadedResources(Object.values(JSON.parse(JSON.stringify(myJson))));
+            })
+            .catch(err => console.log(err))
+    }
+
     const getTasksByProject = async () => {
         fetch(`https://modulo-proyectos-psa-2022.herokuapp.com/tasks/getbyproject/${project.code}`,{
             method: 'GET',
@@ -164,6 +183,9 @@ const Proyecto = () => {
     const updatePage = () => {
         fetchProject();
     };
+    const filterResources = () => {
+        setLoadedResources(resources.filter(resource => project.resources.includes(resource.legajo)))
+    };
 
     const handleChangePage = (event: React.MouseEvent<HTMLButtonElement> | null, newPage: number) => {
         setPage(newPage);
@@ -179,6 +201,12 @@ const Proyecto = () => {
         getTasksByProject();
     }, []);
 
+    useEffect(() => {
+        if (flag) {
+            getResources();
+            setFlag(false)
+        }
+    }, []);
 
     useEffect(() => {
         determineRisk();
@@ -237,7 +265,6 @@ const Proyecto = () => {
                     <Typography variant='body2' className='w-[27vh]' style={{fontWeight: 'bold', color: '#5C7067'}}>Tareas: </Typography>
                         <LoadingIndicator show={isLoading} className={`flex flex-col items-start  transition-all duration-200`} >
                             {!isLoading && (<> 
-                                <TableContainer component={Paper} className="mt-5 ml-100 mr-100" style = {{width: 1000, borderColor: "#B0BFB8", borderRadius: 15, borderWidth: '0.5px'}}  >
                                     <Table className='ml-100 mr-100'>
                                         <TableHead >
                                             <TableRow>
@@ -255,7 +282,7 @@ const Proyecto = () => {
                                         <TableBody>
                                             {(projectTasks.sort((a, b) => b.priority - a.priority))
                                             .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                                            .map(row => <TaskTableRow refresh={getTasksByProject} row={row} code= {project.code} tasks = {projectTasks} key={row.code} projectResources={project.resources} />)}
+                                            .map(row => <TaskTableRow refresh={getTasksByProject} row={row} code= {project.code} tasks = {projectTasks} key={row.code} projectResources={resources} />)}
                                         
                                         </TableBody>
                                         <TableFooter>
@@ -278,7 +305,6 @@ const Proyecto = () => {
                                             </TableRow>
                                         </TableFooter>
                                     </Table>
-                                </TableContainer>
                             </>
                             )}
                         </LoadingIndicator>
@@ -311,7 +337,7 @@ const Proyecto = () => {
                             {expandedRecursos && 
                             <>
                                 <div style={{width: 400}}>
-                                    {project.resources.map(recurso =>  <div style={{display: 'flex', flexDirection: 'row', margin: 5, padding: 5, width: 120, height: 30, backgroundColor: "#E9EDEB", borderRadius: 5}}><AccountCircleIcon className= 'mr-1 h-5' style={{color: '#5C7067'}}/><Typography variant='caption' className='slate' >Legajo {recurso}</Typography></div>)}
+                                    {resources.map(recurso =>  <div style={{display: 'flex', flexDirection: 'row', margin: 5, padding: 5, width: 150, height: 30, backgroundColor: "#E9EDEB", borderRadius: 5}}><AccountCircleIcon className= 'mr-1 h-5' style={{color: '#5C7067'}}/><Typography variant='caption' className='slate' >{recurso.Nombre} {recurso.Apellido}</Typography></div>)}
                                     <div style={{display: 'flex', flexDirection: 'row', margin: 5, padding: 5, width: 120, height: 30}}></div>
                                 </div>
                             </>}
