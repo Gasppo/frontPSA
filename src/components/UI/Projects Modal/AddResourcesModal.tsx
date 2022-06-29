@@ -103,17 +103,19 @@ const AddProjectModal = (props: AddProjectModalProps) => {
                             disablePortal
                             id="combo-box-demo"
                             options={resources}
+                            defaultValue={resources[0]}
                             getOptionLabel={(option) => `${option.Nombre} ${option.Apellido}`}
                             sx={{ width: 300 }}
                             renderInput={(params) => <TextField {...params} label="Recurso" />}
                             onChange={(event: any, newValue: any) => {
                                 if (newProject.resources.includes(newValue.legajo) === false) {
                                 setNewProject({
-                                    resources: [...newProject.resources, newValue.legajo]
+                                    resources: [...newProject.resources, newValue.id]
                                 })
                                 sleep(100)
                             }}}
                         />
+
                        <div className='mr-8 w-80'></div>
                     </div>
                     <div style = {{alignSelf: 'left', width: 700, marginLeft:'5vh'}}>
