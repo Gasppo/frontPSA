@@ -15,6 +15,7 @@ interface AddProjectModalProps {
     project: Project
     onRefresh: () => void
     projectTasks: Task[]
+    resources: Resource[]
 }
 
 const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
@@ -102,21 +103,23 @@ const AddProjectModal = (props: AddProjectModalProps) => {
                             disablePortal
                             id="combo-box-demo"
                             options={resources}
+                            defaultValue={resources[0]}
                             getOptionLabel={(option) => `${option.Nombre} ${option.Apellido}`}
                             sx={{ width: 300 }}
                             renderInput={(params) => <TextField {...params} label="Recurso" />}
                             onChange={(event: any, newValue: any) => {
                                 if (newProject.resources.includes(newValue.legajo) === false) {
                                 setNewProject({
-                                    resources: [...newProject.resources, newValue.legajo]
+                                    resources: [...newProject.resources, newValue.id]
                                 })
                                 sleep(100)
                             }}}
                         />
+
                        <div className='mr-8 w-80'></div>
                     </div>
                     <div style = {{alignSelf: 'left', width: 700, marginLeft:'5vh'}}>
-                                 {(newProject.resources).map( (resource) =>  <div key={resource} style={{display: 'flex', flexDirection: 'row', margin: 5, padding: 5, width: 200, height: 33, backgroundColor: "#E9EDEB", borderRadius: 5}}><AccountCircleIcon className= 'mr-1 h-5' style={{color: '#5C7067'}}/><Typography variant='caption' className='slate' >ID-{resource}</Typography>                    
+                                 {(newProject.resources).map( (resource) =>  <div key={resource} style={{display: 'flex', flexDirection: 'row', margin: 5, padding: 5, width: 290, height: 33, backgroundColor: "#E9EDEB", borderRadius: 5}}><AccountCircleIcon className= 'mr-1 h-5 align-right' style={{color: '#5C7067'}}/><Typography variant='caption' className='slate' >{(resources.find(employee => employee.legajo === resource))?.Nombre} {(resources.find(employee => employee.legajo === resource))?.Apellido}</Typography>                    
                                     <div style = {{alignSelf: 'right', marginLeft:'12vh', marginBottom:'1vh'}} className='hover:text-teal-600 text-slate-600 cursor-pointer' onClick={() => handleResourceRemoval(resource)}>
                         <DeleteIcon/>
                     </div></div>)}
