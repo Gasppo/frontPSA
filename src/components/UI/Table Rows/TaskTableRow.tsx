@@ -6,7 +6,6 @@ import { Circle } from '@mui/icons-material';
 import EditIcon from '@mui/icons-material/Edit';
 import ConfirmModal from '../Modal/confirmationModal';
 import EditTaskModal from '../Tasks Modal/EditTaskModal';
-import VerTareaModal from '../Tasks Modal/VerTareaModal';
 import { Link, useNavigate } from 'react-router-dom';
 
 interface  TaskTableRowProps {
@@ -23,7 +22,6 @@ const  TaskTableRow = (props:  TaskTableRowProps) => {
     const [isOpenEditTaskModal, setIsOpenEditTaskModal] = useState(false);
     const [showCofirmationModal, setShowConfirmationModal] = useState(false);
     const [priorityValue, setPriorityValue] = useState('Baja');
-    const [isTaskDetailsModalOpen, setIsOpenTaskDetailsModal]=useState(false);
     const [stateTagColor, setStateTagColor] = useState('#F9A620');
     const [stateValue, setStateValue] = useState('Pendiente');
     const estimatedEffortWithUnit = row.effort.toString()+' '+row.effortUnit;
@@ -99,13 +97,6 @@ const  TaskTableRow = (props:  TaskTableRowProps) => {
         setIsOpenEditTaskModal(false);
     };
 
-    const openTaskDetailsModal = ()=>{
-        setIsOpenTaskDetailsModal(true);
-    };
-
-    const handleTaskDetailsClose = () =>{
-        setIsOpenTaskDetailsModal(false);
-    };
 
     useEffect(() => {
         determineStateTagColor();
@@ -114,7 +105,6 @@ const  TaskTableRow = (props:  TaskTableRowProps) => {
 
     return (
         <>
-            <VerTareaModal onClose={handleTaskDetailsClose} show={isTaskDetailsModalOpen} currentTask={row}/>
             <EditTaskModal onSubmit={handleEditTaskSubmit} onClose={handleEditTaskClose} show={isOpenEditTaskModal} currentTask={row} projectResources={props.projectResources}/>
             <ConfirmModal onSubmit={handleDeleteConfirmation} onClose={handleNotConfirmation} show={showCofirmationModal} txt="Seguro que desea elimiar la tarea"/>
             <TableRow hover key={row.code}>
@@ -122,9 +112,9 @@ const  TaskTableRow = (props:  TaskTableRowProps) => {
                 <TableCell align="left" ><Link to={`/proyectos/${code}/${row.code}`} state={{ currentTask: row, projectResources: projectResources}}>{row.name}</Link></TableCell>
                 <TableCell align="left" ><Link to={`/proyectos/${code}/${row.code}`} state={{ currentTask: row,projectResources: projectResources }}>{priorityValue}</Link></TableCell>
                 <TableCell align="left" ><Link to={`/proyectos/${code}/${row.code}`} state={{ currentTask: row, projectResources: projectResources }}>{row.effort}</Link></TableCell>
-                <TableCell align="left" onClick={openTaskDetailsModal}>{estimatedEffortWithUnit}</TableCell>
-                { row.isCompleted!=2 && <TableCell align="left" onClick={openTaskDetailsModal}>-</TableCell>}
-                { row.isCompleted== 2 && <TableCell align="left" onClick={openTaskDetailsModal}>{row.realEffort} {row.effortUnit}</TableCell>}
+                <TableCell align="left"><Link to={`/proyectos/${code}/${row.code}`} state={{ currentTask: row, projectResources: projectResources }}>{estimatedEffortWithUnit}</Link></TableCell>
+                { row.isCompleted!=2 && <TableCell align="left"><Link to={`/proyectos/${code}/${row.code}`} state={{ currentTask: row, projectResources: projectResources }}>-</Link></TableCell>}
+                { row.isCompleted== 2 && <TableCell align="left">{row.realEffort} {row.effortUnit}</TableCell>}
                 <TableCell className = 'group'>
                     <Circle style={{ alignSelf: 'left', color: stateTagColor, height: '4vh' }}></Circle>
                     <span className="task-state-tooltip group-hover:scale-100" >

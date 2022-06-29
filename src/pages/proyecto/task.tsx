@@ -149,7 +149,8 @@ const Tarea = () => {
                             {expandedDetails && 
                             <>
                                 <div style={{ marginBottom: 10, display: 'flex', flexDirection: 'row', color: '#5C7067' }}><Typography variant='body2' className='w-[27vh]  ml-5'>Prioridad: </Typography><Typography variant='body2' className={'slate'}>{currentTask.priority}</Typography></div>
-                                <div style={{ marginBottom: 10, display: 'flex', flexDirection: 'row', color: '#5C7067' }}><Typography variant='body2' className='w-[27vh]  ml-5'>Esfuerzo Estimado: </Typography><Typography variant='body2' className={'slate'}>{currentTask.effort}</Typography></div>
+                                <div style={{ marginBottom: 10, display: 'flex', flexDirection: 'row', color: '#5C7067' }}><Typography variant='body2' className='w-[27vh]  ml-5'>Esfuerzo Estimado: </Typography><Typography variant='body2' className={'slate'}>{currentTask.effort} {currentTask.effortUnit}</Typography></div>
+                                { (currentTask.isCompleted == 2) && <div style={{ marginBottom: 10, display: 'flex', flexDirection: 'row', color: '#5C7067' }}><Typography variant='body2' className='w-[27vh]  ml-5'>Esfuerzo Estimado: </Typography><Typography variant='body2' className={'slate'}>{currentTask.realEffort} {currentTask.effortUnit}</Typography></div>}
                                 <div style={{ marginBottom: 10, display: 'flex', flexDirection: 'row', color: '#5C7067' }}>
                                     <Typography variant='body2' className='w-[27vh]  ml-5'>Responsable: </Typography>
                                     <div style={{ display: 'flex', flexDirection: 'row', margin: 5, padding: 5, width: 120, height: 30, backgroundColor: "#E9EDEB", borderRadius: 5 }}><AccountCircleIcon className='mr-1 h-5' style={{ color: '#5C7067' }} /><Typography variant='caption' className='slate' >ID-{currentTask.resource}</Typography></div>
