@@ -55,6 +55,7 @@ const AddProjectModal = (props: AddProjectModalProps) => {
     const handleSubmit = async () => {
         sleep(100);
         const res = await updateProjectUsingAPI();
+        props.onRefresh();
         onSubmit();
         props.onRefresh();
     }
@@ -68,8 +69,6 @@ const AddProjectModal = (props: AddProjectModalProps) => {
             },
             body: JSON.stringify(newProject)
         })
-        console.log(newProject)
-        console.log(response)
         return response;
     }
 
@@ -80,12 +79,12 @@ const AddProjectModal = (props: AddProjectModalProps) => {
         }));
     }
 
-    const handleResourceRemoval = async (resource : number) => {
+    const handleResourceRemoval = async (resource : Resource) => {
         if(hasTasksAssign(resource))
             setIsErrorModalOpen(true);
-        else
-            setNewProject({resources: newProject.resources.filter((item:any)=> item!==resource)});
-
+        else{
+            setNewProject({resources: newProject.resources.filter((item:any)=> item!==resource.legajo)});
+        }
     }
 
     const closeErrorModal= () =>{
@@ -110,8 +109,8 @@ const AddProjectModal = (props: AddProjectModalProps) => {
                             onChange={(event: any, newValue: any) => {
                                 if (newProject.resources.includes(newValue.legajo) === false) {
                                 setNewProject({
-                                    resources: [...newProject.resources, newValue.id]
-                                })
+                                    resources: [...newProject.resources, newValue.legajo]
+                                });
                                 sleep(100)
                             }}}
                         />
@@ -119,7 +118,7 @@ const AddProjectModal = (props: AddProjectModalProps) => {
                        <div className='mr-8 w-80'></div>
                     </div>
                     <div style = {{alignSelf: 'left', width: 700, marginLeft:'5vh'}}>
-                                 {(newProject.resources).map( (resource) =>  <div key={resource} style={{display: 'flex', flexDirection: 'row', margin: 5, padding: 5, width: 290, height: 33, backgroundColor: "#E9EDEB", borderRadius: 5}}><AccountCircleIcon className= 'mr-1 h-5 align-right' style={{color: '#5C7067'}}/><Typography variant='caption' className='slate' >{(resources.find(employee => employee.legajo === resource))?.Nombre} {(resources.find(employee => employee.legajo === resource))?.Apellido}</Typography>                    
+                                 {(resources.filter((item:Resource)=> newProject.resources.includes(item.legajo))).map( (resource) =>  <div key={resource?.legajo} style={{display: 'flex', flexDirection: 'row', margin: 5, padding: 5, width: 290, height: 33, backgroundColor: "#E9EDEB", borderRadius: 5}}><AccountCircleIcon className= 'mr-1 h-5 align-right' style={{color: '#5C7067'}}/><Typography variant='caption' className='slate' >{resource.Nombre} {resource.Apellido}</Typography>                    
                                     <div style = {{alignSelf: 'right', marginLeft:'12vh', marginBottom:'1vh'}} className='hover:text-teal-600 text-slate-600 cursor-pointer' onClick={() => handleResourceRemoval(resource)}>
                         <DeleteIcon/>
                     </div></div>)}

@@ -29,9 +29,9 @@ const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
 const Proyecto = () => {
     const location = useLocation()
-    
     const prop = location.state as ProyectProps;
     const projectData = prop.projectData;
+    console.log(projectData);
     const [project, setProject] = useState(projectData);
     const [projectTasks, setProjectTasks] = useState<Task[]>([])
     const [isLoading, setLoading] = useState<boolean>(false);
@@ -40,7 +40,6 @@ const Proyecto = () => {
     const [riskColor, setRiskColor] = useState('#9297A0');
     const [riskImpact, setRiskImpact] = useState('None');
     const [showResourcesModal, setshowResourcesModal] = useState(false);
-    const [stateTagColor, setStateTagColor] = useState(' ');
     const [rowsPerPage, setRowsPerPage] = useState(5)
     const [page, setPage] = useState(0)
     const [expandedRecursos, setexpandedRecursos] = useState(false);
