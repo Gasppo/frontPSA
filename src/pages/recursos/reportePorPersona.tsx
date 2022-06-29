@@ -5,7 +5,9 @@ import Select from 'react-select';
 import LoadingIndicator from '../../components/Loading/LoadingIndicator';
 import { Hours, ProjectReport, Proyect, SelectResource } from '../../components/types/resourcesTypes';
 import HoursTableRow from '../../components/UI/Horas/HoursTableRow';
+import { ExportToCsv } from 'export-to-csv';
 import ProyectReportTableRow from '../../components/UI/Reports/proyectReportTableRow';
+import PageTitle from '../../components/UI/Dashboard/PageTitle';
 //import AddHourModal from '../../components/UI/Horas/AddHourModal';
 //import DatePicker from "react-datepicker"
 
@@ -21,10 +23,12 @@ const ReportePorPersona = (props: ReportePorPersonaProps,) => {
     const [horas_trabajas, setHorasTrabajadas] = useState<any>(0);
     const [rowsPerPage, setRowsPerPage] = useState(9);
     const [isLoading, setLoading] = useState<boolean>(false)
+    const [disableReport, setDisableReport] = useState<boolean>(true)
     const [page, setPage] = useState(0);
     const [proyects, setProyects] = useState<Proyect[]>([])
     const [horas, setHoras] = useState<Hours[]>([])
     const [totalHours, setTotalHours] = useState(0)
+    const [csv_data, setCSVData] = useState<any[]>();
 
 
     const fetchEmployees = () => {
@@ -46,6 +50,7 @@ const ReportePorPersona = (props: ReportePorPersonaProps,) => {
             .catch(err => {
                 console.log(JSON.stringify(err))
             })
+
     }
 
     const getProyectID = (id:number) => {
@@ -94,6 +99,7 @@ const ReportePorPersona = (props: ReportePorPersonaProps,) => {
             });
 
             let horas: Hours[]= [] 
+            let csvData: any[]= [] 
 
             Object.keys(horasAgrupadasPorTask).forEach((key:string) =>{
                 let horaInicial:Hours = {
@@ -104,6 +110,7 @@ const ReportePorPersona = (props: ReportePorPersonaProps,) => {
                     task: horasAgrupadasPorTask[key][0].task,
                     startingDate: horasAgrupadasPorTask[key][0].startingDate,
                     duration: 0,
+                    deviation: horasAgrupadasPorTask[key][0].task.effort - horasAgrupadasPorTask[key][0].duration
                 }
 
                 horasAgrupadasPorTask[key].forEach((item:Hours)=>{
@@ -112,9 +119,19 @@ const ReportePorPersona = (props: ReportePorPersonaProps,) => {
 
                 horas.push(horaInicial)
 
+                csvData.push({
+                    proyectCode: horasAgrupadasPorTask[key][0].task.projectCode,
+                    code: horasAgrupadasPorTask[key][0].task.code,
+                    name: horasAgrupadasPorTask[key][0].task.name,
+                    description: horasAgrupadasPorTask[key][0].task.description,
+                    duration: horasAgrupadasPorTask[key][0].duration,
+                    deviation: horasAgrupadasPorTask[key][0].task.effort - horasAgrupadasPorTask[key][0].duration,
+                })
+
             })
-
-
+            setDisableReport(false);
+            console.log(horas)
+            setCSVData(csvData);
             setHoras(horas);
             setLoading(false)
 
@@ -132,15 +149,20 @@ const ReportePorPersona = (props: ReportePorPersonaProps,) => {
         .then(res => {
             setTotalHours(typeof res.total_hours_worked == "undefined" ? 0 :res.total_hours_worked )
             console.log(res)
+
         })
     }
 
     useEffect(() => {
-        fetchEmployees();
+        if(recursos.length == 0){
+            fetchEmployees();
+        }
+        else{
         fetchProyects()
         setLoading(true)
         fetchHours();
         fetchTotalTimeWorked()
+        }
     }, [selected]);
 
     const handleChangePage = (event: React.MouseEvent<HTMLButtonElement> | null, newPage: number) => {
@@ -154,11 +176,14 @@ const ReportePorPersona = (props: ReportePorPersonaProps,) => {
 
     return (
         <>
+            <PageTitle label='Reporte por persona'>
             <div className="flex flex-row" >
                 <Link to={'/recursos/'} >
                     <Button>Volver al inicio</Button>
                 </Link>
             </div>
+            </PageTitle>
+
             <Select options={recursos} onChange={(value) => setSelected(value)} />
 
             <LoadingIndicator show={isLoading} className={`flex flex-col items-start  transition-all duration-200`} >
@@ -172,6 +197,7 @@ const ReportePorPersona = (props: ReportePorPersonaProps,) => {
                                 <TableCell align="left">Tarea</TableCell>
                                 <TableCell align="left">Descripcion</TableCell>
                                 <TableCell align="left">Cantidad de Horas</TableCell>
+                                <TableCell align="left">Desvio del esfuerzo</TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
@@ -204,7 +230,25 @@ const ReportePorPersona = (props: ReportePorPersonaProps,) => {
                 </TableContainer>
                 
                 <div>{"TOTAL: " + totalHours}</div>
-                
+
+                <Button onClick={()=>{
+                    const options = { 
+                        fieldSeparator: ',',
+                        quoteStrings: '"',
+                        decimalSeparator: '.',
+                        filename: "reporte_de_persona_"+ selected.value,
+                        showLabels: true, 
+                        showTitle: true,
+                        title: 'Reporte del empleado con legajo '+ selected.value,
+                        useTextFile: false,
+                        useBom: true,
+                        useKeysAsHeaders: true,
+                    };
+                    
+                    const csvExporter = new ExportToCsv(options);
+                    
+                    csvExporter.generateCsv(csv_data);
+                }} disabled={disableReport}>Exportar reporte</Button>
 
                 </LoadingIndicator>
         </>

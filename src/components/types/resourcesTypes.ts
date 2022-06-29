@@ -20,6 +20,7 @@ export type Hours = {
     _v: number;
     task: Task;
     duration: number;
+    deviation: number|0;
 }
 
 export type SelectProyect = {
@@ -88,5 +89,6 @@ export type ProjectReport={
     resource:number;
     code:number;
     hours_worked:number | 0;
-
+    deviation:number | 0;
+    effort:number | 0;
 }

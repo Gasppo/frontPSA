@@ -13,7 +13,8 @@ const HoursTableRow = (props: HoursTableRowProps) => {
             <TableCell align="left">{row.task.code}</TableCell>
             <TableCell align="left">{row.task.name}</TableCell>
             <TableCell align="left">{row.task.description}</TableCell>
-            <TableCell align="left">{row.duration}</TableCell>
+            <TableCell align="left">{row.duration}hs</TableCell>
+            <TableCell align="left">{row.task.effort - row.duration}hs</TableCell>
         
         </TableRow>
     )

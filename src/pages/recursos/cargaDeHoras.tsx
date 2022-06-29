@@ -73,10 +73,11 @@ const CargaDeHoras = (props: CargaDeHorasProps,) => {
         Object.keys(tasks).forEach((key:string)=>{
             let body = {
                 duration:tasks[key],
-                hourAssignee: 3,
+                hourAssignee: state.employeeId,
                 startingDate: state.date,
                 taskCode: key
             }
+            console.log(body)
             information.push(body)
         })
 

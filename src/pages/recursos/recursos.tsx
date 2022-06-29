@@ -4,7 +4,8 @@ import LoadingIndicator from '../../components/Loading/LoadingIndicator'
 import PageTitle from '../../components/UI/Dashboard/PageTitle'
 //import AddHourModal from '../../components/UI/Horas/AddHourModal'
 import { useEffect, useState } from 'react'
-import { Hours, Proyect } from '../../components/types/resourcesTypes'
+import { Hours, Proyect, SelectResource } from '../../components/types/resourcesTypes'
+import Select from 'react-select';
 import HoursTableRow from '../../components/UI/Horas/HoursTableRow'
 interface RecursosProps {
 
@@ -15,12 +16,40 @@ const Recursos = (props: RecursosProps) => {
 
     const [isLoading, setLoading] = useState<boolean>(true)
     const [proyects, setProyects] = useState<Proyect[]>([])
+    const [wasSelected, setWasSelected] = useState<boolean>(false)
     const [horas, setHoras] = useState<Hours[]>([])
     const [rowsPerPage, setRowsPerPage] = useState(9)
     const [page, setPage] = useState(0)
     const [initialDay, setInitialDay] = useState("")
     const [endDay, setEndDay] = useState("")
     const [totalHours, setTotalHours] = useState(0)
+    const [recursos, setRecursos] = useState<SelectResource[]>([]);
+    const [selected, setSelected] = useState<any>(0);
+    const [goToLink, setGoToLink] = useState<any>("#");
+
+    const fetchEmployees = () => {
+        fetch('https://modulo-recursos-psa.herokuapp.com/employees')
+            .then(res => res.json())
+            .then(res => {
+                console.log(res)
+                let resources: SelectResource[] = [];
+                res.forEach((item: any) => {
+                    let proj = {
+                        label: item.Apellido + "," + item.Nombre,
+                        value: item.legajo
+                    }
+                    if (true)
+                        resources.push(proj)
+                })
+                setRecursos(resources)
+                setLoading(false)
+            })
+            .catch(err => {
+                console.log(JSON.stringify(err))
+            })
+
+
+    }
 
     const fetchProyects = () => {
             fetch('https://modulo-proyectos-psa-2022.herokuapp.com/projects/')
@@ -52,7 +81,7 @@ const Recursos = (props: RecursosProps) => {
         let body = JSON.stringify({
             startDate:mondayDate,
             finalDate: fridayDate,
-            hourAssignee: 3})
+            hourAssignee: selected.value})
 
 
         fetch('https://modulo-recursos-psa.herokuapp.com/hours/filterByDate',{
@@ -85,12 +114,13 @@ const Recursos = (props: RecursosProps) => {
                 console.log(horasAgrupadasPorTask[key][0].task.proyectName)
                 let horaInicial:Hours = {
                     _id: horasAgrupadasPorTask[key][0]._id,
-                    hourAssignee:horasAgrupadasPorTask[key][0].hourAssignee,
+                    hourAssignee: horasAgrupadasPorTask[key][0].hourAssignee,
                     created: horasAgrupadasPorTask[key][0].created,
                     _v: horasAgrupadasPorTask[key][0]._v,
                     task: horasAgrupadasPorTask[key][0].task,
                     startingDate: horasAgrupadasPorTask[key][0].startingDate,
                     duration: 0,
+                    deviation: 0
                 }
 
                 horasAgrupadasPorTask[key].forEach((item:Hours)=>{
@@ -100,7 +130,6 @@ const Recursos = (props: RecursosProps) => {
                 horas.push(horaInicial)
 
             })
-
 
             setHoras(horas);
             setLoading(false)
@@ -113,6 +142,7 @@ const Recursos = (props: RecursosProps) => {
         
 
     }
+
     const handleChangePage = (event: React.MouseEvent<HTMLButtonElement> | null, newPage: number) => {
         setPage(newPage);
     };
@@ -132,26 +162,34 @@ const Recursos = (props: RecursosProps) => {
     }
 
     useEffect(() => {
-        fetchProyects()
-        fetchProjects()
-        fetchTotalTimeWorked()
-    }, []);
-
-
+        console.log("selected ", selected)
+        if(selected != 0){
+            setGoToLink("carga")
+            fetchProyects()
+            fetchProjects()
+            fetchTotalTimeWorked()
+        }
+        else{
+            console.log("Consigo los empleados...")
+            fetchEmployees()
+        }
+    }, [selected]);
 
     return (
         <>
-            <PageTitle label='Modulo de Recursos Humanos'>
+            <PageTitle label='Carga de horas'>
             <div className="flex flex-row" >
-                <Link to={'/'} >
+                <Link to={'/recursos'} >
                     <Button>Volver al inicio</Button>
                 </Link>
                 </div>
             </PageTitle>
+            <Select options={recursos} onChange={(value) => setSelected(value)} />
+
             <LoadingIndicator show={isLoading} className={`flex flex-col items-start  transition-all duration-200`} >
 
                 <div className="self-end mr-10 border-2 text-center  rounded-xl shadow-lg text-slate-800 hover:bg-gray-200 hover:text-teal-600 transition-all duration-300 cursor-pointer">
-                    <Link to={'/recursos/horasSemanales/carga'}>
+                    <Link to={'/recursos/horasSemanales/'+goToLink} state={{ employeeId: selected.value }} >
                     <div className="m-4"> Cargar Horas</div>
                     </Link>
                 </div>

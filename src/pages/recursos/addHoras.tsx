@@ -2,7 +2,7 @@ import { DateComponent } from '@fullcalendar/react';
 import { Paper, Table, TableBody, TableCell, TableContainer, TableFooter, TableHead, TablePagination, TableRow, TextField, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { MultiSelect } from "react-multi-select-component";
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import LoadingIndicator from '../../components/Loading/LoadingIndicator';
 import { Proyect, SelectProyect, Task } from '../../components/types/resourcesTypes';
 import PageTitle from '../../components/UI/Dashboard/PageTitle';
@@ -28,6 +28,8 @@ const AddHoras = (props: AddHorasProps) => {
     const [rowsPerPage, setRowsPerPage] = useState(9);
     const [page, setPage] = useState(0);
     const [allTasks, setAllTasks] = useState<any[]>([]);
+
+    const { state }: any = useLocation()
 
     const fetchProyects = () => {
         fetch('https://modulo-proyectos-psa-2022.herokuapp.com/projects')
@@ -129,7 +131,7 @@ const AddHoras = (props: AddHorasProps) => {
                         <TextField type='date' onChange={(value)=>{setDate(value.currentTarget.value)}} inputProps={{ max: new Date().toISOString().slice(0, 10) }} defaultValue={new Date().toISOString().split('T')[0]} ></TextField>
                     </div>
                     <div className="mr-10 border-2 text-center  rounded-xl shadow-lg text-slate-800 hover:bg-gray-200 hover:text-teal-600 transition-all duration-300 cursor-pointer">
-                        <Link to={'/recursos/horasSemanales/carga/seleccion'} state={{ items: selectedItems, date: date }} >
+                        <Link to={'/recursos/horasSemanales/carga/seleccion'} state={{ items: selectedItems, date: date, employeeId: state.employeeId }} >
                             <div className="m-4">Siguiente</div>
                         </Link>
                     </div>
