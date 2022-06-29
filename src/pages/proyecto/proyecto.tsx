@@ -253,6 +253,7 @@ const Proyecto = () => {
                 </Popup>
             </div>
             <div style={{display: 'flex', flexDirection: 'row', marginLeft: 85}}> 
+                <div style={{display: 'flex', flexDirection: 'column', marginTop: -10, width:'90vh'}}>
                     <div style={{padding: 5, width: 110, height: 30, display: 'flex', flexDirection: 'row', backgroundColor: getColor(), borderRadius: 5}}><Typography variant='body2' style= {{color: '#F4F6F5', fontWeight: 'bold'}}>{project.state.toUpperCase()}</Typography></div>
                     <div style={{alignSelf:'left', marginTop: 25}}>
                         <Typography variant='body2' className='w-[27vh]' style={{fontWeight: 'bold', color: '#5C7067'}}>Descripción: </Typography>
@@ -261,8 +262,10 @@ const Proyecto = () => {
                         </div>
                     </div>
                     <div style={{marginTop: 25}}>
+                    <Typography variant='body2' className='w-[27vh]' style={{fontWeight: 'bold', color: '#5C7067'}}>Tareas: </Typography>
                         <LoadingIndicator show={isLoading} className={`flex flex-col items-start  transition-all duration-200`} >
                             {!isLoading && (<> 
+                                    <Table className='ml-100 mr-100'>
                                         <TableHead >
                                             <TableRow>
                                                 <TableCell align="left" style={{color: '#5C7067' }}>Código</TableCell>
@@ -341,6 +344,7 @@ const Proyecto = () => {
                         </div>
                     </div>
                     {expandedRecursos && <AddCircleIcon style={{marginLeft:290, color: '#C5D0CB', zIndex:4, marginTop: -50}} className='hover:teal-600' onClick={handleOpenModalAddResources}/>}
+                    {expandedRecursos && <AddCircleIcon style={{marginLeft:320, color: '#C5D0CB', zIndex:4, marginTop: -50}} className='hover:teal-600' onClick={handleOpenModalAddResources}/>}
                     <div className='hover:bg-gray-100' style={{marginTop: expandedRecursos? 35:10, padding: 15, display: 'flex', flexDirection: 'column', borderColor: "#B0BFB8", borderRadius: 15, borderWidth: '1px',marginRight: '5vh'}} onClick={changeexpandedDatesSetUp}>
                         <div style={{ borderBottomColor: expandedDates ? "#B0BFB8":'transparent', paddingBottom: expandedDates ? 10:0, marginBottom:expandedDates ? 10:0, display: 'flex', flexDirection: 'row',color: '#5C7067', borderBottomWidth: '1px'}}><Typography variant='body2' className='w-[30vh] ml-5' style={{fontWeight: 'bold'}}>Actividad </Typography>
                             {expandedDates && <KeyboardArrowUpIcon className='ml-7' style={{color: '#5C7067'}}/>}
