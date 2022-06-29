@@ -140,41 +140,41 @@ const Tarea = () => {
                         </div>
                     </div>
                 </div>
-                <div style= {{display: 'flex', flexDirection: 'column', width: '50vh',marginLeft: 60}} >
+                <div style= {{display: 'flex', flexDirection: 'column', width: '57vh',marginLeft: 60}} >
                     <div className='hover:bg-gray-100' style={{padding: 15, display: 'flex', flexDirection: 'column', borderColor: "#B0BFB8", borderRadius: 15, borderWidth: '1px', marginRight: '5vh'}} onClick={changeexpandedDetailsSetUp}>
-                        <div style={{ borderBottomColor: expandedDetails ? "#B0BFB8":'transparent', paddingBottom: expandedDetails ? 10:0, marginBottom:expandedDetails ? 10:0, display: 'flex', flexDirection: 'row',color: '#5C7067', borderBottomWidth: '1px'}}><Typography variant='body2' className='w-[30vh] ml-5' style={{fontWeight: 'bold'}}>Detalles </Typography>
-                            {expandedDetails && <KeyboardArrowUpIcon className='ml-7' style={{color: '#5C7067'}}/>}
-                            {!expandedDetails && <KeyboardArrowDownIcon className='ml-7' style={{color: '#5C7067'}}/>}
+                        <div style={{ borderBottomColor: expandedDetails ? "#B0BFB8":'transparent', paddingBottom: expandedDetails ? 10:0, marginBottom:expandedDetails ? 10:0, display: 'flex', flexDirection: 'row',color: '#5C7067', borderBottomWidth: '1px'}}><Typography variant='body2' className='w-[30vh] ml-15' style={{fontWeight: 'bold'}}>Detalles </Typography>
+                            {expandedDetails && <KeyboardArrowUpIcon style={{color: '#5C7067', marginLeft:60}}/>}
+                            {!expandedDetails && <KeyboardArrowDownIcon style={{color: '#5C7067',  marginLeft:60}}/>}
                         </div>
                             {expandedDetails && 
                             <>
-                                <div style={{ marginBottom: 10, display: 'flex', flexDirection: 'row', color: '#5C7067' }}><Typography variant='body2' className='w-[27vh]  ml-5'>Prioridad: </Typography><Typography variant='body2' className={'slate'}>{currentTask.priority}</Typography></div>
-                                <div style={{ marginBottom: 10, display: 'flex', flexDirection: 'row', color: '#5C7067' }}><Typography variant='body2' className='w-[27vh]  ml-5'>Esfuerzo Estimado: </Typography><Typography variant='body2' className={'slate'}>{currentTask.effort} {currentTask.effortUnit}</Typography></div>
-                                { (currentTask.isCompleted == 2) && <div style={{ marginBottom: 10, display: 'flex', flexDirection: 'row', color: '#5C7067' }}><Typography variant='body2' className='w-[27vh]  ml-5'>Esfuerzo Estimado: </Typography><Typography variant='body2' className={'slate'}>{currentTask.realEffort} {currentTask.effortUnit}</Typography></div>}
+                                <div style={{ marginBottom: 10, display: 'flex', flexDirection: 'row', color: '#5C7067' }}><Typography variant='body2' className='w-[27vh]  ml-15'>Prioridad: </Typography><Typography variant='body2' className={'slate'}>{currentTask.priority}</Typography></div>
+                                <div style={{ marginBottom: 10, display: 'flex', flexDirection: 'row', color: '#5C7067' }}><Typography variant='body2' className='w-[27vh]  ml-15'>Esfuerzo Estimado: </Typography><Typography variant='body2' className={'slate'}>{currentTask.effort} {currentTask.effortUnit}</Typography></div>
+                                { (currentTask.isCompleted == 2) && <div style={{ marginBottom: 10, display: 'flex', flexDirection: 'row', color: '#5C7067' }}><Typography variant='body2' className='w-[27vh]  ml-15'>Esfuerzo Estimado: </Typography><Typography variant='body2' className={'slate'}>{currentTask.realEffort} {currentTask.effortUnit}</Typography></div>}
                                 <div style={{ marginBottom: 10, display: 'flex', flexDirection: 'row', color: '#5C7067' }}>
-                                    <Typography variant='body2' className='w-[27vh]  ml-5'>Responsable: </Typography>
+                                    <Typography variant='body2' className='w-[27vh]  ml-15'>Responsable: </Typography>
                                     <div style={{ display: 'flex', flexDirection: 'row', margin: 5, padding: 5, width: 120, height: 30, backgroundColor: "#E9EDEB", borderRadius: 5 }}><AccountCircleIcon className='mr-1 h-5' style={{ color: '#5C7067' }} /><Typography variant='caption' className='slate' >ID-{currentTask.resource}</Typography></div>
                                 </div>
                             </>}
                     </div>
                     {(currentTicket != undefined) && <div className='hover:bg-gray-100' style={{marginTop: 10, padding: 15, display: 'flex', flexDirection: 'column', borderColor: "#B0BFB8", borderRadius: 15, borderWidth: '1px',marginRight: '5vh'}} onClick={changeexpandedTicketSetUp}>
-                        <div style={{ borderBottomColor: expandedTicket ? "#B0BFB8":'transparent', paddingBottom: expandedTicket ? 10:0, marginBottom:expandedTicket ? 10:0, display: 'flex', flexDirection: 'row',color: '#5C7067', borderBottomWidth: '1px'}}><Typography variant='body2' className='w-[30vh] ml-5' style={{fontWeight: 'bold'}}>Detalles del Ticket </Typography>
-                            {expandedTicket && <KeyboardArrowUpIcon className='ml-7' style={{color: '#5C7067'}}/>}
-                            {!expandedTicket && <KeyboardArrowDownIcon className='ml-7' style={{color: '#5C7067'}}/>}
+                        <div style={{ borderBottomColor: expandedTicket ? "#B0BFB8":'transparent', paddingBottom: expandedTicket ? 10:0, marginBottom:expandedTicket ? 10:0, display: 'flex', flexDirection: 'row',color: '#5C7067', borderBottomWidth: '1px'}}><Typography variant='body2' className='w-[30vh] ml-15' style={{fontWeight: 'bold'}}>Detalles del Ticket </Typography>
+                            {expandedTicket && <KeyboardArrowUpIcon style={{color: '#5C7067',  marginLeft:60}}/>}
+                            {!expandedTicket && <KeyboardArrowDownIcon style={{color: '#5C7067',  marginLeft:60}}/>}
                         </div>
                             {expandedTicket && 
                             <>
-                            <div style={{marginBottom:10, display: 'flex', flexDirection: 'row',color: '#5C7067'}}><Typography variant='body2' className='w-[27vh]  ml-5 mr-0'>Nombre: </Typography><Typography variant='body2' className={'slate'}>{currentTicket.title}</Typography></div>
-                            <div style={{marginBottom:10, display: 'flex', flexDirection: 'row',color: '#5C7067'}}><Typography variant='body2' className='w-[27vh]  ml-5 mr-0'>Código: </Typography><Typography variant='body2' className={'slate'}>{currentTicket.id}</Typography></div>
-                            <div style={{marginBottom:10, display: 'flex', flexDirection: 'row',color: '#5C7067'}}><Typography variant='body2' className='w-[27vh]  ml-5'>Estado: </Typography><Typography variant='body2' className={'slate'}>{currentTicket.status}</Typography></div>
-                            <div style={{marginBottom:10, display: 'flex', flexDirection: 'row',color: '#5C7067'}}><Typography variant='body2' className='w-[27vh]  ml-5'>Fecha de creación: </Typography><Typography variant='body2' className={'slate'}>{currentTicket.createdAt.toString()}</Typography></div>
-                            <div style={{marginBottom:10, display: 'flex', flexDirection: 'row',color: '#5C7067'}}><Typography variant='body2' className='w-[27vh]  ml-5'>Fecha de la última modificación: </Typography><Typography variant='body2' className={'slate'}>{currentTicket.updatedAt.toString()}</Typography></div>
+                            <div style={{marginBottom:10, display: 'flex', flexDirection: 'row',color: '#5C7067'}}><Typography variant='body2' className='w-[27vh]  ml-15 mr-0'>Nombre: </Typography><Typography variant='body2' className={'slate'}>{currentTicket.title}</Typography></div>
+                            <div style={{marginBottom:10, display: 'flex', flexDirection: 'row',color: '#5C7067'}}><Typography variant='body2' className='w-[27vh]  ml-15 mr-0'>Código: </Typography><Typography variant='body2' className={'slate'}>{currentTicket.id}</Typography></div>
+                            <div style={{marginBottom:10, display: 'flex', flexDirection: 'row',color: '#5C7067'}}><Typography variant='body2' className='w-[27vh]  ml-15'>Estado: </Typography><Typography variant='body2' className={'slate'}>{currentTicket.status}</Typography></div>
+                            <div style={{marginBottom:10, display: 'flex', flexDirection: 'row',color: '#5C7067'}}><Typography variant='body2' className='w-[27vh]  ml-15'>Fecha de creación: </Typography><Typography variant='body2' className={'slate'}>{currentTicket.createdAt.toString()}</Typography></div>
+                            <div style={{marginBottom:10, display: 'flex', flexDirection: 'row',color: '#5C7067'}}><Typography variant='body2' className='w-[27vh]  ml-15'>Fecha de la última modificación: </Typography><Typography variant='body2' className={'slate'}>{currentTicket.updatedAt.toString()}</Typography></div>
                             </>}
                     </div> } 
                     {(currentTicket != undefined) &&
                         <Link to= {`../../../soporte/tickets/${currentTicket.id}`}>                 
                                 <div className='hover:bg-gray-100' style={{marginTop: 10, padding: 15, display: 'flex', flexDirection: 'column', borderColor: "#B0BFB8", borderRadius: 15, borderWidth: '1px',marginRight: '5vh'}}>
-                                    <div style={{ display: 'flex', flexDirection: 'row',color: '#5C7067'}}><Typography variant='body2' className='w-[30vh] ml-5' style={{fontWeight: 'bold'}}>Acceder al Ticket </Typography>
+                                    <div style={{ display: 'flex', flexDirection: 'row',color: '#5C7067'}}><Typography variant='body2' className='w-[30vh] ml-15' style={{fontWeight: 'bold'}}>Acceder al Ticket </Typography>
                                     </div>
                                 </div>
                         </Link>
