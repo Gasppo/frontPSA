@@ -55,9 +55,9 @@ const AddProjectModal = (props: AddProjectModalProps) => {
     const handleSubmit = async () => {
         sleep(100);
         const res = await updateProjectUsingAPI();
-        props.onRefresh();
+        //props.onRefresh();
         onSubmit();
-        props.onRefresh();
+        //props.onRefresh();
     }
 
     const updateProjectUsingAPI = async () => {
@@ -69,6 +69,7 @@ const AddProjectModal = (props: AddProjectModalProps) => {
             },
             body: JSON.stringify(newProject)
         })
+        window.location.reload();
         return response;
     }
 

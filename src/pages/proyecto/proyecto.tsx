@@ -254,9 +254,9 @@ const Proyecto = () => {
             <div style={{display: 'flex', flexDirection: 'row', marginLeft: 85}}> 
                 <div style={{display: 'flex', flexDirection: 'column', marginTop: -10, width:'90vh'}}>
                     <div style={{padding: 5, width: 110, height: 30, display: 'flex', flexDirection: 'row', backgroundColor: getColor(), borderRadius: 5}}><Typography variant='body2' style= {{color: '#F4F6F5', fontWeight: 'bold'}}>{project.state.toUpperCase()}</Typography></div>
-                    <div style={{alignSelf:'left', marginTop: 25}}>
+                    <div style={{alignSelf:'left', marginTop: 25, boxSizing: 'border-box'}}>
                         <Typography variant='body2' className='w-[27vh]' style={{fontWeight: 'bold', color: '#5C7067'}}>Descripción: </Typography>
-                        <div style= {{width: 1000, marginTop: 10, backgroundColor: "#E9EDEB", borderRadius: 15, padding: 10, paddingLeft: 30, paddingRight: 30, minHeight:110}}>
+                        <div style= {{width: '100%', marginTop: 10, backgroundColor: "#E9EDEB", borderRadius: 15, padding: 10, paddingLeft: 30, paddingRight: 30, minHeight:110}}>
                             <Typography variant='body2' className={'slate'}>{project.description}</Typography>
                         </div>
                     </div>
