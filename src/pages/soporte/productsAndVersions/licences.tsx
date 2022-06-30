@@ -10,7 +10,7 @@ import AddLicenceModal from '../../../components/UI/Licences/AddLicenceModel'
 import EnhancedTableHead from '../../../components/UI/Licences/EnahcedTableHeader'
 import { Client } from '../../../components/types/clientTypes'
 import EditLicenceModal from '../../../components/UI/Licences/EditLicenceModal'
-
+import Filter from '../../../components/UI/Table/Filter'
 type Order = 'asc' | 'desc';
 interface Data {
     id: number,
@@ -60,6 +60,8 @@ const Licences = () => {
   const [orderBy, setOrderBy] = useState<keyof Data>('name');
   const [rowsPerPage, setRowsPerPage] = useState(5)
   const [page, setPage] = useState(0)
+  const [filterKey, setFilterKey] = useState<string>('id')
+  const [filterValue, setFilterValue] = useState('')
 
   const handleAddOpen = () => {
       setShowAddModal(true)
@@ -80,6 +82,14 @@ const Licences = () => {
       setShowAddModal(false)
       setShowEditModal(false)
   }
+  
+  const handleFilterKeyChange = (key: string) => {
+    setFilterKey(key)
+    }
+
+    const handleFilterValueChange = (value: string) => {
+        setFilterValue(value)
+    }   
 
   const handleRequestSort = (event: React.MouseEvent<unknown>, property: keyof Data,) => {
       const isAsc = orderBy === property && order === 'asc';
@@ -151,6 +161,10 @@ const Licences = () => {
     return 0
 }
 
+const fullLicences = loadedLicences
+    .filter((row: any) => filterKey in row ? row[filterKey]?.toString()?.toLowerCase()?.includes(filterValue?.toLowerCase()) : false)
+
+
 useEffect(() => {
     gatherLicences()
 }, [gatherLicences]);
@@ -187,11 +201,12 @@ useEffect(() => {
                 <AddLicenceModal onSubmit={handleSubmit} onClose={handleClose} show={showAddModal} clients={loadedClients} products={loadedProducts}/>
                 <EditLicenceModal onSubmit={handleSubmit} onClose={handleClose} show={showEditModal} currentId={currentId}/>
                 <TableContainer component={Paper} className="mt-10"  >
+                <Filter data={fullLicences || []} currentKey={filterKey} value={filterValue} onKeyChange={handleFilterKeyChange} onValueChange={handleFilterValueChange} filterOptions={tableHeaders} filterKey="id" filterText='label' />
                     <Table>
                         <EnhancedTableHead order={order} orderBy={orderBy} onRequestSort={handleRequestSort} headers={tableHeaders} />
                         <TableBody>
-                            {loadedLicences &&
-                                loadedLicences
+                            {fullLicences &&
+                                fullLicences
                                     .sort(sortFunction)
                                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                                     .map(row => <LicenceTableRow refresh={gatherLicences} row={row} key={row.id} onEdit={handleEditOpen} />)}
@@ -201,7 +216,7 @@ useEffect(() => {
                                 <TablePagination
                                     rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
                                     colSpan={8}
-                                    count={loadedLicences.length}
+                                    count={fullLicences.length}
                                     rowsPerPage={rowsPerPage}
                                     page={page}
                                     SelectProps={{
