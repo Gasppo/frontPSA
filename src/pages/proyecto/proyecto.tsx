@@ -16,6 +16,7 @@ import AddTaskModal from '../../components/UI/Tasks Modal/AddTaskModal';
 import EditProjectModal from '../../components/UI/Projects Modal/editProjectModal';
 import { Task } from '../../components/types/taskType'
 import AddResourcesModal from '../../components/UI/Projects Modal/AddResourcesModal'
+import{Resource} from '../../components/types/resourceType';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 
 interface ProyectProps {
@@ -28,9 +29,9 @@ const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
 const Proyecto = () => {
     const location = useLocation()
-    
     const prop = location.state as ProyectProps;
     const projectData = prop.projectData;
+    console.log(projectData);
     const [project, setProject] = useState(projectData);
     const [projectTasks, setProjectTasks] = useState<Task[]>([])
     const [isLoading, setLoading] = useState<boolean>(false);
@@ -39,12 +40,13 @@ const Proyecto = () => {
     const [riskColor, setRiskColor] = useState('#9297A0');
     const [riskImpact, setRiskImpact] = useState('None');
     const [showResourcesModal, setshowResourcesModal] = useState(false);
-    const [stateTagColor, setStateTagColor] = useState(' ');
     const [rowsPerPage, setRowsPerPage] = useState(5)
     const [page, setPage] = useState(0)
     const [expandedRecursos, setexpandedRecursos] = useState(false);
     const [expandedDates, setexpandedDates] = useState(false);
     const [expandedDetails, setexpandedDetails] = useState(false);
+    const [resources, setLoadedResources] = useState<Resource []>([]);
+    const [flag, setFlag] = useState(true);
     const navigate = useNavigate();
     const [isADevelopmentProject, setIfItIsADevelomentProject]= useState(false);
 
@@ -111,6 +113,7 @@ const Proyecto = () => {
     }
 
     const changeexpandedRecursosSetUp = () =>{
+        filterResources()
         setexpandedRecursos(!expandedRecursos);
     }
 
@@ -146,6 +149,21 @@ const Proyecto = () => {
         setIsOpenNewTaskModal(false);
     };
 
+    const getResources = () => {
+        fetch('https://modulo-recursos-psa.herokuapp.com/employees',{
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+            .then((response) => {
+                return response.json()})
+            .then((myJson) => {
+                setLoadedResources(Object.values(JSON.parse(JSON.stringify(myJson))));
+            })
+            .catch(err => console.log(err))
+    }
+
     const getTasksByProject = async () => {
         fetch(`https://modulo-proyectos-psa-2022.herokuapp.com/tasks/getbyproject/${project.code}`,{
             method: 'GET',
@@ -164,6 +182,9 @@ const Proyecto = () => {
     const updatePage = () => {
         fetchProject();
     };
+    const filterResources = () => {
+        setLoadedResources(resources.filter(resource => project.resources.includes(resource.legajo)))
+    };
 
     const handleChangePage = (event: React.MouseEvent<HTMLButtonElement> | null, newPage: number) => {
         setPage(newPage);
@@ -179,6 +200,12 @@ const Proyecto = () => {
         getTasksByProject();
     }, []);
 
+    useEffect(() => {
+        if (flag) {
+            getResources();
+            setFlag(false)
+        }
+    }, []);
 
     useEffect(() => {
         determineRisk();
@@ -196,8 +223,8 @@ const Proyecto = () => {
         <>
             <EditProjectModal onRefresh={updatePage} onClose={handleAddProjectClose} show={showProjectModal} row={project} />
             <AddTaskModal onSubmit={handleAddTaskSubmit} onClose={handleNewTaskClose} show={isOpenNewTaskModal} toProject={project} projectResources={project.resources}/>
-            <AddResourcesModal onSubmit={handleAddResourcesSubmit} onClose={handleModalAddResourcesClose} show={showResourcesModal} project={project} onRefresh={fetchProject} projectTasks={projectTasks}/> 
-            <div style={{display: 'flex', flexDirection: 'row', margin: 25, paddingBottom: 20, paddingLeft: 80, borderBottomColor:'#C5D0CB', borderBottomWidth: '1px'}}> 
+            <AddResourcesModal onSubmit={handleAddResourcesSubmit} onClose={handleModalAddResourcesClose} show={showResourcesModal} project={project} onRefresh={fetchProject} projectTasks={projectTasks} resources={resources}/> 
+            <div style={{display: 'flex', flexDirection: 'row', margin: 20, paddingBottom: 20, paddingLeft: 40, borderBottomColor:'#C5D0CB', borderBottomWidth: '1px', marginLeft: 0}}> 
                 
                 <ArrowBackIosNewIcon  onClick={() => navigate(-1)} style={{color: 'slate', fontSize: 25, marginTop: -9, marginRight: 20}} className= 'hover:bg-gray-200 hover:text-teal-900 hover:rounded-3xl hover:shadow-lg transition-all duration-200  group  h-12'/>
                
@@ -224,12 +251,12 @@ const Proyecto = () => {
                     </div>
                 </Popup>
             </div>
-            <div style={{display: 'flex', flexDirection: 'row', marginLeft: 100}}> 
+            <div style={{display: 'flex', flexDirection: 'row', marginLeft: 85}}> 
                 <div style={{display: 'flex', flexDirection: 'column', marginTop: -10, width:'90vh'}}>
                     <div style={{padding: 5, width: 110, height: 30, display: 'flex', flexDirection: 'row', backgroundColor: getColor(), borderRadius: 5}}><Typography variant='body2' style= {{color: '#F4F6F5', fontWeight: 'bold'}}>{project.state.toUpperCase()}</Typography></div>
-                    <div style={{alignSelf:'left', marginTop: 25}}>
+                    <div style={{alignSelf:'left', marginTop: 25, boxSizing: 'border-box'}}>
                         <Typography variant='body2' className='w-[27vh]' style={{fontWeight: 'bold', color: '#5C7067'}}>Descripción: </Typography>
-                        <div style= {{ marginTop: 10, backgroundColor: "#E9EDEB", borderRadius: 15, padding: 10, paddingLeft: 30, paddingRight: 30, minHeight:110}}>
+                        <div style= {{width: '100%', marginTop: 10, backgroundColor: "#E9EDEB", borderRadius: 15, padding: 10, paddingLeft: 30, paddingRight: 30, minHeight:110}}>
                             <Typography variant='body2' className={'slate'}>{project.description}</Typography>
                         </div>
                     </div>
@@ -237,14 +264,15 @@ const Proyecto = () => {
                     <Typography variant='body2' className='w-[27vh]' style={{fontWeight: 'bold', color: '#5C7067'}}>Tareas: </Typography>
                         <LoadingIndicator show={isLoading} className={`flex flex-col items-start  transition-all duration-200`} >
                             {!isLoading && (<> 
-                                <TableContainer component={Paper} className="mt-5 ml-100 mr-100" style = {{width: 700, borderColor: "#B0BFB8", borderRadius: 15, borderWidth: '0.5px'}}  >
                                     <Table className='ml-100 mr-100'>
                                         <TableHead >
                                             <TableRow>
                                                 <TableCell align="left" style={{color: '#5C7067' }}>Código</TableCell>
                                                 <TableCell align="left" style={{color: '#5C7067' }}>Nombre</TableCell>
                                                 <TableCell align="left" style={{color: '#5C7067' }}>Prioridad</TableCell>
+                                                <TableCell align="left" style={{color: '#5C7067' }}>Recurso</TableCell>
                                                 <TableCell align="left" style={{color: '#5C7067' }}>Esfuerzo Estimado</TableCell>
+                                                <TableCell align="left" style={{color: '#5C7067' }}>Esfuerzo Real</TableCell>
                                                 <TableCell align="left" style={{color: '#5C7067' }}></TableCell>
                                                 <TableCell align="left" style={{color: '#5C7067' }}></TableCell>
                                                 <TableCell align="left" style={{color: '#5C7067' }}></TableCell>
@@ -253,7 +281,7 @@ const Proyecto = () => {
                                         <TableBody>
                                             {(projectTasks.sort((a, b) => b.priority - a.priority))
                                             .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                                            .map(row => <TaskTableRow refresh={getTasksByProject} row={row} code= {project.code} tasks = {projectTasks} key={row.code} projectResources={project.resources} />)}
+                                            .map(row => <TaskTableRow refresh={getTasksByProject} row={row} code= {project.code} tasks = {projectTasks} key={row.code} projectResources={resources} />)}
                                         
                                         </TableBody>
                                         <TableFooter>
@@ -276,13 +304,12 @@ const Proyecto = () => {
                                             </TableRow>
                                         </TableFooter>
                                     </Table>
-                                </TableContainer>
                             </>
                             )}
                         </LoadingIndicator>
                     </div>
                 </div>
-                <div style= {{display: 'flex', flexDirection: 'column', width: '50vh',marginLeft: 60}} >
+                <div style= {{display: 'flex', flexDirection: 'column', width: '45vh',marginLeft: 130}} >
                     <div className='hover:bg-gray-100' style={{padding: 15, display: 'flex', flexDirection: 'column', borderColor: "#B0BFB8", borderRadius: 15, borderWidth: '1px', marginRight: '5vh'}} onClick={changeexpandedDetailsSetUp}>
                         <div style={{ borderBottomColor: expandedDetails ? "#B0BFB8":'transparent', paddingBottom: expandedDetails ? 10:0, marginBottom:expandedDetails ? 10:0, display: 'flex', flexDirection: 'row',color: '#5C7067', borderBottomWidth: '1px'}}><Typography variant='body2' className='w-[30vh] ml-5' style={{fontWeight: 'bold'}}>Detalles </Typography>
                             {expandedDetails && <KeyboardArrowUpIcon className='ml-7' style={{color: '#5C7067'}}/>}
@@ -290,14 +317,14 @@ const Proyecto = () => {
                         </div>
                             {expandedDetails && 
                             <>
-                            <div style={{marginBottom:10, display: 'flex', flexDirection: 'row', color: '#5C7067'}}><Typography variant='body2' className='w-[27vh]  ml-5'>Tipo de proyecto: </Typography><Typography variant='body2' className={'slate'}>{project.type}</Typography></div>
+                            <div style={{marginBottom:10, display: 'flex', flexDirection: 'row', color: '#5C7067'}}><Typography variant='body2' className='w-[27vh]  ml-4'>Tipo de proyecto: </Typography><Typography variant='body2' className={'slate'}>{project.type}</Typography></div>
                             {(project.clientType=="Interno") &&
-                                <div style={{marginBottom:10, display: 'flex', flexDirection: 'row', color: '#5C7067'}}><Typography variant='body2' className='w-[27vh]  ml-5'>Cliente Interno: </Typography><Typography variant='body2' className={'slate'}>ID-{project.client}</Typography></div>}
+                                <div style={{marginBottom:10, display: 'flex', flexDirection: 'row', color: '#5C7067'}}><Typography variant='body2' className='w-[27vh]  ml-4'>Cliente Interno: </Typography><Typography variant='body2' className={'slate'}>ID-{project.client}</Typography></div>}
                             {!(project.clientType=="Interno") &&
-                                <div style={{marginBottom:10, display: 'flex', flexDirection: 'row', color: '#5C7067'}}><Typography variant='body2' className='w-[27vh]  ml-5'>Cliente Externo: </Typography><Typography variant='body2' className={'slate'}>ID-{project.client}</Typography></div>}
-                            <div style={{marginBottom:10, display: 'flex', flexDirection: 'row',color: '#5C7067'}}><Typography variant='body2' className='w-[27vh]  ml-5'>Fecha de inicio: </Typography><Typography variant='body2' className={'slate'}>{project.startDate}</Typography></div>
-                            <div style={{marginBottom:10,display: 'flex', flexDirection: 'row',color: '#5C7067'}}><Typography variant='body2' className='w-[27vh]  ml-5'>Fecha de cierre: </Typography><Typography variant='body2' className={'slate'}>{project.endDate}</Typography></div>
-                            {isADevelopmentProject && <div style={{display: 'flex', flexDirection: 'row', color: '#5C7067'}}><Typography variant='body2' className='w-[27vh]  ml-5'>Producto: </Typography><Typography variant='body2' className={'slate'}>{project.productId}</Typography></div>}
+                                <div style={{marginBottom:10, display: 'flex', flexDirection: 'row', color: '#5C7067'}}><Typography variant='body2' className='w-[27vh]  ml-4'>Cliente Externo: </Typography><Typography variant='body2' className={'slate'}>ID-{project.client}</Typography></div>}
+                            <div style={{marginBottom:10, display: 'flex', flexDirection: 'row',color: '#5C7067'}}><Typography variant='body2' className='w-[27vh]  ml-4'>Fecha de inicio: </Typography><Typography variant='body2' className={'slate'}>{project.startDate}</Typography></div>
+                            <div style={{marginBottom:10,display: 'flex', flexDirection: 'row',color: '#5C7067'}}><Typography variant='body2' className='w-[27vh]  ml-4'>Fecha de cierre: </Typography><Typography variant='body2' className={'slate'}>{project.endDate}</Typography></div>
+                            {isADevelopmentProject && <div style={{display: 'flex', flexDirection: 'row', color: '#5C7067'}}><Typography variant='body2' className='w-[27vh]  ml-4'>Producto: </Typography><Typography variant='body2' className={'slate'}>{project.productId}</Typography></div>}
                             </>}
                     </div>
                     <div className = 'hover:bg-gray-100 transition-all duration-200  group' style={{width: '400', marginTop: 10, padding: 15, display: 'flex', flexDirection: 'column', borderColor: "#B0BFB8", borderRadius: 15, borderWidth: '1px',marginRight: '5vh'}} onClick={changeexpandedRecursosSetUp}>
@@ -309,14 +336,14 @@ const Proyecto = () => {
                             {expandedRecursos && 
                             <>
                                 <div style={{width: 400}}>
-                                    {project.resources.map(recurso =>  <div style={{display: 'flex', flexDirection: 'row', margin: 5, padding: 5, width: 120, height: 30, backgroundColor: "#E9EDEB", borderRadius: 5}}><AccountCircleIcon className= 'mr-1 h-5' style={{color: '#5C7067'}}/><Typography variant='caption' className='slate' >Legajo {recurso}</Typography></div>)}
+                                    {resources.map(recurso =>  <div style={{display: 'flex', flexDirection: 'row', margin: 5, padding: 5, width: 150, height: 30, backgroundColor: "#E9EDEB", borderRadius: 5}}><AccountCircleIcon className= 'mr-1 h-5' style={{color: '#5C7067'}}/><Typography variant='caption' className='slate' >{recurso.Nombre} {recurso.Apellido}</Typography></div>)}
                                     <div style={{display: 'flex', flexDirection: 'row', margin: 5, padding: 5, width: 120, height: 30}}></div>
                                 </div>
                             </>}
                         </div>
                     </div>
-                    {expandedRecursos && <AddCircleIcon style={{marginLeft:320, color: '#C5D0CB', zIndex:4, marginTop: -50}} className='hover:teal-600' onClick={handleOpenModalAddResources}/>}
-                    <div className='hover:bg-gray-100' style={{marginTop: expandedRecursos? 35:10, padding: 15, display: 'flex', flexDirection: 'column', borderColor: "#B0BFB8", borderRadius: 15, borderWidth: '1px',marginRight: '5vh'}} onClick={changeexpandedDatesSetUp}>
+                    {expandedRecursos && <AddCircleIcon style={{marginLeft:290, color: '#C5D0CB', zIndex:4, marginTop: -50}} className='hover:teal-600' onClick={handleOpenModalAddResources}/>}
+                   <div className='hover:bg-gray-100' style={{marginTop: expandedRecursos? 35:10, padding: 15, display: 'flex', flexDirection: 'column', borderColor: "#B0BFB8", borderRadius: 15, borderWidth: '1px',marginRight: '5vh'}} onClick={changeexpandedDatesSetUp}>
                         <div style={{ borderBottomColor: expandedDates ? "#B0BFB8":'transparent', paddingBottom: expandedDates ? 10:0, marginBottom:expandedDates ? 10:0, display: 'flex', flexDirection: 'row',color: '#5C7067', borderBottomWidth: '1px'}}><Typography variant='body2' className='w-[30vh] ml-5' style={{fontWeight: 'bold'}}>Actividad </Typography>
                             {expandedDates && <KeyboardArrowUpIcon className='ml-7' style={{color: '#5C7067'}}/>}
                             {!expandedDates && <KeyboardArrowDownIcon className='ml-7' style={{color: '#5C7067'}}/>}

@@ -6,14 +6,15 @@ import { Circle } from '@mui/icons-material';
 import EditIcon from '@mui/icons-material/Edit';
 import ConfirmModal from '../Modal/confirmationModal';
 import EditTaskModal from '../Tasks Modal/EditTaskModal';
-import VerTareaModal from '../Tasks Modal/VerTareaModal';
+import{Resource} from '../../types/resourceType'
+import { Link, useNavigate } from 'react-router-dom';
 
 interface  TaskTableRowProps {
     row: Task,
     code: number,
     tasks: Task[],
     refresh: () => void,
-    projectResources: number[]
+    projectResources: Resource[]
 }
 
 
@@ -22,9 +23,10 @@ const  TaskTableRow = (props:  TaskTableRowProps) => {
     const [isOpenEditTaskModal, setIsOpenEditTaskModal] = useState(false);
     const [showCofirmationModal, setShowConfirmationModal] = useState(false);
     const [priorityValue, setPriorityValue] = useState('Baja');
-    const [isTaskDetailsModalOpen, setIsOpenTaskDetailsModal]=useState(false);
     const [stateTagColor, setStateTagColor] = useState('#F9A620');
     const [stateValue, setStateValue] = useState('Pendiente');
+    const taskResource = projectResources.find(resource => resource.legajo === row.resource);
+    const estimatedEffortWithUnit = row.effort.toString()+' '+row.effortUnit;
 
     
     const handleDeleteConfirmation = () =>{
@@ -52,6 +54,7 @@ const  TaskTableRow = (props:  TaskTableRowProps) => {
             setStateValue(state => ('Completa'));
         }
     }
+
 
 
     const removeTask = async () => {
@@ -96,45 +99,49 @@ const  TaskTableRow = (props:  TaskTableRowProps) => {
         setIsOpenEditTaskModal(false);
     };
 
-    const openTaskDetailsModal = ()=>{
-        setIsOpenTaskDetailsModal(true);
-    };
-
-    const handleTaskDetailsClose = () =>{
-        setIsOpenTaskDetailsModal(false);
-    };
 
     useEffect(() => {
         determineStateTagColor();
         determinePriorityValue();
     }, [stateTagColor, priorityValue]);
 
+
     return (
         <>
-            <VerTareaModal onClose={handleTaskDetailsClose} show={isTaskDetailsModalOpen} currentTask={row}/>
             <EditTaskModal onSubmit={handleEditTaskSubmit} onClose={handleEditTaskClose} show={isOpenEditTaskModal} currentTask={row} projectResources={props.projectResources}/>
             <ConfirmModal onSubmit={handleDeleteConfirmation} onClose={handleNotConfirmation} show={showCofirmationModal} txt="Seguro que desea elimiar la tarea"/>
             <TableRow hover key={row.code}>
-                <TableCell align="left" onClick={openTaskDetailsModal}>{row.code}</TableCell>
-                <TableCell align="left" onClick={openTaskDetailsModal}>{row.name}</TableCell>
-                <TableCell align="left" onClick={openTaskDetailsModal}>{priorityValue}</TableCell>
-                <TableCell align="left" onClick={openTaskDetailsModal}>{row.effort}</TableCell>
+                <TableCell align="left" ><Link to={`/proyectos/${code}/${row.code}`} state={{ currentTask: row, projectResources: projectResources }}>{row.code}</Link></TableCell>
+                <TableCell align="left" ><Link to={`/proyectos/${code}/${row.code}`} state={{ currentTask: row, projectResources: projectResources}}>{row.name}</Link></TableCell>
+                <TableCell align="left" ><Link to={`/proyectos/${code}/${row.code}`} state={{ currentTask: row,projectResources: projectResources }}>{priorityValue}</Link></TableCell>
+                <TableCell align="left"><Link to={`/proyectos/${code}/${row.code}`} state={{ currentTask: row,projectResources: projectResources }}>{taskResource?.Nombre} {taskResource?.Apellido}</Link></TableCell>
+                <TableCell align="left"><Link to={`/proyectos/${code}/${row.code}`} state={{ currentTask: row,projectResources: projectResources }}>{estimatedEffortWithUnit}</Link></TableCell>
+                { row.isCompleted!=2 && <TableCell align="left"><Link to={`/proyectos/${code}/${row.code}`} state={{ currentTask: row,projectResources: projectResources }}>-</Link></TableCell>}
+                { row.isCompleted== 2 && <TableCell align="left"><Link to={`/proyectos/${code}/${row.code}`} state={{ currentTask: row,projectResources: projectResources }}>{row.realEffort} {row.effortUnit}</Link></TableCell>}
                 <TableCell className = 'group'>
                     <Circle style={{ alignSelf: 'left', color: stateTagColor, height: '4vh' }}></Circle>
                     <span className="task-state-tooltip group-hover:scale-100" >
                         {stateValue.toUpperCase()}
                     </span>
                 </TableCell>                   
-                <TableCell align="right">
+                {!(row.isCompleted=== 2) && <TableCell align="right">
                     <div className='hover:text-teal-600 text-slate-600 cursor-pointer' onClick={openConfirmationDeleteModal}>
                         <DeleteIcon />
                     </div>
-                </TableCell>
-                <TableCell align="right">
+                </TableCell>}
+                {(row.isCompleted=== 2) && <TableCell align="right">
+                    <div className='hover:text-teal-600 text-slate-600 cursor-pointer'>
+                    </div>
+                </TableCell>}
+                {!(row.isCompleted=== 2) && <TableCell align="right">
                     <div className='hover:text-teal-600 text-slate-600 cursor-pointer' onClick={openEditTaskModal}>
                         <EditIcon />
                     </div>
-                </TableCell>
+                </TableCell>}
+                {(row.isCompleted=== 2) && <TableCell align="right">
+                    <div className='hover:text-teal-600 text-slate-600 cursor-pointer'>
+                    </div>
+                </TableCell>}
         </TableRow></>
     )
 }

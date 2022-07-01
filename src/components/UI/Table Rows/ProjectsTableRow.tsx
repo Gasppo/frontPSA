@@ -70,12 +70,12 @@ const  ProjectTableRow = (props:  ProjectTableRowProps) => {
             <ConfirmModal onSubmit={handleDeleteConfirmation} onClose={handleNotConfirmation} show={showCofirmationModal} txt="Seguro que desea elimiar el proyecto"/>
             <EditProjectModal onRefresh={props.refresh} onClose={handleAddProjectClose} show={showProjectModal} row={props.row} />
             <TableRow hover key={row.code}>
-                <TableCell align="left"><Link to='/proyecto' state={{ projectData: row }}>{row.code.toString()}</Link></TableCell>
-                <TableCell align="left"><Link to='/proyecto' state={{ projectData: row }}>{row.name}</Link></TableCell>
-                <TableCell align="left"><Link to='/proyecto' state={{ projectData: row }}>{row.type}</Link></TableCell>
-                <TableCell align="left"><Link to='/proyecto' state={{ projectData: row }}>{row.state}</Link></TableCell>
-                <TableCell align="left"><Link to='/proyecto' state={{ projectData: row }}>{row.startDate}</Link></TableCell>
-                <TableCell align="left"><Link to='/proyecto' state={{ projectData: row }}>{row.endDate}</Link></TableCell>
+                <TableCell align="left"><Link to={`/proyectos/${row.code}`} state={{ projectData: row }}>{row.code.toString()}</Link></TableCell>
+                <TableCell align="left"><Link to={`/proyectos/${row.code}`} state={{ projectData: row }}>{row.name}</Link></TableCell>
+                <TableCell align="left"><Link to={`/proyectos/${row.code}`} state={{ projectData: row }}>{row.type}</Link></TableCell>
+                <TableCell align="left"><Link to={`/proyectos/${row.code}`} state={{ projectData: row }}>{row.state}</Link></TableCell>
+                <TableCell align="left"><Link to={`/proyectos/${row.code}`} state={{ projectData: row }}>{row.startDate}</Link></TableCell>
+                <TableCell align="left"><Link to={`/proyectos/${row.code}`} state={{ projectData: row }}>{row.endDate}</Link></TableCell>
                 <TableCell><Circle style={{ alignSelf: 'left', color: riskColor, height: '4vh' }}></Circle></TableCell>
                 <TableCell align="right">
                     <div className='hover:text-teal-600 text-slate-600 cursor-pointer' onClick={openConfirmationDeleteModal}>

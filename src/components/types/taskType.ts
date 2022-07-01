@@ -4,8 +4,9 @@ export type Task = {
     code: number;
     name: string;
     priority: number;
-    //resoursed debería de ser un set
     effort: number;
+    effortUnit: string;
+    realEffort: number;
     resource: number;
     isCompleted: number,
     description: string | null;
