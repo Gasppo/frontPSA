@@ -19,7 +19,6 @@ export const useServiceData = () => {
     const gatherResoruces = async () => {
         const internalResources = await getInternalResources()
         setResources(internalResources || [])
-        setLoading(false)
     }
 
     const gatherProducts = async () => {
@@ -30,6 +29,8 @@ export const useServiceData = () => {
     const gatherTickets = async () => {
         const ticks = await getTickets()
         setTickets(ticks || [])
+        setLoading(false)
+
     }
 
     useEffect(() => {
