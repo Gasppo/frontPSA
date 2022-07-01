@@ -48,7 +48,7 @@ const AddResourceLicenceModal = (props: AddResourceLicenceModalProps)=>{
     const disabled = runValidations && invalidFields
     const isEmpty = (value: any) => !value ? "Este campo no puede estar vacio" : ""
     const validations = runValidations ? [isEmpty] : []
-    const isInvalidDurationDays = (value: any) => invalidDurationDays ? "Debe tener un mínimo de 5 (cinco) caracteres y un máximo de 10 (diez) y solo puede contener letras, números, espacios y puntos" : ""
+    const isInvalidDurationDays = (value: any) => !(value >= 5 && value <= 10) ? "Debe tener un mínimo de 5 (cinco) caracteres y un máximo de 10 (diez) y solo puede contener letras, números, espacios y puntos" : ""
     const durationDaysValidations = invalidDurationDays ? [isInvalidDurationDays] : []
 
 
@@ -82,7 +82,7 @@ const AddResourceLicenceModal = (props: AddResourceLicenceModalProps)=>{
             if (response.status >= 200 && response.status < 300) onSubmit()
         }
         if(invalidFields) setRunValidations(true)
-        //if(!validateDate()) setInvalidDate(true)
+        if(!validateDurationDays()) setInvalidDurationDays(true)
         return
         
     }
@@ -114,7 +114,7 @@ const AddResourceLicenceModal = (props: AddResourceLicenceModalProps)=>{
     }, []);
 
     const validateDurationDays = () => {
-        return input.durationDays > 0
+        return input.durationDays >= 5 && input.durationDays <= 10
     }
 
     const handleChangeText = (e: any) => {
@@ -170,4 +170,5 @@ const AddResourceLicenceModal = (props: AddResourceLicenceModalProps)=>{
     )
 
 }
+
 export default AddResourceLicenceModal
