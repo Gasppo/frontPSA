@@ -44,7 +44,7 @@ const AssignSupportModal = (props: AssignSupportModalProps) => {
 
 
     return (
-        <CenteredModal isLoading={isLoading} onClose={onClose} show={show} onSubmit={handleSubmit} label="Asignar Soporte" width='md:w-[42rem] w-[48rem]' addbuttonLabel="Asignar" disableSubmit={false}>
+        <CenteredModal isLoading={isLoading} onClose={onClose} show={show} onSubmit={handleSubmit} label={`Asignar Recurso de Soporte - Ticket #${currentId}`} width='md:w-[42rem] w-[48rem]' addbuttonLabel="Asignar" disableSubmit={false}>
             <div className="my-6" >
                 <SelectBox required name="assigneeId" className='mr-8 w-[36rem] md:w-[30rem]' label="Nombre del recurso" onChange={handleAsssigneeChange} valueKey="legajo" value={assigneeId} options={resroucesWithFullName} text="fullName" />
             </div>

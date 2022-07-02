@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { prioridades } from '../../../../dev/dummyData'
 import { Project } from '../../../../types/projectTypes'
 import { Resource } from '../../../../types/resourcesTypes'
@@ -13,6 +13,7 @@ type createTaskData = {
     resource: number;
     ticket: number;
     projectCode: number
+    realEffort: number;
     effort: number
 }
 
@@ -56,6 +57,7 @@ const CreateTaskModal = (props: CreateTaskModalProps) => {
         ticket: ticketId,
         projectCode: 0,
         effort: 0,
+        realEffort: 0
     }), [ticketId])
 
     const [input, setInput] = useState<createTaskData>(defaultTaskData)
@@ -73,7 +75,7 @@ const CreateTaskModal = (props: CreateTaskModalProps) => {
             setRunValidations(true)
             return
         }
-        onSubmit({...input, effort: input.priority, name: `Ticket #${ticketId} - ${input.name}`})
+        onSubmit({...input, effort: input.priority, realEffort: input.priority, name: `Ticket #${ticketId} - ${input.name}`})
     }
 
 
