@@ -45,6 +45,7 @@ type createTaskData = {
     resource: number;
     ticket: number;
     effort: number;
+    realEffort: number;
 }
 
 interface TicketTasksProps {
