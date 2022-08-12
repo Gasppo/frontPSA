@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/frontPSA/static/css/main.e4835105.css",
+    "main.js": "/frontPSA/static/js/main.eb8759ac.js",
+    "static/js/787.28cb0dcd.chunk.js": "/frontPSA/static/js/787.28cb0dcd.chunk.js",
+    "index.html": "/frontPSA/index.html",
+    "main.e4835105.css.map": "/frontPSA/static/css/main.e4835105.css.map",
+    "main.eb8759ac.js.map": "/frontPSA/static/js/main.eb8759ac.js.map",
+    "787.28cb0dcd.chunk.js.map": "/frontPSA/static/js/787.28cb0dcd.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.e4835105.css",
+    "static/js/main.eb8759ac.js"
+  ]
+}
